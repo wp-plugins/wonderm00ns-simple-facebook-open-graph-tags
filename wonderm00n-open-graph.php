@@ -194,7 +194,8 @@ function wonderm00n_open_graph_activate() {
 }
 
 function wonderm00n_open_graph_settings_link( $links, $file ) {
- 	if( $file == 'wonderm00n-open-graph/wonderm00n-open-graph.php' && function_exists( "admin_url" ) ) {
+	$this_plugin = plugin_basename(__FILE__);
+ 	if( $file == $this_plugin ) {
 		$settings_link = '<a href="' . admin_url( 'options-general.php?page=wonderm00n-open-graph.php' ) . '">' . __('Settings') . '</a>';
 		array_push( $links, $settings_link ); // after other links
 	}
