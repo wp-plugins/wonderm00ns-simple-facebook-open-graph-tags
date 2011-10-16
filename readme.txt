@@ -4,7 +4,7 @@ Donate link: http://example.com/
 Tags: facebook, open graph, seo, share
 Requires at least: 3
 Tested up to: 3.2.1
-Stable tag: 0.1
+Stable tag: 0.1.1
 
 This plugin inserts Facebook Open Grpah Tags into your WordPress Blog/Website for more effective Facebook sharing results.
 
@@ -30,6 +30,10 @@ The tags that this plugin inserts are:
 3. Got to `Options`, `Wonderm00n's Open Graph` to set it up
 
 == Changelog ==
+
+= 0.1.1 =
+
+* Adding Open Graph Namespace to the HTML tag
 
 = 0.1 =
 

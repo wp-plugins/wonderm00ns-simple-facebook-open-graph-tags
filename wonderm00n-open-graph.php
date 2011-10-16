@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Wonderm00n's Simple Facebook Open Graph Tags
- * @version 0.1
+ * @version 0.1.1
  */
 /*
 Plugin Name: Wonderm00n's Simple Facebook Open Graph Tags
 Plugin URI: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
 Description: This plugin inserts Facebook Open Graph Tags into your Wordpress Blog/Website for better Facebook sharing
 Author: Marco Almeida (Wonderm00n)
-Version: 0.1
+Version: 0.1.1
 Author URI: http://wonderm00n.com
 */
 
@@ -145,8 +145,19 @@ function wonderm00n_open_graph() {
 ';
 	echo $html;
 }
-
 add_action('wp_head', 'wonderm00n_open_graph', 1);
+
+function wonderm00n_open_graph_add_opengraph_namespace( $output ) {
+	if (stristr($output,'xmlns:og')) {
+		//Already there
+		return $output;
+	} else {
+		//Let's add it
+		return $output . ' xmlns:og="http://opengraphprotocol.org/schema/"';
+	}
+}
+//We want to be last to add the namespace because some other plugin may already added it ;-)
+add_filter('language_attributes', 'wonderm00n_open_graph_add_opengraph_namespace',9999);
 
 //Admin
 if ( is_admin() ){
