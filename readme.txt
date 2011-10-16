@@ -1,0 +1,32 @@
+=== Plugin Name ===
+Contributors: wonderm00n
+Donate link: http://example.com/
+Tags: facebook, open graph, seo, share
+Stable tag: 0.1
+
+This plugin inserts Facebook Open Grpah Tags into your WordPress Blog/Website for more effective Facebook sharing results.
+
+== Description ==
+
+It allows the user to choose which tags are, or not, included and also the default image if the post/page doesn't have one.
+
+The tags that this plugin inserts are:
+* og:app_id : From settings on the options screen
+* og:admins : From settings on the options screen
+* og:site_name : From blog title
+* og:title : From post/page/archive/tag/... title
+* og:url : From the post/page permalink
+* og:type : "article" for posts and pages and "website" for all the others
+* og:description : From post/page excerpt if it exists, or from post/page content
+* og:image : From post/page featured/thumbnail image, or if it doesn't exists from the first image in the post content, or if it doesn't exists from the first image on the post media gallery, or if it doesn't exists from the default image defined on the options menu 
+
+== Installation ==
+
+1. Upload the `wonderm00n-open-graph` to the `/wp-content/plugins/` directory
+2. Activate the plugin through the 'Plugins' menu in WordPress
+3. Got to `Options`, `Wonderm00n's Open Graph` to set it up
+
+== Changelog ==
+
+= 0.1 =
+* First release
