@@ -1,14 +1,16 @@
-=== Plugin Name ===
+=== Wonderm00n's Simple Facebook Open Graph Meta Tags ===
 Contributors: wonderm00n
-Donate link: http://example.com/
-Tags: facebook, open graph, seo, share
+Donate link: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
+Tags: facebook, open graph, seo, share, social, meta
 Requires at least: 3
 Tested up to: 3.2.1
-Stable tag: 0.1.1
+Stable tag: 0.1.2
 
 This plugin inserts Facebook Open Grpah Tags into your WordPress Blog/Website for more effective Facebook sharing results.
 
 == Description ==
+
+This plugin inserts Facebook Open Grpah Tags into your WordPress Blog/Website for more effective Facebook sharing results.
 
 It allows the user to choose which tags are, or not, included and also the default image if the post/page doesn't have one.
 
@@ -30,6 +32,10 @@ The tags that this plugin inserts are:
 3. Got to `Options`, `Wonderm00n's Open Graph` to set it up
 
 == Changelog ==
+
+= 0.1.2 =
+
+* Fixing a bug for themes that do not support post thumbnail
 
 = 0.1.1 =
 

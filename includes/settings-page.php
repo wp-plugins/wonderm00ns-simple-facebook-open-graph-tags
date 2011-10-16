@@ -178,6 +178,10 @@
   		$links[30]['url']='http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/';
   		$links[40]['text']='Author\'s website: Marco Almeida (Wonderm00n)';
   		$links[40]['url']='http://wonderm00n.com';
+  		$links[50]['text']='Author\'s Twitter account: @Wonderm00n';
+  		$links[50]['url']='http://twitter.com/wonderm00n';
+  		$links[60]['text']='Author\'s Facebook account: Wonderm00n';
+  		$links[60]['url']='http://www.facebook.com/wonderm00n';
   	?>
   	<div class="postbox-container" style="width: 29%;">
   		

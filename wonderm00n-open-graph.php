@@ -1,10 +1,10 @@
 <?php
 /**
- * @package Wonderm00n's Simple Facebook Open Graph Tags
- * @version 0.1.1
+ * @package Wonderm00n's Simple Facebook Open Graph Meta Tags
+ * @version 0.1.2
  */
 /*
-Plugin Name: Wonderm00n's Simple Facebook Open Graph Tags
+Plugin Name: Wonderm00n's Simple Facebook Open Graph Meta Tags
 Plugin URI: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
 Description: This plugin inserts Facebook Open Graph Tags into your Wordpress Blog/Website for better Facebook sharing
 Author: Marco Almeida (Wonderm00n)
@@ -42,10 +42,19 @@ function wonderm00n_open_graph() {
 			$fb_desc=trim($post->post_content);
 		}
 		$fb_desc=(intval($fb_desc_chars)>0 ? substr(esc_attr(strip_tags(stripslashes($fb_desc))),0,$fb_desc_chars) : esc_attr(strip_tags(stripslashes($fb_desc))));
-		if ($id_attachment=get_post_thumbnail_id($post->ID)) {
-			//There's a featured/thumbnail image for this post
-			$fb_image=wp_get_attachment_url($id_attachment, false);
-		} else {
+		$thumbok=false;
+		if (function_exists('get_post_thumbnail_id')) {
+			$thumbok=true;
+		}
+		if ($thumbok) {
+			if ($id_attachment=get_post_thumbnail_id($post->ID)) {
+				//There's a featured/thumbnail image for this post
+				$fb_image=wp_get_attachment_url($id_attachment, false);
+			} else {
+				$thumbok=false;
+			}
+		}
+		if (!$thumbok) {
 			//If not, we'll try to get the first image on the post content
 			$imgreg = '/<img .*src=["\']([^ ^"^\']*)["\']/';
 			preg_match_all($imgreg, trim($post->post_content), $matches);
