@@ -2,6 +2,8 @@
 Contributors: wonderm00n
 Donate link: http://example.com/
 Tags: facebook, open graph, seo, share
+Requires at least: 3
+Tested up to: 3.2.1
 Stable tag: 0.1
 
 This plugin inserts Facebook Open Grpah Tags into your WordPress Blog/Website for more effective Facebook sharing results.
@@ -11,6 +13,7 @@ This plugin inserts Facebook Open Grpah Tags into your WordPress Blog/Website fo
 It allows the user to choose which tags are, or not, included and also the default image if the post/page doesn't have one.
 
 The tags that this plugin inserts are:
+
 * og:app_id : From settings on the options screen
 * og:admins : From settings on the options screen
 * og:site_name : From blog title
@@ -29,4 +32,5 @@ The tags that this plugin inserts are:
 == Changelog ==
 
 = 0.1 =
+
 * First release
