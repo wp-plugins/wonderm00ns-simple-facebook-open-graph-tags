@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Wonderm00n's Simple Facebook Open Graph Meta Tags
- * @version 0.1.3
+ * @version 0.1.4
  */
 /*
 Plugin Name: Wonderm00n's Simple Facebook Open Graph Meta Tags
 Plugin URI: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
 Description: This plugin inserts Facebook Open Graph Tags into your Wordpress Blog/Website for better Facebook sharing
 Author: Marco Almeida (Wonderm00n)
-Version: 0.1.3
+Version: 0.1.4
 Author URI: http://wonderm00n.com
 */
 
@@ -41,7 +41,7 @@ function wonderm00n_open_graph() {
 			//If not we grab it from the content
 			$fb_desc=trim($post->post_content);
 		}
-		$fb_desc=(intval($fb_desc_chars)>0 ? substr(esc_attr(strip_tags(stripslashes($fb_desc))),0,$fb_desc_chars) : esc_attr(strip_tags(stripslashes($fb_desc))));
+		$fb_desc=(intval($fb_desc_chars)>0 ? substr(esc_attr(strip_tags(strip_shortcodes(stripslashes($fb_desc)))),0,$fb_desc_chars) : esc_attr(strip_tags(strip_shortcodes(stripslashes($fb_desc)))));
 		$thumbok=false;
 		if (function_exists('get_post_thumbnail_id')) {
 			$thumbok=true;
@@ -182,8 +182,8 @@ function wonderm00n_open_graph_add_options() {
 
 function wonderm00n_open_graph_activate() {
 	update_option("wonderm00n_open_graph_activated", 1);
-	update_option("wonderm00n_open_graph_fb_admin_id_show", 1);
-	update_option("wonderm00n_open_graph_fb_app_id_show", 1);
+	update_option("wonderm00n_open_graph_fb_admin_id_show", 0);
+	update_option("wonderm00n_open_graph_fb_app_id_show", 0);
 	update_option("wonderm00n_open_graph_fb_sitename_show", 1);
 	update_option("wonderm00n_open_graph_fb_title_show", 1);
 	update_option("wonderm00n_open_graph_fb_url_show", 1);
@@ -194,8 +194,7 @@ function wonderm00n_open_graph_activate() {
 }
 
 function wonderm00n_open_graph_settings_link( $links, $file ) {
-	$this_plugin = plugin_basename(__FILE__);
- 	if( $file == $this_plugin ) {
+ 	if( $file == 'wonderm00n-open-graph/wonderm00n-open-graph.php' && function_exists( "admin_url" ) ) {
 		$settings_link = '<a href="' . admin_url( 'options-general.php?page=wonderm00n-open-graph.php' ) . '">' . __('Settings') . '</a>';
 		array_push( $links, $settings_link ); // after other links
 	}
