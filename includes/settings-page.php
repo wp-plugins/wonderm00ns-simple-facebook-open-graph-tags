@@ -24,13 +24,15 @@
 	$fb_type_show = get_option('wonderm00n_open_graph_fb_type_show');
 	$fb_desc_show = get_option('wonderm00n_open_graph_fb_desc_show');
 	$fb_desc_chars = get_option('wonderm00n_open_graph_fb_desc_chars');
+	$fb_desc_homepage = get_option('wonderm00n_open_graph_fb_desc_homepage');
+	$fb_desc_homepage_customtext = get_option('wonderm00n_open_graph_fb_desc_homepage_customtext');
 	$fb_image_show = get_option('wonderm00n_open_graph_fb_image_show');
 	$fb_image = get_option('wonderm00n_open_graph_fb_image');
 
 	?>
 	<div class="wrap">
 		
-		<?php screen_icon(); ?>
+	<?php screen_icon(); ?>
   	<h2>Wonderm00n's Simple Facebook Open Graph Tags</h2>
   	<br class="clear"/>
   	<p>Please set some default values and which tags should, or should not, be included. It may be necessary to exclude some tags if other plugins are already including them.</p>
@@ -47,114 +49,125 @@
   				
   					<form name="form1" method="post">
   						<table width="100%" class="form-table">
-  							<tr>
-									<th scope="row" nowrap="nowrap">Include Facebook Platform App ID (og:app_id) tag?</th>
-    					  	<td>
-    					  		<input type="checkbox" name="fb_app_id_show" id="fb_app_id_show" value="1" <?php echo (intval($fb_app_id_show)==1 ? ' checked="checked"' : ''); ?>/>
-    					  	</td>
-    						</tr>
-  							<tr>
-									<th scope="row" nowrap="nowrap">Facebook Platform App ID:</th>
-    					  	<td>
-    					  		<input type="text" name="fb_app_id" id="fb_app_id" size="30" value="<?php echo $fb_app_id; ?>"/>
-    					  	</td>
-    						</tr>
-  							<tr>
-  								<td>&nbsp;</td>
-  								<td></td>
-  							</tr>
-  							<tr>
-									<th scope="row" nowrap="nowrap">Include Facebook Admin(s) ID (og:admins) tag?</th>
-    					  	<td>
-    					  		<input type="checkbox" name="fb_admin_id_show" id="fb_admin_id_show" value="1" <?php echo (intval($fb_admin_id_show)==1 ? ' checked="checked"' : ''); ?>/>
-    					  	</td>
-    						</tr>
-  							<tr>
-									<th scope="row" nowrap="nowrap">Facebook Admin(s) ID:</th>
-    					  	<td>
-    					  		<input type="text" name="fb_admin_id" id="fb_admin_id" size="30" value="<?php echo $fb_admin_id; ?>"/>
-    					  		<br/>
-    					  		Comma separated if more than one
-    					  	</td>
-    						</tr>
-  							<tr>
-  								<td>&nbsp;</td>
-  								<td></td>
-  							</tr>
-  							<tr>
-									<th scope="row" nowrap="nowrap">Include Site Name (og:site_name) tag?</th>
-    					  	<td>
-    					  		<input type="checkbox" name="fb_sitename_show" id="fb_sitename_show" value="1" <?php echo (intval($fb_sitename_show)==1 ? ' checked="checked"' : ''); ?>/>
-    					  	</td>
-    						</tr>
-  							<tr>
-  								<td>&nbsp;</td>
-  								<td></td>
-  							</tr>
-  							<tr>
-									<th scope="row" nowrap="nowrap">Include Post/Page title (og:title) tag?</th>
-    					  	<td>
-    					  		<input type="checkbox" name="fb_title_show" id="fb_title_show" value="1" <?php echo (intval($fb_title_show)==1 ? ' checked="checked"' : ''); ?>/>
-    					  	</td>
-    						</tr>
-  							<tr>
-  								<td>&nbsp;</td>
-  								<td></td>
-  							</tr>
-  							<tr>
-									<th scope="row" nowrap="nowrap">Include URL (og:url) tag?</th>
-    					  	<td>
-    					  		<input type="checkbox" name="fb_url_show" id="fb_url_show" value="1" <?php echo (intval($fb_url_show)==1 ? ' checked="checked"' : ''); ?>/>
-    					  	</td>
-    						</tr>
-  							<tr>
-  								<td>&nbsp;</td>
-  								<td></td>
-  							</tr>
-  							<tr>
-									<th scope="row" nowrap="nowrap">Include Type (og:type) tag?</th>
-    					  	<td>
-    					  		<input type="checkbox" name="fb_type_show" id="fb_type_show" value="1" <?php echo (intval($fb_type_show)==1 ? ' checked="checked"' : ''); ?>/>
-    					  		(will be	&quot;article&quot; for posts and pages and &quot;website&quot; for the homepage)
-    					  	</td>
-    						</tr>
-  							<tr>
-  								<td>&nbsp;</td>
-  								<td></td>
-  							</tr>
-  							<tr>
-									<th scope="row" nowrap="nowrap">Include Description (og:description) tag?</th>
-    					  	<td>
-    					  		<input type="checkbox" name="fb_desc_show" id="fb_desc_show" value="1" <?php echo (intval($fb_desc_show)==1 ? ' checked="checked"' : ''); ?>/>
-    					  	</td>
-    						</tr>
-  							<tr>
-									<th scope="row" nowrap="nowrap">Description maximum length:</th>
-    					  	<td>
-    					  		<input type="text" name="fb_desc_chars" id="fb_desc_chars" size="3" maxlength="3" value="<?php echo (intval($fb_desc_chars)>0 ? intval($fb_desc_chars) : ''); ?>"/> characters
-    					  		<br/>
-    					  		0 or blank for no maximum length
-    					  	</td>
-    						</tr>
-  							<tr>
-  								<td>&nbsp;</td>
-  								<td></td>
-  							</tr>
-  							<tr>
-									<th scope="row" nowrap="nowrap">Include Image (og:image) tag?</th>
-    					  	<td>
-    					  		<input type="checkbox" name="fb_image_show" id="fb_image_show" value="1" <?php echo (intval($fb_image_show)==1 ? ' checked="checked"' : ''); ?>/>
-    					  	</td>
-    						</tr>
-  							<tr>
-									<th scope="row" nowrap="nowrap">Default image:</th>
-    					  	<td>
-    					  		<input type="text" name="fb_image" id="fb_image" size="50" value="<?php echo $fb_image; ?>"/>
-    					  		<input id="fb_image_button" class="button" type="button" value="Upload/Choose image" />
-    					  		<br/>
-    					  		Full URL with http://
-    					  	</td>
-    						</tr>
+							<tr>
+								<th scope="row" nowrap="nowrap">Include Facebook Platform App ID (og:app_id) tag?</th>
+								<td>
+									<input type="checkbox" name="fb_app_id_show" id="fb_app_id_show" value="1" <?php echo (intval($fb_app_id_show)==1 ? ' checked="checked"' : ''); ?>/>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row" nowrap="nowrap">Facebook Platform App ID:</th>
+								<td>
+									<input type="text" name="fb_app_id" id="fb_app_id" size="30" value="<?php echo $fb_app_id; ?>"/>
+								</td>
+							</tr>
+							<tr>
+									<td>&nbsp;</td>
+									<td></td>
+							</tr>
+							<tr>
+								<th scope="row" nowrap="nowrap">Include Facebook Admin(s) ID (og:admins) tag?</th>
+								<td>
+									<input type="checkbox" name="fb_admin_id_show" id="fb_admin_id_show" value="1" <?php echo (intval($fb_admin_id_show)==1 ? ' checked="checked"' : ''); ?> onclick="showAdminOptions();"/>
+								</td>
+							</tr>
+							<tr class="fb_admin_id_options">
+								<th scope="row" nowrap="nowrap">Facebook Admin(s) ID:</th>
+								<td>
+									<input type="text" name="fb_admin_id" id="fb_admin_id" size="30" value="<?php echo $fb_admin_id; ?>"/>
+									<br/>
+									Comma separated if more than one
+								</td>
+							</tr>
+							<tr>
+									<td>&nbsp;</td>
+									<td></td>
+							</tr>
+							<tr>
+								<th scope="row" nowrap="nowrap">Include Site Name (og:site_name) tag?</th>
+								<td>
+									<input type="checkbox" name="fb_sitename_show" id="fb_sitename_show" value="1" <?php echo (intval($fb_sitename_show)==1 ? ' checked="checked"' : ''); ?>/>
+								</td>
+							</tr>
+							<tr>
+									<td>&nbsp;</td>
+									<td></td>
+							</tr>
+							<tr>
+								<th scope="row" nowrap="nowrap">Include Post/Page title (og:title) tag?</th>
+								<td>
+									<input type="checkbox" name="fb_title_show" id="fb_title_show" value="1" <?php echo (intval($fb_title_show)==1 ? ' checked="checked"' : ''); ?>/>
+								</td>
+							</tr>
+							<tr>
+									<td>&nbsp;</td>
+									<td></td>
+							</tr>
+							<tr>
+								<th scope="row" nowrap="nowrap">Include URL (og:url) tag?</th>
+								<td>
+									<input type="checkbox" name="fb_url_show" id="fb_url_show" value="1" <?php echo (intval($fb_url_show)==1 ? ' checked="checked"' : ''); ?>/>
+								</td>
+							</tr>
+							<tr>
+									<td>&nbsp;</td>
+									<td></td>
+							</tr>
+							<tr>
+								<th scope="row" nowrap="nowrap">Include Type (og:type) tag?</th>
+								<td>
+									<input type="checkbox" name="fb_type_show" id="fb_type_show" value="1" <?php echo (intval($fb_type_show)==1 ? ' checked="checked"' : ''); ?>/>
+									(will be	&quot;article&quot; for posts and pages and &quot;website&quot; for the homepage)
+								</td>
+							</tr>
+							<tr>
+									<td>&nbsp;</td>
+									<td></td>
+							</tr>
+							<tr>
+								<th scope="row" nowrap="nowrap">Include Description (og:description) tag?</th>
+								<td>
+									<input type="checkbox" name="fb_desc_show" id="fb_desc_show" value="1" <?php echo (intval($fb_desc_show)==1 ? ' checked="checked"' : ''); ?> onclick="showDescriptionOptions();"/>
+								</td>
+							</tr>
+							<tr class="fb_description_options">
+								<th scope="row" nowrap="nowrap">Description maximum length:</th>
+								<td>
+									<input type="text" name="fb_desc_chars" id="fb_desc_chars" size="3" maxlength="3" value="<?php echo (intval($fb_desc_chars)>0 ? intval($fb_desc_chars) : ''); ?>"/> characters, 0 or blank for no maximum length
+								</td>
+							</tr>
+							<tr class="fb_description_options">
+								<th scope="row" nowrap="nowrap">Homepage description:</th>
+								<td>
+									Use
+									<select name="fb_desc_homepage" id="fb_desc_homepage" onchange="showDescriptionCustomText();">
+										<option value=""<?php if (trim($fb_desc_homepage)=='') echo ' selected="selected"'; ?>>Website tagline</option>
+										<option value="custom"<?php if (trim($fb_desc_homepage)=='custom') echo ' selected="selected"'; ?>>Custom text</option>
+									</select>
+									<div id="fb_desc_homepage_customtext_div">
+										<textarea name="fb_desc_homepage_customtext" id="fb_desc_homepage_customtext" rows="3" cols="50"><?php echo $fb_desc_homepage_customtext; ?></textarea>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+								<td></td>
+							</tr>
+							<tr>
+								<th scope="row" nowrap="nowrap">Include Image (og:image) tag?</th>
+								<td>
+									<input type="checkbox" name="fb_image_show" id="fb_image_show" value="1" <?php echo (intval($fb_image_show)==1 ? ' checked="checked"' : ''); ?> onclick="showImageOptions();"/>
+								</td>
+							</tr>
+							<tr class="fb_image_options">
+								<th scope="row" nowrap="nowrap">Default image:</th>
+								<td>
+									<input type="text" name="fb_image" id="fb_image" size="50" value="<?php echo $fb_image; ?>"/>
+									<input id="fb_image_button" class="button" type="button" value="Upload/Choose image" />
+									<br/>
+									Full URL with http://
+								</td>
+							</tr>
   						</table>
   						<p class="submit">
   							<input type="hidden" name="action" value="save"/>
@@ -232,11 +245,45 @@
 				tb_show('',"media-upload.php?type=image&TB_iframe=true");
 			});
 			window.send_to_editor = function(html) {
-        imgurl = jQuery('img',html).attr('src');
-        jQuery("input"+"#fb_image").val(imgurl);
-        tb_remove();
-    	}	
+				imgurl = jQuery('img',html).attr('src');
+				jQuery("input"+"#fb_image").val(imgurl);
+				tb_remove();
+			}
+			showAdminOptions();
+			jQuery('.fb_description_options').hide();
+			showDescriptionOptions();
+			jQuery('#fb_desc_homepage_customtext').hide();
+			showDescriptionCustomText();
+			showImageOptions();
 		});
+		function showAdminOptions() {
+			if (jQuery('#fb_admin_id_show').is(':checked')) {
+				jQuery('.fb_admin_id_options').show();
+			} else {
+				jQuery('.fb_admin_id_options').hide();
+			}
+		}
+		function showDescriptionOptions() {
+			if (jQuery('#fb_desc_show').is(':checked')) {
+				jQuery('.fb_description_options').show();
+			} else {
+				jQuery('.fb_description_options').hide();
+			}
+		}
+		function showDescriptionCustomText() {
+			if (jQuery('#fb_desc_homepage').val()=='custom') {
+				jQuery('#fb_desc_homepage_customtext').show().focus();
+			} else {
+				jQuery('#fb_desc_homepage_customtext').hide();
+			}
+		}
+		function showImageOptions() {
+			if (jQuery('#fb_image_show').is(':checked')) {
+				jQuery('.fb_image_options').show();
+			} else {
+				jQuery('.fb_image_options').hide();
+			}
+		}
 	</script>
 	<style type="text/css">
 		TABLE.form-table TR TH {

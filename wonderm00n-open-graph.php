@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Wonderm00n's Simple Facebook Open Graph Meta Tags
- * @version 0.1.4
+ * @version 0.1.5
  */
 /*
 Plugin Name: Wonderm00n's Simple Facebook Open Graph Meta Tags
 Plugin URI: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
 Description: This plugin inserts Facebook Open Graph Tags into your Wordpress Blog/Website for better Facebook sharing
 Author: Marco Almeida (Wonderm00n)
-Version: 0.1.4
+Version: 0.1.5
 Author URI: http://wonderm00n.com
 */
 
@@ -25,6 +25,8 @@ function wonderm00n_open_graph() {
 	$fb_type_show=get_option('wonderm00n_open_graph_fb_type_show');
 	$fb_desc_show=get_option('wonderm00n_open_graph_fb_desc_show');
 	$fb_desc_chars=intval(get_option('wonderm00n_open_graph_fb_desc_chars'));
+	$fb_desc_homepage = get_option('wonderm00n_open_graph_fb_desc_homepage');
+	$fb_desc_homepage_customtext = get_option('wonderm00n_open_graph_fb_desc_homepage_customtext');
 	$fb_image_show=get_option('wonderm00n_open_graph_fb_image_show');
 	$fb_image=get_option('wonderm00n_open_graph_fb_image');
 	
@@ -78,25 +80,33 @@ function wonderm00n_open_graph() {
 			}
 		}
 	} else {
+		global $wp_query;
 		//Other pages - Defaults
 		$fb_title=esc_attr(strip_tags(stripslashes(get_bloginfo('name'))));
 		$fb_url=get_option('siteurl');
 		$fb_type='website';
-		$fb_desc=esc_attr(strip_tags(stripslashes(get_bloginfo('description'))));
+		switch(trim($fb_desc_homepage)) {
+			case 'custom':
+				$fb_desc=esc_attr(strip_tags(stripslashes($fb_desc_homepage_customtext)));
+				break;
+			default:
+				$fb_desc=esc_attr(strip_tags(stripslashes(get_bloginfo('description'))));
+				break;
+		}
 		
 		if (is_category()) {
 			$fb_title=esc_attr(strip_tags(stripslashes(single_cat_title('', false))));
-			$term=get_queried_object();
+			$term=$wp_query->get_queried_object();
 			$fb_url=get_term_link($term, $term->taxonomy);
 		} else {
 			if (is_tag()) {
 				$fb_title=esc_attr(strip_tags(stripslashes(single_tag_title('', false))));
-				$term=get_queried_object();
+				$term=$wp_query->get_queried_object();
 				$fb_url=get_term_link($term, $term->taxonomy);
 			} else {
 				if (is_tax()) {
 					$fb_title=esc_attr(strip_tags(stripslashes(single_term_title('', false))));
-					$term=get_queried_object();
+					$term=$wp_query->get_queried_object();
 					$fb_url=get_term_link($term, $term->taxonomy);
 				} else {
 					if (is_search()) {
@@ -230,8 +240,10 @@ if ( isset($_POST['action']) ) {
 		update_option('wonderm00n_open_graph_fb_type_show', intval($_POST['fb_type_show']));
 		update_option('wonderm00n_open_graph_fb_desc_show', intval($_POST['fb_desc_show']));
 		update_option('wonderm00n_open_graph_fb_desc_chars', intval($_POST['fb_desc_chars']));
+		update_option('wonderm00n_open_graph_fb_desc_homepage', trim($_POST['fb_desc_homepage']));
+		update_option('wonderm00n_open_graph_fb_desc_homepage_customtext', trim($_POST['fb_desc_homepage_customtext']));
+		update_option('wonderm00n_open_graph_fb_image_show', intval($_POST['fb_image_show']));
 		update_option('wonderm00n_open_graph_fb_image', trim($_POST['fb_image']));
 	}
 }
-
 ?>
