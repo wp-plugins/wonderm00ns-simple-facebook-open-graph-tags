@@ -33,11 +33,16 @@ The tags that this plugin inserts are:
 
 == Changelog ==
 
+= 0.1.7 =
+
+* Changed the plugin priority, so that it shows up as late as possible on the <head> tag, and it won't be override by another plugin's Open Graph implementation, because other plugins usually don't allow to disable the tags. If you want to keep a specific tag from another plugin, you can just disable that tag on this plugin options.
+
 = 0.1.6 =
 
 * Settings link now shows up on the plugins list
 * Small fix to ensure admin functions only are running when on the admin interface
 * Some admin options now only show up when the tag is set to be included
+
 
 = 0.1.5 =
 
