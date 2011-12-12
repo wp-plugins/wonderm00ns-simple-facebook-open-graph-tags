@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Wonderm00n's Simple Facebook Open Graph Meta Tags
- * @version 0.1.8
+ * @version 0.1.8.1
  */
 /*
 Plugin Name: Wonderm00n's Simple Facebook Open Graph Meta Tags
 Plugin URI: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
 Description: This plugin inserts Facebook Open Graph Tags into your Wordpress Blog/Website for better Facebook sharing
 Author: Marco Almeida (Wonderm00n)
-Version: 0.1.8
+Version: 0.1.8.1
 Author URI: http://wonderm00n.com
 */
 
@@ -178,11 +178,17 @@ add_action('wp_head', 'wonderm00n_open_graph', 9999);
 function wonderm00n_open_graph_add_opengraph_namespace( $output ) {
 	if (stristr($output,'xmlns:og')) {
 		//Already there
-		return $output;
 	} else {
 		//Let's add it
-		return $output . ' xmlns:og="http://opengraphprotocol.org/schema/"';
+		$output=$output . ' xmlns:og="http://ogp.me/ns#"';
 	}
+	if (stristr($output,'xmlns:fb')) {
+		//Already there
+	} else {
+		//Let's add it
+		$output=$output . ' xmlns:fb="http://ogp.me/ns/fb#"';
+	}
+	return $output;
 }
 //We want to be last to add the namespace because some other plugin may already added it ;-)
 add_filter('language_attributes', 'wonderm00n_open_graph_add_opengraph_namespace',9999);
