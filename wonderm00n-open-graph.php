@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Wonderm00n's Simple Facebook Open Graph Meta Tags
- * @version 0.1.5
+ * @version 0.1.6
  */
 /*
 Plugin Name: Wonderm00n's Simple Facebook Open Graph Meta Tags
 Plugin URI: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
 Description: This plugin inserts Facebook Open Graph Tags into your Wordpress Blog/Website for better Facebook sharing
 Author: Marco Almeida (Wonderm00n)
-Version: 0.1.5
+Version: 0.1.6
 Author URI: http://wonderm00n.com
 */
 
@@ -179,71 +179,72 @@ function wonderm00n_open_graph_add_opengraph_namespace( $output ) {
 add_filter('language_attributes', 'wonderm00n_open_graph_add_opengraph_namespace',9999);
 
 //Admin
-if ( is_admin() ){
+if ( is_admin() ) {
 	add_action('admin_menu', 'wonderm00n_open_graph_add_options');
-}
-add_action('activate_wonderm00n-open-graph/wonderm00n-open-graph.php', 'wonderm00n_open_graph_activate');
-
-function wonderm00n_open_graph_add_options() {
-  if(function_exists('add_options_page')){
-    add_options_page('Wonderm00n\'s Open Graph', 'Wonderm00n\'s Open Graph', 9, basename(__FILE__), 'wonderm00n_open_graph_admin');
-  }
-}
-
-function wonderm00n_open_graph_activate() {
-	update_option("wonderm00n_open_graph_activated", 1);
-	update_option("wonderm00n_open_graph_fb_admin_id_show", 0);
-	update_option("wonderm00n_open_graph_fb_app_id_show", 0);
-	update_option("wonderm00n_open_graph_fb_sitename_show", 1);
-	update_option("wonderm00n_open_graph_fb_title_show", 1);
-	update_option("wonderm00n_open_graph_fb_url_show", 1);
-	update_option("wonderm00n_open_graph_fb_type_show", 1);
-	update_option("wonderm00n_open_graph_fb_desc_show", 1);
-	update_option("wonderm00n_open_graph_fb_desc_chars", 300);
-	update_option("wonderm00n_open_graph_fb_image_show", 1);
-}
-
-function wonderm00n_open_graph_settings_link( $links, $file ) {
- 	if( $file == 'wonderm00n-open-graph/wonderm00n-open-graph.php' && function_exists( "admin_url" ) ) {
-		$settings_link = '<a href="' . admin_url( 'options-general.php?page=wonderm00n-open-graph.php' ) . '">' . __('Settings') . '</a>';
-		array_push( $links, $settings_link ); // after other links
+	
+	add_action('activate_wonderm00n-open-graph/wonderm00n-open-graph.php', 'wonderm00n_open_graph_activate');
+	
+	function wonderm00n_open_graph_add_options() {
+	if(function_exists('add_options_page')){
+		add_options_page('Wonderm00n\'s Open Graph', 'Wonderm00n\'s Open Graph', 9, basename(__FILE__), 'wonderm00n_open_graph_admin');
 	}
-	return $links;
-}
-add_filter( 'plugin_action_links', 'wonderm00n_open_graph_settings_link', 9, 2 );
-
-
-function wonderm00n_open_graph_admin() {
-	include_once 'includes/settings-page.php';
-}
-
-function wonderm00n_open_graph_scripts() {
-	wp_enqueue_script('media-upload');
-	wp_enqueue_script('thickbox');
-	wp_enqueue_script('jquery');
-}
-function wonderm00n_open_graph_styles() {
-	wp_enqueue_style('thickbox');
-}
-add_action('admin_print_scripts', 'wonderm00n_open_graph_scripts');
-add_action('admin_print_styles', 'wonderm00n_open_graph_styles');
-
-if ( isset($_POST['action']) ) {
-	if (trim($_POST['action'])=='save') {
-		update_option('wonderm00n_open_graph_fb_app_id_show', intval($_POST['fb_app_id_show']));
-		update_option('wonderm00n_open_graph_fb_app_id', trim($_POST['fb_app_id']));
-		update_option('wonderm00n_open_graph_fb_admin_id_show', intval($_POST['fb_admin_id_show']));
-		update_option('wonderm00n_open_graph_fb_admin_id', trim($_POST['fb_admin_id']));
-		update_option('wonderm00n_open_graph_fb_sitename_show', intval($_POST['fb_sitename_show']));
-		update_option('wonderm00n_open_graph_fb_title_show', intval($_POST['fb_title_show']));
-		update_option('wonderm00n_open_graph_fb_url_show', intval($_POST['fb_url_show']));
-		update_option('wonderm00n_open_graph_fb_type_show', intval($_POST['fb_type_show']));
-		update_option('wonderm00n_open_graph_fb_desc_show', intval($_POST['fb_desc_show']));
-		update_option('wonderm00n_open_graph_fb_desc_chars', intval($_POST['fb_desc_chars']));
-		update_option('wonderm00n_open_graph_fb_desc_homepage', trim($_POST['fb_desc_homepage']));
-		update_option('wonderm00n_open_graph_fb_desc_homepage_customtext', trim($_POST['fb_desc_homepage_customtext']));
-		update_option('wonderm00n_open_graph_fb_image_show', intval($_POST['fb_image_show']));
-		update_option('wonderm00n_open_graph_fb_image', trim($_POST['fb_image']));
+	}
+	
+	function wonderm00n_open_graph_activate() {
+		update_option("wonderm00n_open_graph_activated", 1);
+		update_option("wonderm00n_open_graph_fb_admin_id_show", 0);
+		update_option("wonderm00n_open_graph_fb_app_id_show", 0);
+		update_option("wonderm00n_open_graph_fb_sitename_show", 1);
+		update_option("wonderm00n_open_graph_fb_title_show", 1);
+		update_option("wonderm00n_open_graph_fb_url_show", 1);
+		update_option("wonderm00n_open_graph_fb_type_show", 1);
+		update_option("wonderm00n_open_graph_fb_desc_show", 1);
+		update_option("wonderm00n_open_graph_fb_desc_chars", 300);
+		update_option("wonderm00n_open_graph_fb_image_show", 1);
+	}
+	
+	function wonderm00n_open_graph_settings_link( $links, $file ) {
+		if( $file == 'wonderm00ns-simple-facebook-open-graph-tags/wonderm00n-open-graph.php' && function_exists( "admin_url" ) ) {
+			$settings_link = '<a href="' . admin_url( 'options-general.php?page=wonderm00n-open-graph.php' ) . '">' . __('Settings') . '</a>';
+			array_push( $links, $settings_link ); // after other links
+		}
+		return $links;
+	}
+	add_filter('plugin_row_meta', 'wonderm00n_open_graph_settings_link', 9, 2 );
+	
+	
+	function wonderm00n_open_graph_admin() {
+		include_once 'includes/settings-page.php';
+	}
+	
+	function wonderm00n_open_graph_scripts() {
+		wp_enqueue_script('media-upload');
+		wp_enqueue_script('thickbox');
+		wp_enqueue_script('jquery');
+	}
+	function wonderm00n_open_graph_styles() {
+		wp_enqueue_style('thickbox');
+	}
+	add_action('admin_print_scripts', 'wonderm00n_open_graph_scripts');
+	add_action('admin_print_styles', 'wonderm00n_open_graph_styles');
+	
+	if ( isset($_POST['action']) ) {
+		if (trim($_POST['action'])=='save') {
+			update_option('wonderm00n_open_graph_fb_app_id_show', intval($_POST['fb_app_id_show']));
+			update_option('wonderm00n_open_graph_fb_app_id', trim($_POST['fb_app_id']));
+			update_option('wonderm00n_open_graph_fb_admin_id_show', intval($_POST['fb_admin_id_show']));
+			update_option('wonderm00n_open_graph_fb_admin_id', trim($_POST['fb_admin_id']));
+			update_option('wonderm00n_open_graph_fb_sitename_show', intval($_POST['fb_sitename_show']));
+			update_option('wonderm00n_open_graph_fb_title_show', intval($_POST['fb_title_show']));
+			update_option('wonderm00n_open_graph_fb_url_show', intval($_POST['fb_url_show']));
+			update_option('wonderm00n_open_graph_fb_type_show', intval($_POST['fb_type_show']));
+			update_option('wonderm00n_open_graph_fb_desc_show', intval($_POST['fb_desc_show']));
+			update_option('wonderm00n_open_graph_fb_desc_chars', intval($_POST['fb_desc_chars']));
+			update_option('wonderm00n_open_graph_fb_desc_homepage', trim($_POST['fb_desc_homepage']));
+			update_option('wonderm00n_open_graph_fb_desc_homepage_customtext', trim($_POST['fb_desc_homepage_customtext']));
+			update_option('wonderm00n_open_graph_fb_image_show', intval($_POST['fb_image_show']));
+			update_option('wonderm00n_open_graph_fb_image', trim($_POST['fb_image']));
+		}
 	}
 }
 ?>

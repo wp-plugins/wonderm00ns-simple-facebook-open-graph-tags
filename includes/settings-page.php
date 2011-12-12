@@ -52,10 +52,10 @@
 							<tr>
 								<th scope="row" nowrap="nowrap">Include Facebook Platform App ID (og:app_id) tag?</th>
 								<td>
-									<input type="checkbox" name="fb_app_id_show" id="fb_app_id_show" value="1" <?php echo (intval($fb_app_id_show)==1 ? ' checked="checked"' : ''); ?>/>
+									<input type="checkbox" name="fb_app_id_show" id="fb_app_id_show" value="1" <?php echo (intval($fb_app_id_show)==1 ? ' checked="checked"' : ''); ?> onclick="showAppidOptions();"/>
 								</td>
 							</tr>
-							<tr>
+							<tr class="fb_app_id_options">
 								<th scope="row" nowrap="nowrap">Facebook Platform App ID:</th>
 								<td>
 									<input type="text" name="fb_app_id" id="fb_app_id" size="30" value="<?php echo $fb_app_id; ?>"/>
@@ -249,6 +249,7 @@
 				jQuery("input"+"#fb_image").val(imgurl);
 				tb_remove();
 			}
+			showAppidOptions();
 			showAdminOptions();
 			jQuery('.fb_description_options').hide();
 			showDescriptionOptions();
@@ -256,6 +257,13 @@
 			showDescriptionCustomText();
 			showImageOptions();
 		});
+		function showAppidOptions() {
+			if (jQuery('#fb_app_id_show').is(':checked')) {
+				jQuery('.fb_app_id_options').show();
+			} else {
+				jQuery('.fb_app_id_options').hide();
+			}
+		}
 		function showAdminOptions() {
 			if (jQuery('#fb_admin_id_show').is(':checked')) {
 				jQuery('.fb_admin_id_options').show();
