@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Wonderm00n's Simple Facebook Open Graph Meta Tags
- * @version 0.1.7
+ * @version 0.1.8
  */
 /*
 Plugin Name: Wonderm00n's Simple Facebook Open Graph Meta Tags
 Plugin URI: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
 Description: This plugin inserts Facebook Open Graph Tags into your Wordpress Blog/Website for better Facebook sharing
 Author: Marco Almeida (Wonderm00n)
-Version: 0.1.7
+Version: 0.1.8
 Author URI: http://wonderm00n.com
 */
 
@@ -30,12 +30,12 @@ function wonderm00n_open_graph() {
 	$fb_image_show=get_option('wonderm00n_open_graph_fb_image_show');
 	$fb_image=get_option('wonderm00n_open_graph_fb_image');
 	
+	$fb_type='article';
 	if (is_singular()) {
 		//It's a Post or a Page or an attachment page
 		global $post;
 		$fb_title=esc_attr(strip_tags(stripslashes($post->post_title)));
 		$fb_url=get_permalink();
-		$fb_type='article';
 		if (trim($post->post_excerpt)!='') {
 			//If there's an excerpt that's waht we'll use
 			$fb_desc=trim($post->post_excerpt);
@@ -84,7 +84,6 @@ function wonderm00n_open_graph() {
 		//Other pages - Defaults
 		$fb_title=esc_attr(strip_tags(stripslashes(get_bloginfo('name'))));
 		$fb_url=get_option('siteurl');
-		$fb_type='website';
 		switch(trim($fb_desc_homepage)) {
 			case 'custom':
 				$fb_desc=esc_attr(strip_tags(stripslashes($fb_desc_homepage_customtext)));
@@ -98,11 +97,15 @@ function wonderm00n_open_graph() {
 			$fb_title=esc_attr(strip_tags(stripslashes(single_cat_title('', false))));
 			$term=$wp_query->get_queried_object();
 			$fb_url=get_term_link($term, $term->taxonomy);
+			$cat_desc=trim(esc_attr(strip_tags(stripslashes(category_description()))));
+			if (trim($cat_desc)!='') $fb_desc=$cat_desc;
 		} else {
 			if (is_tag()) {
 				$fb_title=esc_attr(strip_tags(stripslashes(single_tag_title('', false))));
 				$term=$wp_query->get_queried_object();
 				$fb_url=get_term_link($term, $term->taxonomy);
+				$tag_desc=trim(esc_attr(strip_tags(stripslashes(tag_description()))));
+				if (trim($tag_desc)!='') $fb_desc=$tag_desc;
 			} else {
 				if (is_tax()) {
 					$fb_title=esc_attr(strip_tags(stripslashes(single_term_title('', false))));
@@ -133,7 +136,11 @@ function wonderm00n_open_graph() {
 									}
 								}
 							} else {
-								//Home or others... Defaults already set up there
+								if (is_front_page()) {
+									$fb_type='website';
+								} else {
+									//Others... Defaults already set up there
+								}
 							}
 						}
 					}
@@ -141,6 +148,8 @@ function wonderm00n_open_graph() {
 			}
 		}
 	}
+	//If no description let's just add the title
+	if (trim($fb_desc)=='') $fb_desc=$fb_title;
 	
 	$html.='<!-- START - Wonderm00n\'s Simple Facebook Open Graph Tags -->
 ';
