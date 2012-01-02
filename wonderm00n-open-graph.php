@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Wonderm00n's Simple Facebook Open Graph Meta Tags
- * @version 0.1.9.5
+ * @version 0.2
  */
 /*
 Plugin Name: Wonderm00n's Simple Facebook Open Graph Meta Tags
 Plugin URI: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
 Description: This plugin inserts Facebook Open Graph Tags into your Wordpress Blog/Website for better Facebook sharing
 Author: Marco Almeida (Wonderm00n)
-Version: 0.1.9.5
+Version: 0.2
 Author URI: http://wonderm00n.com
 */
 
@@ -53,96 +53,8 @@ function wonderm00n_open_graph() {
 		}
 		$fb_desc=(intval($fb_desc_chars)>0 ? substr(esc_attr(strip_tags(strip_shortcodes(stripslashes($fb_desc)))),0,$fb_desc_chars) : esc_attr(strip_tags(strip_shortcodes(stripslashes($fb_desc)))));
 		if (intval($fb_image_show)==1) {
-			$thumbdone=false;
-			//Featured image
-			if (function_exists('get_post_thumbnail_id')) {
-				if (intval($fb_image_use_featured)==1) {
-					if ($id_attachment=get_post_thumbnail_id($post->ID)) {
-						//There's a featured/thumbnail image for this post
-						$fb_image=wp_get_attachment_url($id_attachment, false);
-						$thumbdone=true;
-					}
-				}
-			}
-			//From post/page content
-			if (!$thumbdone) {
-				if (intval($fb_image_use_content)==1) {
-					$imgreg = '/<img .*src=["\']([^ ^"^\']*)["\']/';
-					preg_match_all($imgreg, trim($post->post_content), $matches);
-					$image=$matches[1][0];
-					if ($image) {
-						//There's an image on the content
-						$pos = strpos($image, site_url());
-						if ($pos === false) {
-							$fb_image=$_SERVER['HTTP_HOST'].$image;
-						} else {
-							$fb_image=$image;
-						}
-						$thumbdone=true;
-					}
-				}
-			}
-			//From media gallery
-			if (!$thumbdone) {
-				if (intval($fb_image_use_media)==1) {
-					$images = get_posts(array('post_type' => 'attachment','numberposts' => 1,'post_status' => null,'order' => 'ASC','orderby' => 'menu_order','post_mime_type' => 'image','post_parent' => $post->ID));
-					if ($images) {
-						$fb_image=wp_get_attachment_url($images[0]->ID, false);
-						$thumbdone=true;
-					}
-				}
-			}
-			//From default
-			if (!$thumbdone) {
-				if (intval($fb_image_use_default)==1) {
-					//Well... We sure did try. We'll just keep the default one!
-					//$fb_image is already set
-				} else {
-					//User chose not to use default on pages/posts
-					$fb_image='';
-				}
-			}
+			$fb_image=wonderm00n_open_graph_post_image($fb_image_use_featured, $fb_image_use_content, $fb_image_use_media, $fb_image_use_default, $fb_image);
 		}
-		
-		
-		/*$thumbok=false;
-		if (function_exists('get_post_thumbnail_id')) {
-			$thumbok=true;
-		}
-		//From post/page featured/image
-		if ($thumbok) {
-			if ($id_attachment=get_post_thumbnail_id($post->ID)) {
-				//There's a featured/thumbnail image for this post
-				$fb_image=wp_get_attachment_url($id_attachment, false);
-			} else {
-				$thumbok=false;
-			}
-		}
-		if (!$thumbok) {
-			//If not, we'll try to get the first image on the post content
-			$imgreg = '/<img .*src=["\']([^ ^"^\']*)["\']/';
-			preg_match_all($imgreg, trim($post->post_content), $matches);
-			$image=$matches[1][0];
-			if ($image) {
-				//There's an image on the content
-				$pos = strpos($image, site_url());
-				if ($pos === false) {
-					$fb_image=$_SERVER['HTTP_HOST'].$image;
-				} else {
-					$fb_image=$image;
-				}
-			} else {
-				//If not, we'll try to get the first image associated to the post, even if not used on the content
-				$images = get_posts(array('post_type' => 'attachment','numberposts' => 1,'post_status' => null,'order' => 'ASC','orderby' => 'menu_order','post_mime_type' => 'image','post_parent' => $post->ID));
-				if ($images) {
-					$fb_image=wp_get_attachment_url($images[0]->ID, false);
-				} else {
-					//Well... We sure did try. We'll just keep the default one :-(
-				}
-			}
-		}*/
-		
-		
 	} else {
 		global $wp_query;
 		//Other pages - Defaults
@@ -259,6 +171,109 @@ function wonderm00n_open_graph_add_opengraph_namespace( $output ) {
 //We want to be last to add the namespace because some other plugin may already added it ;-)
 add_filter('language_attributes', 'wonderm00n_open_graph_add_opengraph_namespace',9999);
 
+//Add images also to RSS feed. Most code from WP RSS Images by Alain Gonzalez
+function wonderm00n_open_graph_images_on_feed($comments) {
+	$fb_image_rss=get_option('wonderm00n_open_graph_fb_image_rss');
+	if (intval($fb_image_rss)==1) {
+		if (!$comments) {
+			add_action('rss2_ns', 'wonderm00n_open_graph_images_on_feed_yahoo_media_tag');
+			add_action('rss_item', 'wonderm00n_open_graph_images_on_feed_image');
+			add_action('rss2_item', 'wonderm00n_open_graph_images_on_feed_image');
+		}
+	}
+}
+function wonderm00n_open_graph_images_on_feed_yahoo_media_tag() {
+	echo 'xmlns:media="http://search.yahoo.com/mrss/"';
+}
+function wonderm00n_open_graph_images_on_feed_image() {
+	$fb_image=get_option('wonderm00n_open_graph_fb_image');
+	$fb_image_use_featured=get_option('wonderm00n_open_graph_fb_image_use_featured');
+	$fb_image_use_content=get_option('wonderm00n_open_graph_fb_image_use_content');
+	$fb_image_use_media=get_option('wonderm00n_open_graph_fb_image_use_media');
+	$fb_image_use_default=get_option('wonderm00n_open_graph_fb_image_use_default');
+	$fb_image = wonderm00n_open_graph_post_image($fb_image_use_featured, $fb_image_use_content, $fb_image_use_media, $fb_image_use_default, $fb_image);
+	if ($fb_image!='') {
+		$uploads = wp_upload_dir();
+		$url = parse_url($fb_image);
+		$path = $uploads['basedir'] . preg_replace( '/.*uploads(.*)/', '${1}', $url['path'] );
+		//echo $path;
+		if (file_exists($path)) {
+			$filesize=filesize($path);
+			$url=$path;
+		} else {		
+			$header=get_headers($fb_image, 1);					   
+			$filesize=$header['Content-Length'];	
+			$url=$fb_image;				
+		}
+		list($width, $height, $type, $attr) = getimagesize($url);
+		echo '<enclosure url="' . $fb_image . '" length="' . $filesize . '" type="'.image_type_to_mime_type($type).'" />';
+		echo '<media:content url="'.$fb_image.'" width="'.$width.'" height="'.$height.'" medium="image" type="'.image_type_to_mime_type($type).'" />';
+	}
+}
+add_action("do_feed_rss","wonderm00n_open_graph_images_on_feed",5,1);
+add_action("do_feed_rss2","wonderm00n_open_graph_images_on_feed",5,1);
+
+//Post image
+function wonderm00n_open_graph_post_image($fb_image_use_featured=1, $fb_image_use_content=1, $fb_image_use_media=1, $fb_image_use_default=1, $default_image='') {
+	global $post;
+	$thumbdone=false;
+	$fb_image='';
+	//Featured image
+	if (function_exists('get_post_thumbnail_id')) {
+		if (intval($fb_image_use_featured)==1) {
+			if ($id_attachment=get_post_thumbnail_id($post->ID)) {
+				//There's a featured/thumbnail image for this post
+				$fb_image=wp_get_attachment_url($id_attachment, false);
+				$thumbdone=true;
+				//echo 'IMG FEAT';
+			}
+		}
+	}
+	//From post/page content
+	if (!$thumbdone) {
+		if (intval($fb_image_use_content)==1) {
+			$imgreg = '/<img .*src=["\']([^ ^"^\']*)["\']/';
+			preg_match_all($imgreg, trim($post->post_content), $matches);
+			$image=$matches[1][0];
+			if ($image) {
+				//There's an image on the content
+				$pos = strpos($image, site_url());
+				if ($pos === false) {
+					$fb_image=$_SERVER['HTTP_HOST'].$image;
+				} else {
+					$fb_image=$image;
+				}
+				$thumbdone=true;
+				//echo 'IMG CONTENT';
+			}
+		}
+	}
+	//From media gallery
+	if (!$thumbdone) {
+		if (intval($fb_image_use_media)==1) {
+			$images = get_posts(array('post_type' => 'attachment','numberposts' => 1,'post_status' => null,'order' => 'ASC','orderby' => 'menu_order','post_mime_type' => 'image','post_parent' => $post->ID));
+			if ($images) {
+				$fb_image=wp_get_attachment_url($images[0]->ID, false);
+				$thumbdone=true;
+				//echo 'IMG MEDIA';
+			}
+		}
+	}
+	//From default
+	if (!$thumbdone) {
+		if (intval($fb_image_use_default)==1) {
+			//Well... We sure did try. We'll just keep the default one!
+			$fb_image=$default_image;
+			//echo 'IMG DEFAULT';
+		} else {
+			//User chose not to use default on pages/posts
+			$fb_image='';
+			//echo 'IMG NO IMG';
+		}
+	}
+	return $fb_image;
+}
+
 //Admin
 if ( is_admin() ) {
 	add_action('admin_menu', 'wonderm00n_open_graph_add_options');
@@ -283,6 +298,7 @@ if ( is_admin() ) {
 		update_option("wonderm00n_open_graph_fb_desc_show", 1);
 		update_option("wonderm00n_open_graph_fb_desc_chars", 300);
 		update_option("wonderm00n_open_graph_fb_image_show", 1);
+		update_option("wonderm00n_open_graph_fb_image_rss", 0);
 		update_option("wonderm00n_open_graph_fb_image_use_featured", 1);
 		update_option("wonderm00n_open_graph_fb_image_use_content", 1);
 		update_option("wonderm00n_open_graph_fb_image_use_media", 1);
@@ -334,6 +350,7 @@ if ( is_admin() ) {
 			update_option('wonderm00n_open_graph_fb_desc_homepage_customtext', trim($_POST['fb_desc_homepage_customtext']));
 			update_option('wonderm00n_open_graph_fb_image_show', intval($_POST['fb_image_show']));
 			update_option('wonderm00n_open_graph_fb_image', trim($_POST['fb_image']));
+			update_option('wonderm00n_open_graph_fb_image_rss', intval($_POST['fb_image_rss']));
 			update_option('wonderm00n_open_graph_fb_image_use_featured', intval($_POST['fb_image_use_featured']));
 			update_option('wonderm00n_open_graph_fb_image_use_content', intval($_POST['fb_image_use_content']));
 			update_option('wonderm00n_open_graph_fb_image_use_media', intval($_POST['fb_image_use_media']));

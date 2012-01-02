@@ -32,6 +32,7 @@
 	$fb_desc_homepage_customtext = get_option('wonderm00n_open_graph_fb_desc_homepage_customtext');
 	$fb_image_show=get_option('wonderm00n_open_graph_fb_image_show');
 	$fb_image=get_option('wonderm00n_open_graph_fb_image');
+	$fb_image_rss=get_option('wonderm00n_open_graph_fb_image_rss');
 	$fb_image_use_featured=get_option('wonderm00n_open_graph_fb_image_use_featured');
 	$fb_image_use_content=get_option('wonderm00n_open_graph_fb_image_use_content');
 	$fb_image_use_media=get_option('wonderm00n_open_graph_fb_image_use_media');
@@ -172,12 +173,8 @@
 							<tr class="fb_url_options">
 								<th scope="row" nowrap="nowrap">Add trailing slash at the end:</th>
 								<td>
-									<select name="fb_url_add_trailing" id="fb_url_add_trailing" onchange="showUrlTrail();">
-										<option value="0"<?php if (intval($fb_url_add_trailing)==0) echo ' selected="selected"'; ?>>No&nbsp;</option>
-										<option value="1"<?php if (intval($fb_url_add_trailing)==1) echo ' selected="selected"'; ?>>Yes&nbsp;</option>
-									</select>
-									<br/>
-									On the homepage will be: <i><?php echo get_option('siteurl'); ?><span id="fb_url_add_trailing_example">/</span></i>
+									<input type="checkbox" name="fb_url_add_trailing" id="fb_url_add_trailing" value="1" <?php echo (intval($fb_url_add_trailing)==1 ? ' checked="checked"' : ''); ?> onclick="showUrlTrail();"/>
+									(on the homepage will be: <i><?php echo get_option('siteurl'); ?><span id="fb_url_add_trailing_example">/</span></i>)
 								</td>
 							</tr>
 							<tr>
@@ -188,7 +185,7 @@
 								<th scope="row" nowrap="nowrap">Include Type (og:type) tag?</th>
 								<td>
 									<input type="checkbox" name="fb_type_show" id="fb_type_show" value="1" <?php echo (intval($fb_type_show)==1 ? ' checked="checked"' : ''); ?> onclick="showTypeOptions();"/>
-									(will be	&quot;article&quot; for posts and pages and &quot;website&quot; or &quot;blog&quot; for the homepage)
+									(will be &quot;article&quot; for posts and pages and &quot;website&quot; or &quot;blog&quot; for the homepage)
 								</td>
 							</tr>
 							<tr class="fb_type_options">
@@ -247,6 +244,13 @@
 									<input id="fb_image_button" class="button" type="button" value="Upload/Choose image" />
 									<br/>
 									Full URL with http://
+								</td>
+							</tr>
+							<tr class="fb_image_options">
+								<th scope="row" nowrap="nowrap">Also add image to RSS/RSS2 feeds?</th>
+								<td>
+									<input type="checkbox" name="fb_image_rss" id="fb_image_rss" value="1" <?php echo (intval($fb_image_rss)==1 ? ' checked="checked"' : ''); ?> onclick="showImageOptions();"/>
+									(for auto-posting apps like RSS Graffiti, twitterfeed, ...)
 								</td>
 							</tr>
 							<tr class="fb_image_options">
@@ -400,7 +404,7 @@
 			}
 		}
 		function showUrlTrail() {
-			if (jQuery('#fb_url_add_trailing').val()=='1') {
+			if (jQuery('#fb_url_add_trailing').is(':checked')) {
 				jQuery('#fb_url_add_trailing_example').show();
 			} else {
 				jQuery('#fb_url_add_trailing_example').hide();

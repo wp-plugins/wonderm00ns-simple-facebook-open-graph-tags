@@ -4,13 +4,14 @@ Donate link: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-faceb
 Tags: facebook, open graph, seo, share, social, meta
 Requires at least: 3
 Tested up to: 3.2.1
-Stable tag: 0.1.9.5
+Stable tag: 0.2
 
 This plugin inserts Facebook Open Graph Tags into your WordPress Blog/Website for more effective Facebook sharing results.
 
 == Description ==
 
 This plugin inserts Facebook Open Graph Tags into your WordPress Blog/Website for more effective Facebook sharing results.
+It also allows to insert the "enclosure" and "media:content" tags to the RSS feeds, so that apps like RSS Graffiti and twitterfeed post the image to Facebook correctly.
 
 It allows the user to choose which tags are, or not, included and also the default image if the post/page doesn't have one.
 
@@ -24,7 +25,7 @@ The tags that this plugin inserts are:
 * **og:url** : From the post/page permalink.
 * **og:type** : "website" or "blog" for the homepage and "article" for all the others.
 * **og:description** : From post/page excerpt if it exist, or from post/page content. From category/tag description on it's pages, if it exist. From tagline, or custom text, on all the others.
-* **og:image** : From post/page featured/thumbnail image, or if it doesn't exist from the first image in the post content, or if it doesn't exist from the first image on the post media gallery, or if it doesn't exist from the default image defined on the options menu.
+* **og:image** : From post/page featured/thumbnail image, or if it doesn't exist from the first image in the post content, or if it doesn't exist from the first image on the post media gallery, or if it doesn't exist from the default image defined on the options menu. The same image chosen here will be used and enclosure/media:content on the RSS feed.
 
 == Installation ==
 
@@ -33,6 +34,10 @@ The tags that this plugin inserts are:
 3. Got to `Options`, `Wonderm00n's Open Graph` to set it up
 
 == Changelog ==
+
+= 0.2 =
+
+* If the option is set to true, the same image obtained to the og:image will be added to the RSS feed on the "enclosure" and "media:content" tags so that apps like RSS Graffiti and twitterfeed post them correctly.
 
 = 0.1.9.5 =
 
