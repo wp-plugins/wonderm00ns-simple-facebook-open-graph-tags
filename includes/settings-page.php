@@ -32,6 +32,10 @@
 	$fb_desc_homepage_customtext = get_option('wonderm00n_open_graph_fb_desc_homepage_customtext');
 	$fb_image_show=get_option('wonderm00n_open_graph_fb_image_show');
 	$fb_image=get_option('wonderm00n_open_graph_fb_image');
+	$fb_image_use_featured=get_option('wonderm00n_open_graph_fb_image_use_featured');
+	$fb_image_use_content=get_option('wonderm00n_open_graph_fb_image_use_content');
+	$fb_image_use_media=get_option('wonderm00n_open_graph_fb_image_use_media');
+	$fb_image_use_default=get_option('wonderm00n_open_graph_fb_image_use_default');
 
 	?>
 	<div class="wrap">
@@ -243,6 +247,26 @@
 									<input id="fb_image_button" class="button" type="button" value="Upload/Choose image" />
 									<br/>
 									Full URL with http://
+								</td>
+							</tr>
+							<tr class="fb_image_options">
+								<th scope="row" nowrap="nowrap">On posts/pages:</th>
+								<td>
+									<div>
+										1) <input type="checkbox" name="fb_image_use_featured" id="fb_image_use_featured" value="1" <?php echo (intval($fb_image_use_featured)==1 ? ' checked="checked"' : ''); ?>/>
+										Image will be fetched from post/page featured/thumbnail picture.</div>
+									<div>
+										2) <input type="checkbox" name="fb_image_use_content" id="fb_image_use_content" value="1" <?php echo (intval($fb_image_use_content)==1 ? ' checked="checked"' : ''); ?>/>
+										If it doesn't exist, use the first image from the post/page content.
+									</div>
+									<div>
+										3) <input type="checkbox" name="fb_image_use_media" id="fb_image_use_media" value="1" <?php echo (intval($fb_image_use_media)==1 ? ' checked="checked"' : ''); ?>/>
+										If it doesn't exist, use first image from the post/page media gallery.
+									</div>
+									<div>
+										4) <input type="checkbox" name="fb_image_use_default" id="fb_image_use_default" value="1" <?php echo (intval($fb_image_use_default)==1 ? ' checked="checked"' : ''); ?>/>
+										If it doesn't exist, use the default image above.
+									</div>
 								</td>
 							</tr>
   						</table>

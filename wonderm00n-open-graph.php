@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Wonderm00n's Simple Facebook Open Graph Meta Tags
- * @version 0.1.9
+ * @version 0.1.9.5
  */
 /*
 Plugin Name: Wonderm00n's Simple Facebook Open Graph Meta Tags
 Plugin URI: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
 Description: This plugin inserts Facebook Open Graph Tags into your Wordpress Blog/Website for better Facebook sharing
 Author: Marco Almeida (Wonderm00n)
-Version: 0.1.9
+Version: 0.1.9.5
 Author URI: http://wonderm00n.com
 */
 
@@ -33,6 +33,10 @@ function wonderm00n_open_graph() {
 	$fb_desc_homepage_customtext = get_option('wonderm00n_open_graph_fb_desc_homepage_customtext');
 	$fb_image_show=get_option('wonderm00n_open_graph_fb_image_show');
 	$fb_image=get_option('wonderm00n_open_graph_fb_image');
+	$fb_image_use_featured=get_option('wonderm00n_open_graph_fb_image_use_featured');
+	$fb_image_use_content=get_option('wonderm00n_open_graph_fb_image_use_content');
+	$fb_image_use_media=get_option('wonderm00n_open_graph_fb_image_use_media');
+	$fb_image_use_default=get_option('wonderm00n_open_graph_fb_image_use_default');
 	
 	$fb_type='article';
 	if (is_singular()) {
@@ -48,10 +52,64 @@ function wonderm00n_open_graph() {
 			$fb_desc=trim($post->post_content);
 		}
 		$fb_desc=(intval($fb_desc_chars)>0 ? substr(esc_attr(strip_tags(strip_shortcodes(stripslashes($fb_desc)))),0,$fb_desc_chars) : esc_attr(strip_tags(strip_shortcodes(stripslashes($fb_desc)))));
-		$thumbok=false;
+		if (intval($fb_image_show)==1) {
+			$thumbdone=false;
+			//Featured image
+			if (function_exists('get_post_thumbnail_id')) {
+				if (intval($fb_image_use_featured)==1) {
+					if ($id_attachment=get_post_thumbnail_id($post->ID)) {
+						//There's a featured/thumbnail image for this post
+						$fb_image=wp_get_attachment_url($id_attachment, false);
+						$thumbdone=true;
+					}
+				}
+			}
+			//From post/page content
+			if (!$thumbdone) {
+				if (intval($fb_image_use_content)==1) {
+					$imgreg = '/<img .*src=["\']([^ ^"^\']*)["\']/';
+					preg_match_all($imgreg, trim($post->post_content), $matches);
+					$image=$matches[1][0];
+					if ($image) {
+						//There's an image on the content
+						$pos = strpos($image, site_url());
+						if ($pos === false) {
+							$fb_image=$_SERVER['HTTP_HOST'].$image;
+						} else {
+							$fb_image=$image;
+						}
+						$thumbdone=true;
+					}
+				}
+			}
+			//From media gallery
+			if (!$thumbdone) {
+				if (intval($fb_image_use_media)==1) {
+					$images = get_posts(array('post_type' => 'attachment','numberposts' => 1,'post_status' => null,'order' => 'ASC','orderby' => 'menu_order','post_mime_type' => 'image','post_parent' => $post->ID));
+					if ($images) {
+						$fb_image=wp_get_attachment_url($images[0]->ID, false);
+						$thumbdone=true;
+					}
+				}
+			}
+			//From default
+			if (!$thumbdone) {
+				if (intval($fb_image_use_default)==1) {
+					//Well... We sure did try. We'll just keep the default one!
+					//$fb_image is already set
+				} else {
+					//User chose not to use default on pages/posts
+					$fb_image='';
+				}
+			}
+		}
+		
+		
+		/*$thumbok=false;
 		if (function_exists('get_post_thumbnail_id')) {
 			$thumbok=true;
 		}
+		//From post/page featured/image
 		if ($thumbok) {
 			if ($id_attachment=get_post_thumbnail_id($post->ID)) {
 				//There's a featured/thumbnail image for this post
@@ -82,7 +140,9 @@ function wonderm00n_open_graph() {
 					//Well... We sure did try. We'll just keep the default one :-(
 				}
 			}
-		}
+		}*/
+		
+		
 	} else {
 		global $wp_query;
 		//Other pages - Defaults
@@ -223,6 +283,10 @@ if ( is_admin() ) {
 		update_option("wonderm00n_open_graph_fb_desc_show", 1);
 		update_option("wonderm00n_open_graph_fb_desc_chars", 300);
 		update_option("wonderm00n_open_graph_fb_image_show", 1);
+		update_option("wonderm00n_open_graph_fb_image_use_featured", 1);
+		update_option("wonderm00n_open_graph_fb_image_use_content", 1);
+		update_option("wonderm00n_open_graph_fb_image_use_media", 1);
+		update_option("wonderm00n_open_graph_fb_image_use_default", 1);
 	}
 	
 	function wonderm00n_open_graph_settings_link( $links, $file ) {
@@ -270,7 +334,35 @@ if ( is_admin() ) {
 			update_option('wonderm00n_open_graph_fb_desc_homepage_customtext', trim($_POST['fb_desc_homepage_customtext']));
 			update_option('wonderm00n_open_graph_fb_image_show', intval($_POST['fb_image_show']));
 			update_option('wonderm00n_open_graph_fb_image', trim($_POST['fb_image']));
+			update_option('wonderm00n_open_graph_fb_image_use_featured', intval($_POST['fb_image_use_featured']));
+			update_option('wonderm00n_open_graph_fb_image_use_content', intval($_POST['fb_image_use_content']));
+			update_option('wonderm00n_open_graph_fb_image_use_media', intval($_POST['fb_image_use_media']));
+			update_option('wonderm00n_open_graph_fb_image_use_default', intval($_POST['fb_image_use_default']));
 		}
 	}
 }
+
+
+
+	
+//Upgrade 2012-01-02 (locale)
+if (trim(get_option('wonderm00n_open_graph_fb_locale_show'))=='') {
+	update_option("wonderm00n_open_graph_fb_locale_show", 1);
+}
+//Upgrade 2012-01-02 (images)
+if (
+	trim(get_option('wonderm00n_open_graph_fb_image_use_featured'))==''
+	||
+	trim(get_option('wonderm00n_open_graph_fb_image_use_content'))==''
+	||
+	trim(get_option('wonderm00n_open_graph_fb_image_use_media'))==''
+	||
+	trim(get_option('wonderm00n_open_graph_fb_image_use_default'))==''
+	) {
+	update_option("wonderm00n_open_graph_fb_image_use_featured", 1);
+	update_option("wonderm00n_open_graph_fb_image_use_content", 1);
+	update_option("wonderm00n_open_graph_fb_image_use_media", 1);
+	update_option("wonderm00n_open_graph_fb_image_use_default", 1);
+}
+
 ?>
