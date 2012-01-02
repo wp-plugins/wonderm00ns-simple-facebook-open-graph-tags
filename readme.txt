@@ -4,7 +4,7 @@ Donate link: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-faceb
 Tags: facebook, open graph, seo, share, social, meta
 Requires at least: 3
 Tested up to: 3.2.1
-Stable tag: 0.1.8.1
+Stable tag: 0.1.9
 
 This plugin inserts Facebook Open Graph Tags into your WordPress Blog/Website for more effective Facebook sharing results.
 
@@ -18,12 +18,13 @@ The tags that this plugin inserts are:
 
 * **fb:app_id** : From settings on the options screen.
 * **fb:admins** : From settings on the options screen.
+* **og:locale** : From Wordpress locale or chosen by the user.
 * **og:site_name** : From blog title.
 * **og:title** : From post/page/archive/tag/... title.
 * **og:url** : From the post/page permalink.
-* **og:type** : "website" for the homepage and "article" for all the others.
-* **og:description** : From post/page excerpt if it exists, or from post/page content. From category/tag description on it's pages, if it exists. From tagline, or custom text, on all the others.
-* **og:image** : From post/page featured/thumbnail image, or if it doesn't exists from the first image in the post content, or if it doesn't exists from the first image on the post media gallery, or if it doesn't exists from the default image defined on the options menu.
+* **og:type** : "website" or "blog" for the homepage and "article" for all the others.
+* **og:description** : From post/page excerpt if it exist, or from post/page content. From category/tag description on it's pages, if it exist. From tagline, or custom text, on all the others.
+* **og:image** : From post/page featured/thumbnail image, or if it doesn't exist from the first image in the post content, or if it doesn't exist from the first image on the post media gallery, or if it doesn't exist from the default image defined on the options menu.
 
 == Installation ==
 
@@ -32,6 +33,13 @@ The tags that this plugin inserts are:
 3. Got to `Options`, `Wonderm00n's Open Graph` to set it up
 
 == Changelog ==
+
+= 0.1.9 =
+
+* Added the og:locale tag. This will be the Wordpress locale by default, but can be chosen by the user also.
+* The og:type tag can now be set as 'website' or 'blog' for the homepage.
+* A final trailing slash can now be added to the homepage url, if the user wants to. Avoids 'circular reference error' on the Facebook debugger.
+
 
 = 0.1.8.1 =
 

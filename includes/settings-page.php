@@ -14,20 +14,24 @@
 		wonderm00n_open_graph_activate();
 	}
 	
-	$fb_app_id_show = get_option('wonderm00n_open_graph_fb_app_id_show');
-	$fb_app_id = get_option('wonderm00n_open_graph_fb_app_id');
-	$fb_admin_id_show = get_option('wonderm00n_open_graph_fb_admin_id_show');
-	$fb_admin_id = get_option('wonderm00n_open_graph_fb_admin_id');
-	$fb_sitename_show = get_option('wonderm00n_open_graph_fb_sitename_show');
-	$fb_title_show = get_option('wonderm00n_open_graph_fb_title_show');
-	$fb_url_show = get_option('wonderm00n_open_graph_fb_url_show');
-	$fb_type_show = get_option('wonderm00n_open_graph_fb_type_show');
-	$fb_desc_show = get_option('wonderm00n_open_graph_fb_desc_show');
-	$fb_desc_chars = get_option('wonderm00n_open_graph_fb_desc_chars');
+	$fb_app_id_show=get_option('wonderm00n_open_graph_fb_app_id_show');
+	$fb_app_id=get_option('wonderm00n_open_graph_fb_app_id');
+	$fb_admin_id_show=get_option('wonderm00n_open_graph_fb_admin_id_show');
+	$fb_admin_id=get_option('wonderm00n_open_graph_fb_admin_id');
+	$fb_locale_show=get_option('wonderm00n_open_graph_fb_locale_show');
+	$fb_locale = get_option('wonderm00n_open_graph_fb_locale');
+	$fb_sitename_show=get_option('wonderm00n_open_graph_fb_sitename_show');
+	$fb_title_show=get_option('wonderm00n_open_graph_fb_title_show');
+	$fb_url_show=get_option('wonderm00n_open_graph_fb_url_show');
+	$fb_url_add_trailing=get_option('wonderm00n_open_graph_fb_url_add_trailing');
+	$fb_type_show=get_option('wonderm00n_open_graph_fb_type_show');
+	$fb_type_homepage=get_option('wonderm00n_open_graph_fb_type_homepage');
+	$fb_desc_show=get_option('wonderm00n_open_graph_fb_desc_show');
+	$fb_desc_chars=intval(get_option('wonderm00n_open_graph_fb_desc_chars'));
 	$fb_desc_homepage = get_option('wonderm00n_open_graph_fb_desc_homepage');
 	$fb_desc_homepage_customtext = get_option('wonderm00n_open_graph_fb_desc_homepage_customtext');
-	$fb_image_show = get_option('wonderm00n_open_graph_fb_image_show');
-	$fb_image = get_option('wonderm00n_open_graph_fb_image');
+	$fb_image_show=get_option('wonderm00n_open_graph_fb_image_show');
+	$fb_image=get_option('wonderm00n_open_graph_fb_image');
 
 	?>
 	<div class="wrap">
@@ -50,7 +54,7 @@
   					<form name="form1" method="post">
   						<table width="100%" class="form-table">
 							<tr>
-								<th scope="row" nowrap="nowrap">Include Facebook Platform App ID (og:app_id) tag?</th>
+								<th scope="row" nowrap="nowrap">Include Facebook Platform App ID (fb:app_id) tag?</th>
 								<td>
 									<input type="checkbox" name="fb_app_id_show" id="fb_app_id_show" value="1" <?php echo (intval($fb_app_id_show)==1 ? ' checked="checked"' : ''); ?> onclick="showAppidOptions();"/>
 								</td>
@@ -62,11 +66,11 @@
 								</td>
 							</tr>
 							<tr>
-									<td>&nbsp;</td>
-									<td></td>
+								<td>&nbsp;</td>
+								<td></td>
 							</tr>
 							<tr>
-								<th scope="row" nowrap="nowrap">Include Facebook Admin(s) ID (og:admins) tag?</th>
+								<th scope="row" nowrap="nowrap">Include Facebook Admin(s) ID (fb:admins) tag?</th>
 								<td>
 									<input type="checkbox" name="fb_admin_id_show" id="fb_admin_id_show" value="1" <?php echo (intval($fb_admin_id_show)==1 ? ' checked="checked"' : ''); ?> onclick="showAdminOptions();"/>
 								</td>
@@ -80,8 +84,60 @@
 								</td>
 							</tr>
 							<tr>
-									<td>&nbsp;</td>
-									<td></td>
+								<td>&nbsp;</td>
+								<td></td>
+							</tr>
+							<tr>
+								<th scope="row" nowrap="nowrap">Include locale (fb:locale) tag?</th>
+								<td>
+									<input type="checkbox" name="fb_locale_show" id="fb_locale_show" value="1" <?php echo (intval($fb_locale_show)==1 ? ' checked="checked"' : ''); ?> onclick="showLocaleOptions();"/>
+								</td>
+							</tr>
+							<tr class="fb_locale_options">
+								<th scope="row" nowrap="nowrap">Locale:</th>
+								<td>
+									<select name="fb_locale" id="fb_locale">
+										<option value=""<?php if (trim($fb_locale)=='') echo ' selected="selected"'; ?>>Wordpress current locale/language (<?php echo get_locale(); ?>)&nbsp;</option>
+									<?php
+										$listLocales=false;
+										//Online
+										if ($ch = curl_init('http://www.facebook.com/translations/FacebookLocales.xmla')) {
+											curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+											$fb_locales=curl_exec($ch);
+											if (curl_errno($ch)) {
+												//echo curl_error($ch);
+											} else {
+												$info = curl_getinfo($ch);
+												if (intval($info['http_code'])==200) {
+													$listLocales=true;
+												}
+											}
+											curl_close($ch);
+										}
+										//Offline
+										if (!$listLocales) {
+											if ($fb_locales=file_get_contents(ABSPATH . 'wp-content/plugins/wonderm00ns-simple-facebook-open-graph-tags/includes/FacebookLocales.xml')) {
+												$listLocales=true;
+											}
+										}
+										//OK
+										if ($listLocales) {
+											$xml=simplexml_load_string($fb_locales);
+											$json = json_encode($xml);
+											$locales = json_decode($json,TRUE);
+											if (is_array($locales['locale'])) {
+												foreach ($locales['locale'] as $locale) {
+													?><option value="<?php echo $locale['codes']['code']['standard']['representation']; ?>"<?php if (trim($fb_locale)==trim($locale['codes']['code']['standard']['representation'])) echo ' selected="selected"'; ?>><?php echo $locale['englishName']; ?> (<?php echo $locale['codes']['code']['standard']['representation']; ?>)</option><?php
+												}
+											}
+										}
+									?>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+								<td></td>
 							</tr>
 							<tr>
 								<th scope="row" nowrap="nowrap">Include Site Name (og:site_name) tag?</th>
@@ -90,8 +146,8 @@
 								</td>
 							</tr>
 							<tr>
-									<td>&nbsp;</td>
-									<td></td>
+								<td>&nbsp;</td>
+								<td></td>
 							</tr>
 							<tr>
 								<th scope="row" nowrap="nowrap">Include Post/Page title (og:title) tag?</th>
@@ -100,29 +156,50 @@
 								</td>
 							</tr>
 							<tr>
-									<td>&nbsp;</td>
-									<td></td>
+								<td>&nbsp;</td>
+								<td></td>
 							</tr>
 							<tr>
 								<th scope="row" nowrap="nowrap">Include URL (og:url) tag?</th>
 								<td>
-									<input type="checkbox" name="fb_url_show" id="fb_url_show" value="1" <?php echo (intval($fb_url_show)==1 ? ' checked="checked"' : ''); ?>/>
+									<input type="checkbox" name="fb_url_show" id="fb_url_show" value="1" <?php echo (intval($fb_url_show)==1 ? ' checked="checked"' : ''); ?> onclick="showUrlOptions();"/>
+								</td>
+							</tr>
+							<tr class="fb_url_options">
+								<th scope="row" nowrap="nowrap">Add trailing slash at the end:</th>
+								<td>
+									<select name="fb_url_add_trailing" id="fb_url_add_trailing" onchange="showUrlTrail();">
+										<option value="0"<?php if (intval($fb_url_add_trailing)==0) echo ' selected="selected"'; ?>>No&nbsp;</option>
+										<option value="1"<?php if (intval($fb_url_add_trailing)==1) echo ' selected="selected"'; ?>>Yes&nbsp;</option>
+									</select>
+									<br/>
+									On the homepage will be: <i><?php echo get_option('siteurl'); ?><span id="fb_url_add_trailing_example">/</span></i>
 								</td>
 							</tr>
 							<tr>
-									<td>&nbsp;</td>
-									<td></td>
+								<td>&nbsp;</td>
+								<td></td>
 							</tr>
 							<tr>
 								<th scope="row" nowrap="nowrap">Include Type (og:type) tag?</th>
 								<td>
-									<input type="checkbox" name="fb_type_show" id="fb_type_show" value="1" <?php echo (intval($fb_type_show)==1 ? ' checked="checked"' : ''); ?>/>
-									(will be	&quot;article&quot; for posts and pages and &quot;website&quot; for the homepage)
+									<input type="checkbox" name="fb_type_show" id="fb_type_show" value="1" <?php echo (intval($fb_type_show)==1 ? ' checked="checked"' : ''); ?> onclick="showTypeOptions();"/>
+									(will be	&quot;article&quot; for posts and pages and &quot;website&quot; or &quot;blog&quot; for the homepage)
+								</td>
+							</tr>
+							<tr class="fb_type_options">
+								<th scope="row" nowrap="nowrap">Homepage type:</th>
+								<td>
+									Use
+									<select name="fb_type_homepage" id="fb_type_homepage">
+										<option value="website"<?php if (trim($fb_type_homepage)=='' || trim($fb_type_homepage)=='website') echo ' selected="selected"'; ?>>website&nbsp;</option>
+										<option value="blog"<?php if (trim($fb_type_homepage)=='blog') echo ' selected="selected"'; ?>>blog&nbsp;</option>
+									</select>
 								</td>
 							</tr>
 							<tr>
-									<td>&nbsp;</td>
-									<td></td>
+								<td>&nbsp;</td>
+								<td></td>
 							</tr>
 							<tr>
 								<th scope="row" nowrap="nowrap">Include Description (og:description) tag?</th>
@@ -141,8 +218,8 @@
 								<td>
 									Use
 									<select name="fb_desc_homepage" id="fb_desc_homepage" onchange="showDescriptionCustomText();">
-										<option value=""<?php if (trim($fb_desc_homepage)=='') echo ' selected="selected"'; ?>>Website tagline</option>
-										<option value="custom"<?php if (trim($fb_desc_homepage)=='custom') echo ' selected="selected"'; ?>>Custom text</option>
+										<option value=""<?php if (trim($fb_desc_homepage)=='') echo ' selected="selected"'; ?>>Website tagline&nbsp;</option>
+										<option value="custom"<?php if (trim($fb_desc_homepage)=='custom') echo ' selected="selected"'; ?>>Custom text&nbsp;</option>
 									</select>
 									<div id="fb_desc_homepage_customtext_div">
 										<textarea name="fb_desc_homepage_customtext" id="fb_desc_homepage_customtext" rows="3" cols="50"><?php echo $fb_desc_homepage_customtext; ?></textarea>
@@ -181,7 +258,7 @@
   	</div>
   	
   	<?php
-  		$links[0]['text']='Test your URLs at Facebook URL Linter';
+  		$links[0]['text']='Test your URLs at Facebook URL Linter / Debugger';
   		$links[0]['url']='https://developers.facebook.com/tools/debug';
   		$links[10]['text']='About the Open Graph Protocol (on Facebook)';
   		$links[10]['url']='https://developers.facebook.com/docs/opengraph/';
@@ -196,8 +273,17 @@
   		$links[60]['text']='Author\'s Facebook account: Wonderm00n';
   		$links[60]['url']='http://www.facebook.com/wonderm00n';
   	?>
-  	<div class="postbox-container" style="width: 29%;">
+  	<div class="postbox-container" style="width: 29%; float: right;">
   		
+  		<div id="poststuff">
+  			<div id="wonderm00n_open_graph_links" class="postbox">
+  				<h3 id="settings">Rate this plugin</h3>
+  				<div class="inside">
+  					If you like this plugin, <a href="http://wordpress.org/extend/plugins/wonderm00ns-simple-facebook-open-graph-tags/" target="_blank">please give it a high Rating</a>.
+  				</div>
+  			</div>
+  		</div>
+		
   		<div id="poststuff">
   			<div id="wonderm00n_open_graph_links" class="postbox">
   				<h3 id="settings">Useful links</h3>
@@ -234,7 +320,7 @@
   	</div>
   	
   	<div class="clear">
-  		<p><br/>&copy 2011<?php if(date('Y')>2010) echo '-'.date('Y'); ?> <a href="http://wonderm00n.com" target="_blank">Marco Almeida (Wonderm00n)</a></p>
+  		<p><br/>&copy 2011<?php if(date('Y')>2011) echo '-'.date('Y'); ?> <a href="http://wonderm00n.com" target="_blank">Marco Almeida (Wonderm00n)</a></p>
   	</div>
 		
 	</div>
@@ -251,6 +337,10 @@
 			}
 			showAppidOptions();
 			showAdminOptions();
+			showLocaleOptions();
+			showTypeOptions();
+			showUrlOptions();
+			showUrlTrail();
 			jQuery('.fb_description_options').hide();
 			showDescriptionOptions();
 			jQuery('#fb_desc_homepage_customtext').hide();
@@ -269,6 +359,34 @@
 				jQuery('.fb_admin_id_options').show();
 			} else {
 				jQuery('.fb_admin_id_options').hide();
+			}
+		}
+		function showLocaleOptions() {
+			if (jQuery('#fb_locale_show').is(':checked')) {
+				jQuery('.fb_locale_options').show();
+			} else {
+				jQuery('.fb_locale_options').hide();
+			}
+		}
+		function showUrlOptions() {
+			if (jQuery('#fb_url_show').is(':checked')) {
+				jQuery('.fb_url_options').show();
+			} else {
+				jQuery('.fb_url_options').hide();
+			}
+		}
+		function showUrlTrail() {
+			if (jQuery('#fb_url_add_trailing').val()=='1') {
+				jQuery('#fb_url_add_trailing_example').show();
+			} else {
+				jQuery('#fb_url_add_trailing_example').hide();
+			}
+		}
+		function showTypeOptions() {
+			if (jQuery('#fb_type_show').is(':checked')) {
+				jQuery('.fb_type_options').show();
+			} else {
+				jQuery('.fb_type_options').hide();
 			}
 		}
 		function showDescriptionOptions() {
