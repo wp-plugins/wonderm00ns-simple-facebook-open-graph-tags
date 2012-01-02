@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Wonderm00n's Simple Facebook Open Graph Meta Tags
- * @version 0.2
+ * @version 0.2.1
  */
 /*
 Plugin Name: Wonderm00n's Simple Facebook Open Graph Meta Tags
 Plugin URI: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
 Description: This plugin inserts Facebook Open Graph Tags into your Wordpress Blog/Website for better Facebook sharing
 Author: Marco Almeida (Wonderm00n)
-Version: 0.2
+Version: 0.2.1
 Author URI: http://wonderm00n.com
 */
 
@@ -239,8 +239,14 @@ function wonderm00n_open_graph_post_image($fb_image_use_featured=1, $fb_image_us
 				//There's an image on the content
 				$pos = strpos($image, site_url());
 				if ($pos === false) {
-					$fb_image=$_SERVER['HTTP_HOST'].$image;
+					if (stristr($image, 'http://') || stristr($image, 'https://')) {
+						//URL Completo fora do site
+						$fb_image=$image;
+					} else {
+						$fb_image=site_url().$image;
+					}
 				} else {
+					//URL Completo no site
 					$fb_image=$image;
 				}
 				$thumbdone=true;
