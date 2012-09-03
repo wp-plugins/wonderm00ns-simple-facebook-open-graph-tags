@@ -287,9 +287,9 @@ if ( is_admin() ) {
 	add_action('activate_wonderm00n-open-graph/wonderm00n-open-graph.php', 'wonderm00n_open_graph_activate');
 	
 	function wonderm00n_open_graph_add_options() {
-	if(function_exists('add_options_page')){
-		add_options_page('Wonderm00n\'s Open Graph', 'Wonderm00n\'s Open Graph', 9, basename(__FILE__), 'wonderm00n_open_graph_admin');
-	}
+		if(function_exists('add_options_page')){
+			add_options_page('Wonderm00n\'s Open Graph', 'Wonderm00n\'s Open Graph', 'manage_options', basename(__FILE__), 'wonderm00n_open_graph_admin');
+		}
 	}
 	
 	function wonderm00n_open_graph_activate() {

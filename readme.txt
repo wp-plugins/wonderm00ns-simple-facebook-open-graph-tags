@@ -35,9 +35,13 @@ The tags that this plugin inserts are:
 
 == Changelog ==
 
+= 0.2.2 =
+
+* Bugfix: small change to avoid using the "has_cap" function that is deprecated. Thanks to @flynsarmy.
+
 = 0.2.1 =
 
-* Bugfix when the og:image is not hosted on the same domain as the website/blog.
+* Bugfix: when the og:image is not hosted on the same domain as the website/blog.
 
 = 0.2 =
 
