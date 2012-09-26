@@ -37,7 +37,7 @@ The tags that this plugin inserts are:
 
 = 0.2.2 =
 
-* Bugfix: small change to avoid using the "has_cap" function that is deprecated. Thanks to @flynsarmy.
+* Bugfix: small change to avoid using the "has_cap" function (deprecated). Thanks to @flynsarmy.
 
 = 0.2.1 =
 
