@@ -3,8 +3,8 @@ Contributors: wonderm00n
 Donate link: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
 Tags: facebook, open graph, seo, share, social, meta
 Requires at least: 3
-Tested up to: 3.2.1
-Stable tag: 0.2.3
+Tested up to: 3.4.2
+Stable tag: 0.3
 
 This plugin inserts Facebook Open Graph Tags into your WordPress Blog/Website for more effective Facebook sharing results.
 
@@ -34,6 +34,13 @@ The tags that this plugin inserts are:
 3. Got to `Options`, `Wonderm00n's Open Graph` to set it up
 
 == Changelog ==
+
+= 0.3 =
+
+* "SubHeading" plugin integration. It's now possible add this field to the "og:title" tag.
+* Changed the way defaults and user settings are loaded and saved, to "try" to eliminate the problem some users experienced where the user settings would disappear.
+* Bugfix: "Also add image to RSS/RSS2 feeds?" option was not being correctly loaded
+* The plugin version is now showed both as a comment before the open graph tags and on the settings page
 
 = 0.2.3 =
 
