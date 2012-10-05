@@ -1,7 +1,7 @@
 <?php
 /**
  * @package Wonderm00n's Simple Facebook Open Graph Meta Tags
- * @version 0.3
+ * @version 0.3.1
  */
 /*
 Plugin Name: Wonderm00n's Simple Facebook Open Graph Meta Tags
@@ -12,7 +12,7 @@ Version: 0.3
 Author URI: http://wonderm00n.com
 */
 
-$wonderm00n_open_graph_plugin_version='0.3';
+$wonderm00n_open_graph_plugin_version='0.3.1';
 $wonderm00n_open_graph_plugin_settings=array(
 		'fb_app_id_show',
 		'fb_app_id',
@@ -384,7 +384,7 @@ if ( is_admin() ) {
 	
 	if ( isset($_POST['action']) ) {
 		if (trim($_POST['action'])=='save') {
-			print_r($_POST);
+			//print_r($_POST);
 			//This should also use the $wonderm00n_open_graph_plugin_settings array, but because of intval and trim we still can't
 			update_option('wonderm00n_open_graph_fb_app_id_show', intval($_POST['fb_app_id_show']));
 			update_option('wonderm00n_open_graph_fb_app_id', trim($_POST['fb_app_id']));
