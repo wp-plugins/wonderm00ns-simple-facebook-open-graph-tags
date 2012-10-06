@@ -1,18 +1,18 @@
 <?php
 /**
  * @package Wonderm00n's Simple Facebook Open Graph Meta Tags
- * @version 0.3.1
+ * @version 0.3.2
  */
 /*
 Plugin Name: Wonderm00n's Simple Facebook Open Graph Meta Tags
 Plugin URI: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
 Description: This plugin inserts Facebook Open Graph Tags into your Wordpress Blog/Website for better Facebook sharing
 Author: Marco Almeida (Wonderm00n)
-Version: 0.3
+Version: 0.3.2
 Author URI: http://wonderm00n.com
 */
 
-$wonderm00n_open_graph_plugin_version='0.3.1';
+$wonderm00n_open_graph_plugin_version='0.3.2';
 $wonderm00n_open_graph_plugin_settings=array(
 		'fb_app_id_show',
 		'fb_app_id',

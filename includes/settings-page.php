@@ -281,7 +281,7 @@
 	  					if (!$thirdparty) {
 	  						?>
 	  						<p>You don't have any compatible 3rd Party plugin installed/active.</p>
-	  						<p>This plugin in currently compatible with:</p>
+	  						<p>This plugin is currently compatible with:</p>
 	  						<ul>
 	  							<li><a href="http://wordpress.org/extend/plugins/subheading/" target="_blank">SubHeading</a></li>
 	  						</ul>
