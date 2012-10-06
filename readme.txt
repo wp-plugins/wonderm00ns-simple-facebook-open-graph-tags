@@ -37,7 +37,7 @@ The tags that this plugin inserts are:
 
 = 0.3.1 =
 
-* When saving settings the $_POST array was showned for debug/development reasons. This output has been removed.
+* When saving the settings the $_POST array was showned for debug/development reasons. This output has been removed.
 
 = 0.3 =
 
