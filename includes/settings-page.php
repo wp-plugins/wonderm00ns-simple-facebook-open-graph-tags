@@ -18,7 +18,12 @@
 	}
 	//Merge the settings "all together now" (yes, it's a Beatles reference)
 	foreach($usersettings as $key => $value) {
-		if ($value=='' && $defaults[$key]!='') $usersettings[$key]=$defaults[$key];
+		//if ($value=='') {
+		if (strlen(trim($value))==0) {
+			if ($defaults[$key]!='') {
+				$usersettings[$key]=$defaults[$key];
+			}
+		}
 	}
 	extract($usersettings);
 

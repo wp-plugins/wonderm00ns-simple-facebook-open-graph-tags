@@ -1,18 +1,18 @@
 <?php
 /**
  * @package Wonderm00n's Simple Facebook Open Graph Meta Tags
- * @version 0.3.2
+ * @version 0.3.3
  */
 /*
 Plugin Name: Wonderm00n's Simple Facebook Open Graph Meta Tags
 Plugin URI: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
 Description: This plugin inserts Facebook Open Graph Tags into your Wordpress Blog/Website for better Facebook sharing
 Author: Marco Almeida (Wonderm00n)
-Version: 0.3.2
+Version: 0.3.3
 Author URI: http://wonderm00n.com
 */
 
-$wonderm00n_open_graph_plugin_version='0.3.2';
+$wonderm00n_open_graph_plugin_version='0.3.3';
 $wonderm00n_open_graph_plugin_settings=array(
 		'fb_app_id_show',
 		'fb_app_id',
@@ -76,6 +76,20 @@ function wonderm00n_open_graph() {
 		//It's a Post or a Page or an attachment page
 		global $post;
 		$fb_title=esc_attr(strip_tags(stripslashes($post->post_title)));
+		//All In One SEO - To Do
+		if ($fb_show_allinoneseo==1) {
+			@include_once(ABSPATH . 'wp-admin/includes/plugin.php');
+			if (is_plugin_active('all-in-one-seo-pack/all_in_one_seo_pack.php')) {
+				//Code still missing here
+			}
+		}
+		//Platinum SEO - To Do
+		if ($fb_show_platinumseo==1) {
+			@include_once(ABSPATH . 'wp-admin/includes/plugin.php');
+			if (is_plugin_active('platinum-seo-pack/platinum_seo_pack.php')) {
+				//Code still missing here
+			}
+		}
 		//SubHeading
 		if ($fb_show_subheading==1) {
 			@include_once(ABSPATH . 'wp-admin/includes/plugin.php');
@@ -324,6 +338,38 @@ function wonderm00n_open_graph_post_image($fb_image_use_featured=1, $fb_image_us
 
 //Admin
 if ( is_admin() ) {
+	
+	//First we save!
+	if ( isset($_POST['action']) ) {
+		if (trim($_POST['action'])=='save') {
+			//This should also use the $wonderm00n_open_graph_plugin_settings array, but because of intval and trim we still can't
+			update_option('wonderm00n_open_graph_fb_app_id_show', intval($_POST['fb_app_id_show']));
+			update_option('wonderm00n_open_graph_fb_app_id', trim($_POST['fb_app_id']));
+			update_option('wonderm00n_open_graph_fb_admin_id_show', intval($_POST['fb_admin_id_show']));
+			update_option('wonderm00n_open_graph_fb_admin_id', trim($_POST['fb_admin_id']));
+			update_option('wonderm00n_open_graph_fb_locale_show', intval($_POST['fb_locale_show']));
+			update_option('wonderm00n_open_graph_fb_locale', trim($_POST['fb_locale']));
+			update_option('wonderm00n_open_graph_fb_sitename_show', intval($_POST['fb_sitename_show']));
+			update_option('wonderm00n_open_graph_fb_title_show', intval($_POST['fb_title_show']));
+			update_option('wonderm00n_open_graph_fb_url_show', intval($_POST['fb_url_show']));
+			update_option('wonderm00n_open_graph_fb_url_add_trailing', intval($_POST['fb_url_add_trailing']));
+			update_option('wonderm00n_open_graph_fb_type_show', intval($_POST['fb_type_show']));
+			update_option('wonderm00n_open_graph_fb_type_homepage', trim($_POST['fb_type_homepage']));
+			update_option('wonderm00n_open_graph_fb_desc_show', intval($_POST['fb_desc_show']));
+			update_option('wonderm00n_open_graph_fb_desc_chars', intval($_POST['fb_desc_chars']));
+			update_option('wonderm00n_open_graph_fb_desc_homepage', trim($_POST['fb_desc_homepage']));
+			update_option('wonderm00n_open_graph_fb_desc_homepage_customtext', trim($_POST['fb_desc_homepage_customtext']));
+			update_option('wonderm00n_open_graph_fb_image_show', intval($_POST['fb_image_show']));
+			update_option('wonderm00n_open_graph_fb_image', trim($_POST['fb_image']));
+			update_option('wonderm00n_open_graph_fb_image_rss', intval($_POST['fb_image_rss']));
+			update_option('wonderm00n_open_graph_fb_image_use_featured', intval($_POST['fb_image_use_featured']));
+			update_option('wonderm00n_open_graph_fb_image_use_content', intval($_POST['fb_image_use_content']));
+			update_option('wonderm00n_open_graph_fb_image_use_media', intval($_POST['fb_image_use_media']));
+			update_option('wonderm00n_open_graph_fb_image_use_default', intval($_POST['fb_image_use_default']));
+			update_option('wonderm00n_open_graph_fb_show_subheading', intval($_POST['fb_show_subheading']));
+		}
+	}
+	
 	add_action('admin_menu', 'wonderm00n_open_graph_add_options');
 	
 	register_activation_hook(__FILE__, 'wonderm00n_open_graph_activate');
@@ -381,37 +427,6 @@ if ( is_admin() ) {
 	}
 	add_action('admin_print_scripts', 'wonderm00n_open_graph_scripts');
 	add_action('admin_print_styles', 'wonderm00n_open_graph_styles');
-	
-	if ( isset($_POST['action']) ) {
-		if (trim($_POST['action'])=='save') {
-			//print_r($_POST);
-			//This should also use the $wonderm00n_open_graph_plugin_settings array, but because of intval and trim we still can't
-			update_option('wonderm00n_open_graph_fb_app_id_show', intval($_POST['fb_app_id_show']));
-			update_option('wonderm00n_open_graph_fb_app_id', trim($_POST['fb_app_id']));
-			update_option('wonderm00n_open_graph_fb_admin_id_show', intval($_POST['fb_admin_id_show']));
-			update_option('wonderm00n_open_graph_fb_admin_id', trim($_POST['fb_admin_id']));
-			update_option('wonderm00n_open_graph_fb_locale_show', intval($_POST['fb_locale_show']));
-			update_option('wonderm00n_open_graph_fb_locale', trim($_POST['fb_locale']));
-			update_option('wonderm00n_open_graph_fb_sitename_show', intval($_POST['fb_sitename_show']));
-			update_option('wonderm00n_open_graph_fb_title_show', intval($_POST['fb_title_show']));
-			update_option('wonderm00n_open_graph_fb_url_show', intval($_POST['fb_url_show']));
-			update_option('wonderm00n_open_graph_fb_url_add_trailing', intval($_POST['fb_url_add_trailing']));
-			update_option('wonderm00n_open_graph_fb_type_show', intval($_POST['fb_type_show']));
-			update_option('wonderm00n_open_graph_fb_type_homepage', trim($_POST['fb_type_homepage']));
-			update_option('wonderm00n_open_graph_fb_desc_show', intval($_POST['fb_desc_show']));
-			update_option('wonderm00n_open_graph_fb_desc_chars', intval($_POST['fb_desc_chars']));
-			update_option('wonderm00n_open_graph_fb_desc_homepage', trim($_POST['fb_desc_homepage']));
-			update_option('wonderm00n_open_graph_fb_desc_homepage_customtext', trim($_POST['fb_desc_homepage_customtext']));
-			update_option('wonderm00n_open_graph_fb_image_show', intval($_POST['fb_image_show']));
-			update_option('wonderm00n_open_graph_fb_image', trim($_POST['fb_image']));
-			update_option('wonderm00n_open_graph_fb_image_rss', intval($_POST['fb_image_rss']));
-			update_option('wonderm00n_open_graph_fb_image_use_featured', intval($_POST['fb_image_use_featured']));
-			update_option('wonderm00n_open_graph_fb_image_use_content', intval($_POST['fb_image_use_content']));
-			update_option('wonderm00n_open_graph_fb_image_use_media', intval($_POST['fb_image_use_media']));
-			update_option('wonderm00n_open_graph_fb_image_use_default', intval($_POST['fb_image_use_default']));
-			update_option('wonderm00n_open_graph_fb_show_subheading', intval($_POST['fb_show_subheading']));
-		}
-	}
 }
 
 
