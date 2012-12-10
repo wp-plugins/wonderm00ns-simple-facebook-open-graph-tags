@@ -9,6 +9,36 @@
  *
  */
 		
+	//First we save!
+	if ( isset($_POST['action']) ) {
+		if (trim($_POST['action'])=='save') {
+			//This should also use the $wonderm00n_open_graph_plugin_settings array, but because of intval and trim we still can't
+			update_option('wonderm00n_open_graph_fb_app_id_show', intval($_POST['fb_app_id_show']));
+			update_option('wonderm00n_open_graph_fb_app_id', trim($_POST['fb_app_id']));
+			update_option('wonderm00n_open_graph_fb_admin_id_show', intval($_POST['fb_admin_id_show']));
+			update_option('wonderm00n_open_graph_fb_admin_id', trim($_POST['fb_admin_id']));
+			update_option('wonderm00n_open_graph_fb_locale_show', intval($_POST['fb_locale_show']));
+			update_option('wonderm00n_open_graph_fb_locale', trim($_POST['fb_locale']));
+			update_option('wonderm00n_open_graph_fb_sitename_show', intval($_POST['fb_sitename_show']));
+			update_option('wonderm00n_open_graph_fb_title_show', intval($_POST['fb_title_show']));
+			update_option('wonderm00n_open_graph_fb_url_show', intval($_POST['fb_url_show']));
+			update_option('wonderm00n_open_graph_fb_url_add_trailing', intval($_POST['fb_url_add_trailing']));
+			update_option('wonderm00n_open_graph_fb_type_show', intval($_POST['fb_type_show']));
+			update_option('wonderm00n_open_graph_fb_type_homepage', trim($_POST['fb_type_homepage']));
+			update_option('wonderm00n_open_graph_fb_desc_show', intval($_POST['fb_desc_show']));
+			update_option('wonderm00n_open_graph_fb_desc_chars', intval($_POST['fb_desc_chars']));
+			update_option('wonderm00n_open_graph_fb_desc_homepage', trim($_POST['fb_desc_homepage']));
+			update_option('wonderm00n_open_graph_fb_desc_homepage_customtext', trim($_POST['fb_desc_homepage_customtext']));
+			update_option('wonderm00n_open_graph_fb_image_show', intval($_POST['fb_image_show']));
+			update_option('wonderm00n_open_graph_fb_image', trim($_POST['fb_image']));
+			update_option('wonderm00n_open_graph_fb_image_rss', intval($_POST['fb_image_rss']));
+			update_option('wonderm00n_open_graph_fb_image_use_featured', intval($_POST['fb_image_use_featured']));
+			update_option('wonderm00n_open_graph_fb_image_use_content', intval($_POST['fb_image_use_content']));
+			update_option('wonderm00n_open_graph_fb_image_use_media', intval($_POST['fb_image_use_media']));
+			update_option('wonderm00n_open_graph_fb_image_use_default', intval($_POST['fb_image_use_default']));
+			update_option('wonderm00n_open_graph_fb_show_subheading', intval($_POST['fb_show_subheading']));
+		}
+	}
 	
 	//Load the defaults
 	$defaults=wonderm00n_open_graph_default_values();
