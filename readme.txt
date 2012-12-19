@@ -3,8 +3,8 @@ Contributors: wonderm00n
 Donate link: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
 Tags: facebook, open graph, seo, share, social, meta
 Requires at least: 3
-Tested up to: 3.4.2
-Stable tag: 0.3.4
+Tested up to: 3.5
+Stable tag: 0.3.5
 
 This plugin inserts Facebook Open Graph Tags into your WordPress Blog/Website for more effective Facebook sharing results.
 
@@ -34,6 +34,10 @@ The tags that this plugin inserts are:
 3. Got to `Options`, `Wonderm00n's Open Graph` to set it up
 
 == Changelog ==
+
+= 0.3.5 =
+
+* Minor fixes to avoid php notices filling up error logs. Thanks to flynsarmy.
 
 = 0.3.4 =
 

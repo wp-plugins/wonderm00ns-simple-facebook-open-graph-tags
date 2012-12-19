@@ -1,18 +1,18 @@
 <?php
 /**
  * @package Wonderm00n's Simple Facebook Open Graph Meta Tags
- * @version 0.3.4
+ * @version 0.3.5
  */
 /*
 Plugin Name: Wonderm00n's Simple Facebook Open Graph Meta Tags
 Plugin URI: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
 Description: This plugin inserts Facebook Open Graph Tags into your Wordpress Blog/Website for better Facebook sharing
 Author: Marco Almeida (Wonderm00n)
-Version: 0.3.4
+Version: 0.3.5
 Author URI: http://wonderm00n.com
 */
 
-$wonderm00n_open_graph_plugin_version='0.3.4';
+$wonderm00n_open_graph_plugin_version='0.3.5';
 $wonderm00n_open_graph_plugin_settings=array(
 		'fb_app_id_show',
 		'fb_app_id',
@@ -77,19 +77,19 @@ function wonderm00n_open_graph() {
 		global $post;
 		$fb_title=esc_attr(strip_tags(stripslashes($post->post_title)));
 		//All In One SEO - To Do
-		if ($fb_show_allinoneseo==1) {
+		/*if ($fb_show_allinoneseo==1) {
 			@include_once(ABSPATH . 'wp-admin/includes/plugin.php');
 			if (is_plugin_active('all-in-one-seo-pack/all_in_one_seo_pack.php')) {
 				//Code still missing here
 			}
-		}
+		}*/
 		//Platinum SEO - To Do
-		if ($fb_show_platinumseo==1) {
+		/*if ($fb_show_platinumseo==1) {
 			@include_once(ABSPATH . 'wp-admin/includes/plugin.php');
 			if (is_plugin_active('platinum-seo-pack/platinum_seo_pack.php')) {
 				//Code still missing here
 			}
-		}
+		}*/
 		//SubHeading
 		if ($fb_show_subheading==1) {
 			@include_once(ABSPATH . 'wp-admin/includes/plugin.php');
@@ -183,7 +183,7 @@ function wonderm00n_open_graph() {
 	//If no description let's just add the title
 	if (trim($fb_desc)=='') $fb_desc=$fb_title;
 	
-	$html.='<!-- START - Wonderm00n\'s Simple Facebook Open Graph Tags '.$wonderm00n_open_graph_plugin_version.' -->
+	$html='<!-- START - Wonderm00n\'s Simple Facebook Open Graph Tags '.$wonderm00n_open_graph_plugin_version.' -->
 ';
 	if (intval($fb_app_id_show)==1 && trim($fb_app_id)!='') $html.='<meta property="fb:app_id" content="'.trim($fb_app_id).'" />
 ';
