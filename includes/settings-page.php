@@ -37,6 +37,7 @@
 			update_option('wonderm00n_open_graph_fb_image_use_media', intval($_POST['fb_image_use_media']));
 			update_option('wonderm00n_open_graph_fb_image_use_default', intval($_POST['fb_image_use_default']));
 			update_option('wonderm00n_open_graph_fb_show_subheading', intval($_POST['fb_show_subheading']));
+			update_option('wonderm00n_open_graph_fb_show_businessdirectoryplugin', intval($_POST['fb_show_businessdirectoryplugin']));
 		}
 	}
 	
@@ -307,7 +308,21 @@
 									<tr>
 										<th scope="row" nowrap="nowrap">Add SubHeading to Post/Page title?</th>
 										<td>
-											<input type="checkbox" name="fb_show_subheading" id="fb_show_subheading" value="1" <?php echo (intval($fb_show_subheading)==1 ? ' checked="checked"' : ''); ?> onclick="showAppidOptions();"/>
+											<input type="checkbox" name="fb_show_subheading" id="fb_show_subheading" value="1" <?php echo (intval($fb_show_subheading)==1 ? ' checked="checked"' : ''); ?>/>
+										</td>
+									</tr>
+								</table>
+	  						<?php
+	  					}
+	  					if(is_plugin_active('business-directory-plugin/wpbusdirman.php')) {
+	  						$thirdparty=true;
+	  						?>
+	  						<h4><a href="http://wordpress.org/extend/plugins/business-directory-plugin/" target="_blank">Business Directory Plugin</a></h4>
+	  						<table width="100%" class="form-table">
+									<tr>
+										<th scope="row" nowrap="nowrap">Use listing BDP listing contents as OG tags?</th>
+										<td>
+											<input type="checkbox" name="fb_show_businessdirectoryplugin" id="fb_show_businessdirectoryplugin" value="1" <?php echo (intval($fb_show_businessdirectoryplugin)==1 ? ' checked="checked"' : ''); ?>/>
 										</td>
 									</tr>
 								</table>
@@ -319,6 +334,7 @@
 	  						<p>This plugin is currently compatible with:</p>
 	  						<ul>
 	  							<li><a href="http://wordpress.org/extend/plugins/subheading/" target="_blank">SubHeading</a></li>
+	  							<li><a href="http://wordpress.org/extend/plugins/business-directory-plugin/" target="_blank">Business Directory Plugin</a></li>
 	  						</ul>
 	  						<?php
 	  					}

@@ -1,18 +1,18 @@
 <?php
 /**
  * @package Wonderm00n's Simple Facebook Open Graph Meta Tags
- * @version 0.3.5
+ * @version 0.4
  */
 /*
 Plugin Name: Wonderm00n's Simple Facebook Open Graph Meta Tags
 Plugin URI: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
 Description: This plugin inserts Facebook Open Graph Tags into your Wordpress Blog/Website for better Facebook sharing
 Author: Marco Almeida (Wonderm00n)
-Version: 0.3.5
+Version: 0.4
 Author URI: http://wonderm00n.com
 */
 
-$wonderm00n_open_graph_plugin_version='0.3.5';
+$wonderm00n_open_graph_plugin_version='0.4';
 $wonderm00n_open_graph_plugin_settings=array(
 		'fb_app_id_show',
 		'fb_app_id',
@@ -37,7 +37,8 @@ $wonderm00n_open_graph_plugin_settings=array(
 		'fb_image_use_content',
 		'fb_image_use_media',
 		'fb_image_use_default',
-		'fb_show_subheading'
+		'fb_show_subheading',
+		'fb_show_businessdirectoryplugin'
 );
 
 function wonderm00n_open_graph() {
@@ -110,6 +111,54 @@ function wonderm00n_open_graph() {
 		$fb_desc=(intval($fb_desc_chars)>0 ? substr(esc_attr(strip_tags(strip_shortcodes(stripslashes($fb_desc)))),0,$fb_desc_chars) : esc_attr(strip_tags(strip_shortcodes(stripslashes($fb_desc)))));
 		if (intval($fb_image_show)==1) {
 			$fb_image=wonderm00n_open_graph_post_image($fb_image_use_featured, $fb_image_use_content, $fb_image_use_media, $fb_image_use_default, $fb_image);
+		}
+		//Business Directory Plugin
+		if ($fb_show_businessdirectoryplugin==1) {
+			@include_once(ABSPATH . 'wp-admin/includes/plugin.php');
+			if (is_plugin_active('business-directory-plugin/wpbusdirman.php')) {
+				$bdpaction = _wpbdp_current_action();
+				switch($bdpaction) {
+					case 'showlisting':
+						//Listing
+						$listing_id = get_query_var('listing') ? wpbdp_get_post_by_slug(get_query_var('listing'))->ID : wpbdp_getv($_GET, 'id', get_query_var('id'));
+						$bdppost=get_post($listing_id);
+						$fb_title=esc_attr(strip_tags(stripslashes($bdppost->post_title))).' - '.$fb_title;
+						$fb_url=get_permalink($listing_id);
+						if (trim($bdppost->post_excerpt)!='') {
+							//If there's an excerpt that's waht we'll use
+							$fb_desc=trim($bdppost->post_excerpt);
+						} else {
+							//If not we grab it from the content
+							$fb_desc=trim($bdppost->post_content);
+						}
+						$fb_desc=(intval($fb_desc_chars)>0 ? substr(esc_attr(strip_tags(strip_shortcodes(stripslashes($fb_desc)))),0,$fb_desc_chars) : esc_attr(strip_tags(strip_shortcodes(stripslashes($fb_desc)))));
+						if (intval($fb_image_show)==1) {
+							$thumbdone=false;
+							if (intval($fb_image_use_featured)==1) {
+								//Featured
+								if ($id_attachment=get_post_thumbnail_id($bdppost->ID)) {
+									//There's a featured/thumbnail image for this listing
+									$fb_image=wp_get_attachment_url($id_attachment, false);
+									$thumbdone=true;
+								}
+							}
+							if (!$thumbdone) {
+								//Main image loaded
+								if ($thumbnail_id = wpbdp_listings_api()->get_thumbnail_id($bdppost->ID)) {
+									$fb_image=wp_get_attachment_url($thumbnail_id, false);
+								}
+							}
+						}
+						break;
+					case 'main':
+						//Main page
+						//No changes
+						break;
+					default:
+						//No changes
+						break;
+				}
+			}
 		}
 	} else {
 		global $wp_query;
