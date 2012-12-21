@@ -22,6 +22,7 @@
 			update_option('wonderm00n_open_graph_fb_sitename_show', intval($_POST['fb_sitename_show']));
 			update_option('wonderm00n_open_graph_fb_title_show', intval($_POST['fb_title_show']));
 			update_option('wonderm00n_open_graph_fb_url_show', intval($_POST['fb_url_show']));
+			update_option('wonderm00n_open_graph_fb_url_canonical', intval($_POST['fb_url_canonical']));
 			update_option('wonderm00n_open_graph_fb_url_add_trailing', intval($_POST['fb_url_add_trailing']));
 			update_option('wonderm00n_open_graph_fb_type_show', intval($_POST['fb_type_show']));
 			update_option('wonderm00n_open_graph_fb_type_homepage', trim($_POST['fb_type_homepage']));
@@ -190,10 +191,17 @@
 									</td>
 								</tr>
 								<tr class="fb_url_options">
+									<th scope="row" nowrap="nowrap">Also set Canonical URL:</th>
+									<td>
+										<input type="checkbox" name="fb_url_canonical" id="fb_url_canonical" value="1" <?php echo (intval($fb_url_canonical)==1 ? ' checked="checked"' : ''); ?>/>
+									</td>
+								</tr>
+								<tr class="fb_url_options">
 									<th scope="row" nowrap="nowrap">Add trailing slash at the end:</th>
 									<td>
 										<input type="checkbox" name="fb_url_add_trailing" id="fb_url_add_trailing" value="1" <?php echo (intval($fb_url_add_trailing)==1 ? ' checked="checked"' : ''); ?> onclick="showUrlTrail();"/>
-										(on the homepage will be: <i><?php echo get_option('siteurl'); ?><span id="fb_url_add_trailing_example">/</span></i>)
+										<br/>
+										On the homepage will be: <i><?php echo get_option('siteurl'); ?><span id="fb_url_add_trailing_example">/</span></i>
 									</td>
 								</tr>
 								<tr>
@@ -204,7 +212,8 @@
 									<th scope="row" nowrap="nowrap">Include Type (og:type) tag?</th>
 									<td>
 										<input type="checkbox" name="fb_type_show" id="fb_type_show" value="1" <?php echo (intval($fb_type_show)==1 ? ' checked="checked"' : ''); ?> onclick="showTypeOptions();"/>
-										(will be &quot;article&quot; for posts and pages and &quot;website&quot; or &quot;blog&quot; for the homepage)
+										<br/>
+										Will be &quot;article&quot; for posts and pages and &quot;website&quot; or &quot;blog&quot; for the homepage
 									</td>
 								</tr>
 								<tr class="fb_type_options">
@@ -230,7 +239,9 @@
 								<tr class="fb_description_options">
 									<th scope="row" nowrap="nowrap">Description maximum length:</th>
 									<td>
-										<input type="text" name="fb_desc_chars" id="fb_desc_chars" size="3" maxlength="3" value="<?php echo (intval($fb_desc_chars)>0 ? intval($fb_desc_chars) : ''); ?>"/> characters, 0 or blank for no maximum length
+										<input type="text" name="fb_desc_chars" id="fb_desc_chars" size="3" maxlength="3" value="<?php echo (intval($fb_desc_chars)>0 ? intval($fb_desc_chars) : ''); ?>"/> characters,
+										<br/>
+										0 or blank for no maximum length
 									</td>
 								</tr>
 								<tr class="fb_description_options">
@@ -269,7 +280,8 @@
 									<th scope="row" nowrap="nowrap">Also add image to RSS/RSS2 feeds?</th>
 									<td>
 										<input type="checkbox" name="fb_image_rss" id="fb_image_rss" value="1" <?php echo (intval($fb_image_rss)==1 ? ' checked="checked"' : ''); ?> onclick="showImageOptions();"/>
-										(for auto-posting apps like RSS Graffiti, twitterfeed, ...)
+										<br/>
+										For auto-posting apps like RSS Graffiti, twitterfeed, ...
 									</td>
 								</tr>
 								<tr class="fb_image_options">
@@ -323,6 +335,8 @@
 										<th scope="row" nowrap="nowrap">Use listing BDP listing contents as OG tags?</th>
 										<td>
 											<input type="checkbox" name="fb_show_businessdirectoryplugin" id="fb_show_businessdirectoryplugin" value="1" <?php echo (intval($fb_show_businessdirectoryplugin)==1 ? ' checked="checked"' : ''); ?>/>
+											<br/>
+											Setting "Include URL", "Also set Canonical URL", "Include Description" and "Include Image" options above is HIGHLY recommended
 										</td>
 									</tr>
 								</table>
