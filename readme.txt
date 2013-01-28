@@ -35,6 +35,10 @@ The tags that this plugin inserts are:
 
 == Changelog ==
 
+= 0.4.2 =
+
+* If using the "Business Directory Plugin" integration, the "og:url" tag is now correctly set in the category listing pages.
+
 = 0.4.1 =
 
 * Added the ability to set/replace the Canonical URL tag. Very important for SEO in the "Business Directory Plugin" integration.
