@@ -1,18 +1,18 @@
 <?php
 /**
  * @package Wonderm00n's Simple Facebook Open Graph Meta Tags
- * @version 0.4.2
+ * @version 0.4.3
  */
 /*
 Plugin Name: Wonderm00n's Simple Facebook Open Graph Meta Tags
 Plugin URI: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
 Description: This plugin inserts Facebook Open Graph Tags into your Wordpress Blog/Website for better Facebook sharing
 Author: Marco Almeida (Wonderm00n)
-Version: 0.4.2
+Version: 0.4.3
 Author URI: http://wonderm00n.com
 */
 
-$wonderm00n_open_graph_plugin_version='0.4.2';
+$wonderm00n_open_graph_plugin_version='0.4.3';
 $wonderm00n_open_graph_plugin_settings=array(
 		'fb_app_id_show',
 		'fb_app_id',
@@ -41,6 +41,13 @@ $wonderm00n_open_graph_plugin_settings=array(
 		'fb_show_subheading',
 		'fb_show_businessdirectoryplugin'
 );
+
+//We have to remove canonical NOW because the plugin runs to late
+if (get_option('wonderm00n_open_graph_fb_url_show')==1) {
+	if (get_option('wonderm00n_open_graph_fb_url_canonical')==1) {
+		remove_action('wp_head', 'rel_canonical');
+	}
+}
 
 function wonderm00n_open_graph() {
 	global $wonderm00n_open_graph_plugin_settings, $wonderm00n_open_graph_plugin_version;
@@ -258,7 +265,7 @@ function wonderm00n_open_graph() {
 		$html.='<meta property="og:url" content="'.trim(esc_attr($fb_url)).'" />
 ';
 		if (intval($fb_url_canonical)==1) {
-			remove_action('wp_head', 'rel_canonical'); //Try to remove the old canonical URL - Not working I guess...
+			//remove_action('wp_head', 'rel_canonical'); //Try to remove the old canonical URL - Not working I guess... THIS IS DONE BEFORE
 			$html.='<link rel="canonical" href="'.trim(esc_attr($fb_url)).'" />
 ';
 		}
