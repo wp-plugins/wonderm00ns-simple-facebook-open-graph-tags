@@ -4,18 +4,20 @@ Donate link: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-faceb
 Tags: facebook, open graph, seo, share, social, meta
 Requires at least: 3
 Tested up to: 3.5.1
-Stable tag: 0.4.3
+Stable tag: 0.5
 
 This plugin inserts Facebook Open Graph Tags into your WordPress Blog/Website for more effective Facebook sharing results.
+It also allows you to add the Meta Description tag and Schema.org Name, Description and Image tags for more effective Google+ sharing results.
 
 == Description ==
 
 This plugin inserts Facebook Open Graph Tags into your WordPress Blog/Website for more effective Facebook sharing results.
-It also allows to insert the "enclosure" and "media:content" tags to the RSS feeds, so that apps like RSS Graffiti and twitterfeed post the image to Facebook correctly.
+It also allows you to add the Meta Description tag and Schema.org Name, Description and Image tags for more effective Google+ sharing results.
+You can also choose to insert the "enclosure" and "media:content" tags to the RSS feeds, so that apps like RSS Graffiti and twitterfeed post the image to Facebook correctly.
 
 It allows the user to choose which tags are, or not, included and also the default image if the post/page doesn't have one.
 
-The tags that this plugin inserts are:
+The Facebook Open Graph Tags that this plugin inserts are:
 
 * **fb:app_id** : From settings on the options screen.
 * **fb:admins** : From settings on the options screen.
@@ -27,6 +29,19 @@ The tags that this plugin inserts are:
 * **og:description** : From post/page excerpt if it exist, or from post/page content. From category/tag description on it's pages, if it exist. From tagline, or custom text, on all the others.
 * **og:image** : From post/page featured/thumbnail image, or if it doesn't exist from the first image in the post content, or if it doesn't exist from the first image on the post media gallery, or if it doesn't exist from the default image defined on the options menu. The same image chosen here will be used and enclosure/media:content on the RSS feed.
 
+The Schema.org Tags that this plugin inserts are:
+
+* **name** : Same as "og:title"
+* **description** : Same as "og:description"
+* **image** : Same as "og:image"
+
+Other Tags:
+
+* **meta description** : Same as "og:description"
+* **enclosure** : On RSS feeds, same as "og:image"
+* **media:content** : On RSS feeds, same as "og:image"
+
+
 == Installation ==
 
 1. Upload the `wonderm00n-open-graph` to the `/wp-content/plugins/` directory
@@ -34,6 +49,10 @@ The tags that this plugin inserts are:
 3. Got to `Options`, `Wonderm00n's Open Graph` to set it up
 
 == Changelog ==
+
+= 0.5 =
+
+* Added meta description and Schema.org name, description and image tags.
 
 = 0.4.3 =
 

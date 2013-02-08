@@ -21,16 +21,20 @@
 			update_option('wonderm00n_open_graph_fb_locale', trim($_POST['fb_locale']));
 			update_option('wonderm00n_open_graph_fb_sitename_show', intval($_POST['fb_sitename_show']));
 			update_option('wonderm00n_open_graph_fb_title_show', intval($_POST['fb_title_show']));
+			update_option('wonderm00n_open_graph_fb_title_show_schema', intval($_POST['fb_title_show_schema']));
 			update_option('wonderm00n_open_graph_fb_url_show', intval($_POST['fb_url_show']));
 			update_option('wonderm00n_open_graph_fb_url_canonical', intval($_POST['fb_url_canonical']));
 			update_option('wonderm00n_open_graph_fb_url_add_trailing', intval($_POST['fb_url_add_trailing']));
 			update_option('wonderm00n_open_graph_fb_type_show', intval($_POST['fb_type_show']));
 			update_option('wonderm00n_open_graph_fb_type_homepage', trim($_POST['fb_type_homepage']));
 			update_option('wonderm00n_open_graph_fb_desc_show', intval($_POST['fb_desc_show']));
+			update_option('wonderm00n_open_graph_fb_desc_show_meta', intval($_POST['fb_desc_show_meta']));
+			update_option('wonderm00n_open_graph_fb_desc_show_schema', intval($_POST['fb_desc_show_schema']));
 			update_option('wonderm00n_open_graph_fb_desc_chars', intval($_POST['fb_desc_chars']));
 			update_option('wonderm00n_open_graph_fb_desc_homepage', trim($_POST['fb_desc_homepage']));
 			update_option('wonderm00n_open_graph_fb_desc_homepage_customtext', trim($_POST['fb_desc_homepage_customtext']));
 			update_option('wonderm00n_open_graph_fb_image_show', intval($_POST['fb_image_show']));
+			update_option('wonderm00n_open_graph_fb_image_show_schema', intval($_POST['fb_image_show_schema']));
 			update_option('wonderm00n_open_graph_fb_image', trim($_POST['fb_image']));
 			update_option('wonderm00n_open_graph_fb_image_rss', intval($_POST['fb_image_rss']));
 			update_option('wonderm00n_open_graph_fb_image_use_featured', intval($_POST['fb_image_use_featured']));
@@ -91,8 +95,7 @@
 									</td>
 								</tr>
 								<tr>
-									<td>&nbsp;</td>
-									<td></td>
+									<td colspan="2"><hr/></td>
 								</tr>
 								<tr>
 									<th scope="row" nowrap="nowrap">Include Facebook Admin(s) ID (fb:admins) tag?</th>
@@ -109,8 +112,7 @@
 									</td>
 								</tr>
 								<tr>
-									<td>&nbsp;</td>
-									<td></td>
+									<td colspan="2"><hr/></td>
 								</tr>
 								<tr>
 									<th scope="row" nowrap="nowrap">Include locale (fb:locale) tag?</th>
@@ -161,8 +163,7 @@
 									</td>
 								</tr>
 								<tr>
-									<td>&nbsp;</td>
-									<td></td>
+									<td colspan="2"><hr/></td>
 								</tr>
 								<tr>
 									<th scope="row" nowrap="nowrap">Include Site Name (og:site_name) tag?</th>
@@ -171,18 +172,26 @@
 									</td>
 								</tr>
 								<tr>
-									<td>&nbsp;</td>
-									<td></td>
+									<td colspan="2"><hr/></td>
 								</tr>
 								<tr>
 									<th scope="row" nowrap="nowrap">Include Post/Page title (og:title) tag?</th>
 									<td>
-										<input type="checkbox" name="fb_title_show" id="fb_title_show" value="1" <?php echo (intval($fb_title_show)==1 ? ' checked="checked"' : ''); ?>/>
+										<input type="checkbox" name="fb_title_show" id="fb_title_show" value="1" <?php echo (intval($fb_title_show)==1 ? ' checked="checked"' : ''); ?> onclick="showTitleOptions();"/>
+									</td>
+								</tr>
+								<tr class="fb_title_options">
+									<th scope="row" nowrap="nowrap">Also include Schema.org "itemprop" Name tag?</th>
+									<td>
+										<input type="checkbox" name="fb_title_show_schema" id="fb_title_show_schema" value="1" <?php echo (intval($fb_title_show_schema)==1 ? ' checked="checked"' : ''); ?>/>
+										<br/>
+										<i>&lt;meta itemprop="name" content="..."/&gt;</i>
+										<br/>
+										Recommended for G+ sharing purposes if no other plugin is setting it already
 									</td>
 								</tr>
 								<tr>
-									<td>&nbsp;</td>
-									<td></td>
+									<td colspan="2"><hr/></td>
 								</tr>
 								<tr>
 									<th scope="row" nowrap="nowrap">Include URL (og:url) tag?</th>
@@ -194,6 +203,8 @@
 									<th scope="row" nowrap="nowrap">Also set Canonical URL:</th>
 									<td>
 										<input type="checkbox" name="fb_url_canonical" id="fb_url_canonical" value="1" <?php echo (intval($fb_url_canonical)==1 ? ' checked="checked"' : ''); ?>/>
+										<br/>
+										<i>&lt;link rel="canonical" href="http://novo.opticapita.pt"/&gt;</i>
 									</td>
 								</tr>
 								<tr class="fb_url_options">
@@ -205,8 +216,7 @@
 									</td>
 								</tr>
 								<tr>
-									<td>&nbsp;</td>
-									<td></td>
+									<td colspan="2"><hr/></td>
 								</tr>
 								<tr>
 									<th scope="row" nowrap="nowrap">Include Type (og:type) tag?</th>
@@ -227,13 +237,32 @@
 									</td>
 								</tr>
 								<tr>
-									<td>&nbsp;</td>
-									<td></td>
+									<td colspan="2"><hr/></td>
 								</tr>
 								<tr>
 									<th scope="row" nowrap="nowrap">Include Description (og:description) tag?</th>
 									<td>
 										<input type="checkbox" name="fb_desc_show" id="fb_desc_show" value="1" <?php echo (intval($fb_desc_show)==1 ? ' checked="checked"' : ''); ?> onclick="showDescriptionOptions();"/>
+									</td>
+								</tr>
+								<tr class="fb_description_options">
+									<th scope="row" nowrap="nowrap">Also include Meta Description tag?</th>
+									<td>
+										<input type="checkbox" name="fb_desc_show_meta" id="fb_desc_show_meta" value="1" <?php echo (intval($fb_desc_show_meta)==1 ? ' checked="checked"' : ''); ?>/>
+										<br/>
+										<i>&lt;meta name="description" content="..."/&gt;</i>
+										<br/>
+										Recommended for SEO purposes if no other plugin is setting it already
+									</td>
+								</tr>
+								<tr class="fb_description_options">
+									<th scope="row" nowrap="nowrap">Also include Schema.org "itemprop" Description tag?</th>
+									<td>
+										<input type="checkbox" name="fb_desc_show_schema" id="fb_desc_show_schema" value="1" <?php echo (intval($fb_desc_show_schema)==1 ? ' checked="checked"' : ''); ?>/>
+										<br/>
+										<i>&lt;meta itemprop="description" content="..."/&gt;</i>
+										<br/>
+										Recommended for G+ sharing purposes if no other plugin is setting it already
 									</td>
 								</tr>
 								<tr class="fb_description_options">
@@ -258,13 +287,22 @@
 									</td>
 								</tr>
 								<tr>
-									<td>&nbsp;</td>
-									<td></td>
+									<td colspan="2"><hr/></td>
 								</tr>
 								<tr>
 									<th scope="row" nowrap="nowrap">Include Image (og:image) tag?</th>
 									<td>
 										<input type="checkbox" name="fb_image_show" id="fb_image_show" value="1" <?php echo (intval($fb_image_show)==1 ? ' checked="checked"' : ''); ?> onclick="showImageOptions();"/>
+									</td>
+								</tr>
+								<tr class="fb_image_options">
+									<th scope="row" nowrap="nowrap">Also include Schema.org "itemprop" Image tag?</th>
+									<td>
+										<input type="checkbox" name="fb_image_show_schema" id="fb_image_show_schema" value="1" <?php echo (intval($fb_image_show_schema)==1 ? ' checked="checked"' : ''); ?>/>
+										<br/>
+										<i>&lt;meta itemprop="image" content="..."/&gt;</i>
+										<br/>
+										Recommended for G+ sharing purposes if no other plugin is setting it already
 									</td>
 								</tr>
 								<tr class="fb_image_options">
@@ -449,6 +487,7 @@
 			showUrlTrail();
 			jQuery('.fb_description_options').hide();
 			showDescriptionOptions();
+			showTitleOptions();
 			jQuery('#fb_desc_homepage_customtext').hide();
 			showDescriptionCustomText();
 			showImageOptions();
@@ -502,6 +541,13 @@
 				jQuery('.fb_description_options').hide();
 			}
 		}
+		function showTitleOptions() {
+			if (jQuery('#fb_title_show').is(':checked')) {
+				jQuery('.fb_title_options').show();
+			} else {
+				jQuery('.fb_title_options').hide();
+			}
+		}
 		function showDescriptionCustomText() {
 			if (jQuery('#fb_desc_homepage').val()=='custom') {
 				jQuery('#fb_desc_homepage_customtext').show().focus();
@@ -520,5 +566,11 @@
 	<style type="text/css">
 		TABLE.form-table TR TH {
 			font-weight: bold;
+		}
+		TABLE.form-table TR TD HR {
+			height: 1px;
+  		margin: 0px;
+  		background-color: #DFDFDF;
+  		border: none;
 		}
 	</style>

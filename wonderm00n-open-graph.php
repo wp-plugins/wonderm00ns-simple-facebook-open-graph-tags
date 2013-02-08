@@ -1,18 +1,18 @@
 <?php
 /**
  * @package Wonderm00n's Simple Facebook Open Graph Meta Tags
- * @version 0.4.3
+ * @version 0.5
  */
 /*
 Plugin Name: Wonderm00n's Simple Facebook Open Graph Meta Tags
 Plugin URI: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
-Description: This plugin inserts Facebook Open Graph Tags into your Wordpress Blog/Website for better Facebook sharing
+Description: This plugin inserts Facebook Open Graph Tags into your WordPress Blog/Website for more effective Facebook sharing results. It also allows you to add the Meta Description tag and Schema.org Name, Description and Image tags for more effective Google+ sharing results. You can also choose to insert the "enclosure" and "media:content" tags to the RSS feeds, so that apps like RSS Graffiti and twitterfeed post the image to Facebook correctly.
 Author: Marco Almeida (Wonderm00n)
-Version: 0.4.3
+Version: 0.5
 Author URI: http://wonderm00n.com
 */
 
-$wonderm00n_open_graph_plugin_version='0.4.3';
+$wonderm00n_open_graph_plugin_version='0.5';
 $wonderm00n_open_graph_plugin_settings=array(
 		'fb_app_id_show',
 		'fb_app_id',
@@ -22,16 +22,20 @@ $wonderm00n_open_graph_plugin_settings=array(
 		'fb_locale',
 		'fb_sitename_show',
 		'fb_title_show',
+		'fb_title_show_schema',
 		'fb_url_show',
 		'fb_url_canonical',
 		'fb_url_add_trailing',
 		'fb_type_show',
 		'fb_type_homepage',
 		'fb_desc_show',
+		'fb_desc_show_meta',
+		'fb_desc_show_schema',
 		'fb_desc_chars',
 		'fb_desc_homepage',
 		'fb_desc_homepage_customtext',
 		'fb_image_show',
+		'fb_image_show_schema',
 		'fb_image',
 		'fb_image_rss',
 		'fb_image_use_featured',
@@ -249,7 +253,8 @@ function wonderm00n_open_graph() {
 	//If no description let's just add the title
 	if (trim($fb_desc)=='') $fb_desc=$fb_title;
 	
-	$html='<!-- START - Wonderm00n\'s Simple Facebook Open Graph Tags '.$wonderm00n_open_graph_plugin_version.' -->
+	$html='
+<!-- START - Wonderm00n\'s Simple Facebook Open Graph Tags '.$wonderm00n_open_graph_plugin_version.' -->
 ';
 	if (intval($fb_app_id_show)==1 && trim($fb_app_id)!='') $html.='<meta property="fb:app_id" content="'.trim($fb_app_id).'" />
 ';
@@ -260,6 +265,8 @@ function wonderm00n_open_graph() {
 	if (intval($fb_sitename_show)==1) $html.='<meta property="og:site_name" content="'.get_bloginfo('name').'" />
 ';
 	if (intval($fb_title_show)==1) $html.='<meta property="og:title" content="'.trim($fb_title).'" />
+';
+	if (intval($fb_title_show_schema)==1) $html.='<meta itemprop="name" content="'.trim($fb_title).'" />
 ';
 	if (intval($fb_url_show)==1) {
 		$html.='<meta property="og:url" content="'.trim(esc_attr($fb_url)).'" />
@@ -274,7 +281,13 @@ function wonderm00n_open_graph() {
 ';
 	if (intval($fb_desc_show)==1) $html.='<meta property="og:description" content="'.trim($fb_desc).'" />
 ';
+	if (intval($fb_desc_show_meta)==1) $html.='<meta name="description" content="'.trim($fb_desc).'" />
+';
+	if (intval($fb_desc_show_schema)==1) $html.='<meta itemprop="description" content="'.trim($fb_desc).'" />
+';
 	if(intval($fb_image_show)==1 && trim($fb_image)!='') $html.='<meta property="og:image" content="'.trim(esc_attr($fb_image)).'" />
+';
+	if(intval($fb_image_show_schema)==1 && trim($fb_image)!='') $html.='<meta itemprop="image" content="'.trim(esc_attr($fb_image)).'" />
 ';
 	$html.='<!-- END - Wonderm00n\'s Simple Facebook Open Graph Tags -->
 ';
