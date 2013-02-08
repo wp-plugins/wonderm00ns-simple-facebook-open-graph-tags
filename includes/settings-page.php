@@ -293,6 +293,8 @@
 									<th scope="row" nowrap="nowrap">Include Image (og:image) tag?</th>
 									<td>
 										<input type="checkbox" name="fb_image_show" id="fb_image_show" value="1" <?php echo (intval($fb_image_show)==1 ? ' checked="checked"' : ''); ?> onclick="showImageOptions();"/>
+										<br/>
+										It's HIGHLY recommended that all images have at least 200px on both dimensions in order to Facebook to properly load them
 									</td>
 								</tr>
 								<tr class="fb_image_options">
@@ -327,18 +329,19 @@
 									<td>
 										<div>
 											1) <input type="checkbox" name="fb_image_use_featured" id="fb_image_use_featured" value="1" <?php echo (intval($fb_image_use_featured)==1 ? ' checked="checked"' : ''); ?>/>
-											Image will be fetched from post/page featured/thumbnail picture.</div>
+											Image will be fetched from post/page featured/thumbnail picture
+										</div>
 										<div>
 											2) <input type="checkbox" name="fb_image_use_content" id="fb_image_use_content" value="1" <?php echo (intval($fb_image_use_content)==1 ? ' checked="checked"' : ''); ?>/>
-											If it doesn't exist, use the first image from the post/page content.
+											If it doesn't exist, use the first image from the post/page content
 										</div>
 										<div>
 											3) <input type="checkbox" name="fb_image_use_media" id="fb_image_use_media" value="1" <?php echo (intval($fb_image_use_media)==1 ? ' checked="checked"' : ''); ?>/>
-											If it doesn't exist, use first image from the post/page media gallery.
+											If it doesn't exist, use first image from the post/page media gallery
 										</div>
 										<div>
 											4) <input type="checkbox" name="fb_image_use_default" id="fb_image_use_default" value="1" <?php echo (intval($fb_image_use_default)==1 ? ' checked="checked"' : ''); ?>/>
-											If it doesn't exist, use the default image above.
+											If it doesn't exist, use the default image above
 										</div>
 									</td>
 								</tr>
