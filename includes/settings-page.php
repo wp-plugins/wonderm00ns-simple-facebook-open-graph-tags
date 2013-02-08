@@ -204,7 +204,7 @@
 									<td>
 										<input type="checkbox" name="fb_url_canonical" id="fb_url_canonical" value="1" <?php echo (intval($fb_url_canonical)==1 ? ' checked="checked"' : ''); ?>/>
 										<br/>
-										<i>&lt;link rel="canonical" href="http://novo.opticapita.pt"/&gt;</i>
+										<i>&lt;link rel="canonical" href="..."/&gt;</i>
 									</td>
 								</tr>
 								<tr class="fb_url_options">
