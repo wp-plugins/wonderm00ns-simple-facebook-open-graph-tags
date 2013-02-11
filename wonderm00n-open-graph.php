@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Wonderm00n's Simple Facebook Open Graph Meta Tags
- * @version 0.5.1
+ * @version 0.5.2
  */
 /*
 Plugin Name: Wonderm00n's Simple Facebook Open Graph Meta Tags
 Plugin URI: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
 Description: This plugin inserts Facebook Open Graph Tags into your WordPress Blog/Website for more effective Facebook sharing results. It also allows you to add the Meta Description tag and Schema.org Name, Description and Image tags for more effective Google+ sharing results. You can also choose to insert the "enclosure" and "media:content" tags to the RSS feeds, so that apps like RSS Graffiti and twitterfeed post the image to Facebook correctly.
 Author: Marco Almeida (Wonderm00n)
-Version: 0.5.1
+Version: 0.5.2
 Author URI: http://wonderm00n.com
 */
 
@@ -46,7 +46,7 @@ $wonderm00n_open_graph_plugin_settings=array(
 		'fb_show_businessdirectoryplugin'
 );
 
-//We have to remove canonical NOW because the plugin runs to late
+//We have to remove canonical NOW because the plugin runs too late
 if (get_option('wonderm00n_open_graph_fb_url_show')==1) {
 	if (get_option('wonderm00n_open_graph_fb_url_canonical')==1) {
 		remove_action('wp_head', 'rel_canonical');
@@ -56,37 +56,14 @@ if (get_option('wonderm00n_open_graph_fb_url_show')==1) {
 function wonderm00n_open_graph() {
 	global $wonderm00n_open_graph_plugin_settings, $wonderm00n_open_graph_plugin_version;
 	
+	//Get options
 	foreach($wonderm00n_open_graph_plugin_settings as $key) {
 		$$key=get_option('wonderm00n_open_graph_'.$key);
 	}
 	
-	//This should be set by options on wp-admin
-	/*$fb_app_id_show=get_option('wonderm00n_open_graph_fb_app_id_show');
-	$fb_app_id=get_option('wonderm00n_open_graph_fb_app_id');
-	$fb_admin_id_show=get_option('wonderm00n_open_graph_fb_admin_id_show');
-	$fb_admin_id=get_option('wonderm00n_open_graph_fb_admin_id');
-	$fb_locale_show=get_option('wonderm00n_open_graph_fb_locale_show');
-	$fb_locale = get_option('wonderm00n_open_graph_fb_locale');
-	$fb_sitename_show=get_option('wonderm00n_open_graph_fb_sitename_show');
-	$fb_title_show=get_option('wonderm00n_open_graph_fb_title_show');
-	$fb_url_show=get_option('wonderm00n_open_graph_fb_url_show');
-	$fb_url_add_trailing=get_option('wonderm00n_open_graph_fb_url_add_trailing');
-	$fb_type_show=get_option('wonderm00n_open_graph_fb_type_show');
-	$fb_type_homepage=get_option('wonderm00n_open_graph_fb_type_homepage');
-	$fb_desc_show=get_option('wonderm00n_open_graph_fb_desc_show');
-	$fb_desc_chars=intval(get_option('wonderm00n_open_graph_fb_desc_chars'));
-	$fb_desc_homepage = get_option('wonderm00n_open_graph_fb_desc_homepage');
-	$fb_desc_homepage_customtext = get_option('wonderm00n_open_graph_fb_desc_homepage_customtext');
-	$fb_image_show=get_option('wonderm00n_open_graph_fb_image_show');
-	$fb_image=get_option('wonderm00n_open_graph_fb_image');
-	$fb_image_use_featured=get_option('wonderm00n_open_graph_fb_image_use_featured');
-	$fb_image_use_content=get_option('wonderm00n_open_graph_fb_image_use_content');
-	$fb_image_use_media=get_option('wonderm00n_open_graph_fb_image_use_media');
-	$fb_image_use_default=get_option('wonderm00n_open_graph_fb_image_use_default');*/
-	
 	$fb_type='article';
 	if (is_singular()) {
-		//It's a Post or a Page or an attachment page
+		//It's a Post or a Page or an attachment page - It acan also be the homepage if it's set as a page
 		global $post;
 		$fb_title=esc_attr(strip_tags(stripslashes($post->post_title)));
 		//All In One SEO - To Do
@@ -114,7 +91,7 @@ function wonderm00n_open_graph() {
 		}
 		$fb_url=get_permalink();
 		if (trim($post->post_excerpt)!='') {
-			//If there's an excerpt that's waht we'll use
+			//If there's an excerpt that's what we'll use
 			$fb_desc=trim($post->post_excerpt);
 		} else {
 			//If not we grab it from the content
@@ -137,7 +114,7 @@ function wonderm00n_open_graph() {
 						$fb_title=esc_attr(strip_tags(stripslashes($bdppost->post_title))).' - '.$fb_title;
 						$fb_url=get_permalink($listing_id);
 						if (trim($bdppost->post_excerpt)!='') {
-							//If there's an excerpt that's waht we'll use
+							//If there's an excerpt that's what we'll use
 							$fb_desc=trim($bdppost->post_excerpt);
 						} else {
 							//If not we grab it from the content
@@ -272,7 +249,7 @@ function wonderm00n_open_graph() {
 		$html.='<meta property="og:url" content="'.trim(esc_attr($fb_url)).'" />
 ';
 		if (intval($fb_url_canonical)==1) {
-			//remove_action('wp_head', 'rel_canonical'); //Try to remove the old canonical URL - Not working I guess... THIS IS DONE BEFORE
+			//remove_action('wp_head', 'rel_canonical'); //This is already done
 			$html.='<link rel="canonical" href="'.trim(esc_attr($fb_url)).'" />
 ';
 		}
@@ -338,7 +315,6 @@ function wonderm00n_open_graph_images_on_feed_image() {
 		$uploads = wp_upload_dir();
 		$url = parse_url($fb_image);
 		$path = $uploads['basedir'] . preg_replace( '/.*uploads(.*)/', '${1}', $url['path'] );
-		//echo $path;
 		if (file_exists($path)) {
 			$filesize=filesize($path);
 			$url=$path;
@@ -367,7 +343,6 @@ function wonderm00n_open_graph_post_image($fb_image_use_featured=1, $fb_image_us
 				//There's a featured/thumbnail image for this post
 				$fb_image=wp_get_attachment_url($id_attachment, false);
 				$thumbdone=true;
-				//echo 'IMG FEAT';
 			}
 		}
 	}
@@ -376,23 +351,22 @@ function wonderm00n_open_graph_post_image($fb_image_use_featured=1, $fb_image_us
 		if (intval($fb_image_use_content)==1) {
 			$imgreg = '/<img .*src=["\']([^ ^"^\']*)["\']/';
 			preg_match_all($imgreg, trim($post->post_content), $matches);
-			$image=$matches[1][0];
-			if ($image) {
+			if (isset($matches[1][0])) {
 				//There's an image on the content
+				$image=$matches[1][0];
 				$pos = strpos($image, site_url());
 				if ($pos === false) {
 					if (stristr($image, 'http://') || stristr($image, 'https://')) {
-						//URL Completo fora do site
+						//Complete URL - offsite
 						$fb_image=$image;
 					} else {
 						$fb_image=site_url().$image;
 					}
 				} else {
-					//URL Completo no site
+					//Complete URL - onsite
 					$fb_image=$image;
 				}
 				$thumbdone=true;
-				//echo 'IMG CONTENT';
 			}
 		}
 	}
@@ -403,7 +377,6 @@ function wonderm00n_open_graph_post_image($fb_image_use_featured=1, $fb_image_us
 			if ($images) {
 				$fb_image=wp_get_attachment_url($images[0]->ID, false);
 				$thumbdone=true;
-				//echo 'IMG MEDIA';
 			}
 		}
 	}
@@ -412,11 +385,9 @@ function wonderm00n_open_graph_post_image($fb_image_use_featured=1, $fb_image_us
 		if (intval($fb_image_use_default)==1) {
 			//Well... We sure did try. We'll just keep the default one!
 			$fb_image=$default_image;
-			//echo 'IMG DEFAULT';
 		} else {
 			//User chose not to use default on pages/posts
 			$fb_image='';
-			//echo 'IMG NO IMG';
 		}
 	}
 	return $fb_image;

@@ -4,7 +4,7 @@ Donate link: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-faceb
 Tags: facebook, open graph, seo, share, social, meta
 Requires at least: 3
 Tested up to: 3.5.1
-Stable tag: 0.5.1
+Stable tag: 0.5.2
 
 This plugin inserts Facebook Open Graph Tags into your WordPress Blog/Website for more effective Facebook sharing results.
 It also allows you to add the Meta Description tag and Schema.org Name, Description and Image tags for more effective Google+ sharing results.
@@ -50,10 +50,17 @@ Other Tags:
 
 == Changelog ==
 
+= 0.5.2 =
+
+* Minor fix to avoid php notices filling up error logs. Thanks to @flynsarmy (again).
+* Fixed FacebookLocales.xml URL.
+* By default the FacebookLocales.xml is loaded from the local cache (to save on bandwidth) and it's only loaded from Facebook URL by user request.
+* Deleted some commented debug stuff and translate portuguese comments to english.
+
 = 0.5.1 =
 
-* Fixed a typo
-* Added the information about the recommended minimum image size
+* Fixed a typo.
+* Added the information about the recommended minimum image size.
 
 = 0.5 =
 
@@ -77,11 +84,11 @@ Other Tags:
 
 = 0.3.5 =
 
-* Minor fixes to avoid php notices filling up error logs. Thanks to flynsarmy.
+* Minor fixes to avoid php notices filling up error logs. Thanks to @flynsarmy.
 
 = 0.3.4 =
 
-* Fixed a bug where all the settings could be lost when saving other plugins options (Shame on me!!)
+* Fixed a bug where all the settings could be lost when saving other plugins options (Shame on me!!).
 
 = 0.3.3 =
 
@@ -89,7 +96,7 @@ Other Tags:
 
 = 0.3.2 =
 
-* Fixed a typo on the settings page
+* Fixed a typo on the settings page.
 
 = 0.3.1 =
 
@@ -99,8 +106,8 @@ Other Tags:
 
 * "SubHeading" plugin integration. It's now possible add this field to the "og:title" tag.
 * Changed the way defaults and user settings are loaded and saved, to "try" to eliminate the problem some users experienced where the user settings would disappear.
-* Bugfix: "Also add image to RSS/RSS2 feeds?" option was not being correctly loaded
-* The plugin version is now showed both as a comment before the open graph tags and on the settings page
+* Bugfix: "Also add image to RSS/RSS2 feeds?" option was not being correctly loaded.
+* The plugin version is now showed both as a comment before the open graph tags and on the settings page.
 
 = 0.2.3 =
 
@@ -131,7 +138,7 @@ Other Tags:
 
 = 0.1.8.1 =
 
-* Fixed the namespace declarations
+* Fixed the namespace declarations.
 
 = 0.1.8 =
 
@@ -152,7 +159,7 @@ Other Tags:
 
 = 0.1.5 =
 
-* Fixed the way Categories and Tags pages links were being retrieved that would cause an error on WP 3.0
+* Fixed the way Categories and Tags pages links were being retrieved that would cause an error on WP 3.0.
 * Added the option to use a Custom text as homepage og:description instead of the Website Tagline.
 * Fixed a bug that wouldn't allow to uncheck the og:image tag.
 

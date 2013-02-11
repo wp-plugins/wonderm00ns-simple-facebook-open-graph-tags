@@ -127,24 +127,34 @@
 											<option value=""<?php if (trim($fb_locale)=='') echo ' selected="selected"'; ?>>Wordpress current locale/language (<?php echo get_locale(); ?>)&nbsp;</option>
 										<?php
 											$listLocales=false;
+											$loadedOnline=false;
+											$loadedOffline=false;
 											//Online
-											if ($ch = curl_init('http://www.facebook.com/translations/FacebookLocales.xmla')) {
-												curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-												$fb_locales=curl_exec($ch);
-												if (curl_errno($ch)) {
-													//echo curl_error($ch);
-												} else {
-													$info = curl_getinfo($ch);
-													if (intval($info['http_code'])==200) {
-														$listLocales=true;
+											if (intval($_GET['localeOnline'])==1) {
+												if ($ch = curl_init('http://www.facebook.com/translations/FacebookLocales.xml')) {
+													curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+													$fb_locales=curl_exec($ch);
+													if (curl_errno($ch)) {
+														//echo curl_error($ch);
+													} else {
+														$info = curl_getinfo($ch);
+														if (intval($info['http_code'])==200) {
+															//Save the file locally
+															$fh = fopen(ABSPATH . 'wp-content/plugins/wonderm00ns-simple-facebook-open-graph-tags/includes/FacebookLocales.xml', 'w') or die("Can't open file");
+															fwrite($fh, $fb_locales);
+															fclose($fh);
+															$listLocales=true;
+															$loadedOnline=true;
+														}
 													}
+													curl_close($ch);
 												}
-												curl_close($ch);
 											}
 											//Offline
 											if (!$listLocales) {
 												if ($fb_locales=file_get_contents(ABSPATH . 'wp-content/plugins/wonderm00ns-simple-facebook-open-graph-tags/includes/FacebookLocales.xml')) {
 													$listLocales=true;
+													$loadedOffline=true;
 												}
 											}
 											//OK
@@ -160,6 +170,18 @@
 											}
 										?>
 										</select>
+										<br/>
+										<?php
+										if ($loadedOnline) {
+											?>List loaded from Facebook (online)<?php
+										} else {
+											if ($loadedOffline) {
+												?>List loaded from local cache (offline) - <a href="?page=wonderm00n-open-graph.php&amp;localeOnline=1" onClick="return(confirm('You\'l lose any changes you haven\'t saved. Are you sure?'));">Reload from Facebook</a><?php
+											} else {
+												?>List not loaded<?php
+											}
+										}
+										?>
 									</td>
 								</tr>
 								<tr>
