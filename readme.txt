@@ -50,6 +50,10 @@ Other Tags:
 
 == Changelog ==
 
+= 0.5.2.1 =
+
+* Fixed version number.
+
 = 0.5.2 =
 
 * Minor fix to avoid php notices filling up error logs. Thanks to @flynsarmy (again).
