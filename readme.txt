@@ -4,7 +4,7 @@ Donate link: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-faceb
 Tags: facebook, open graph, seo, share, social, meta
 Requires at least: 3
 Tested up to: 3.5.1
-Stable tag: 0.5.3
+Stable tag: 0.5.4
 
 This plugin inserts Facebook Open Graph Tags into your WordPress Blog/Website for more effective Facebook sharing results.
 It also allows you to add the Meta Description tag and Schema.org Name, Description and Image tags for more effective Google+ sharing results.
@@ -49,6 +49,10 @@ Other Tags:
 3. Got to `Options`, `Wonderm00n's Open Graph` to set it up
 
 == Changelog ==
+
+= 0.5.4 =
+
+* Fix in order to be compatible with "Business Directory Plugin" 3.0
 
 = 0.5.3 =
 

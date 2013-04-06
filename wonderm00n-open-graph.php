@@ -1,18 +1,18 @@
 <?php
 /**
  * @package Wonderm00n's Simple Facebook Open Graph Meta Tags
- * @version 0.5.3
+ * @version 0.5.4
  */
 /*
 Plugin Name: Wonderm00n's Simple Facebook Open Graph Meta Tags
 Plugin URI: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
 Description: This plugin inserts Facebook Open Graph Tags into your WordPress Blog/Website for more effective Facebook sharing results. It also allows you to add the Meta Description tag and Schema.org Name, Description and Image tags for more effective Google+ sharing results. You can also choose to insert the "enclosure" and "media:content" tags to the RSS feeds, so that apps like RSS Graffiti and twitterfeed post the image to Facebook correctly.
 Author: Marco Almeida (Wonderm00n)
-Version: 0.5.3
+Version: 0.5.4
 Author URI: http://wonderm00n.com
 */
 
-$wonderm00n_open_graph_plugin_version='0.5.3';
+$wonderm00n_open_graph_plugin_version='0.5.4';
 $wonderm00n_open_graph_plugin_settings=array(
 		'fb_app_id_show',
 		'fb_app_id',
@@ -61,6 +61,9 @@ function wonderm00n_open_graph() {
 		$$key=get_option('wonderm00n_open_graph_'.$key);
 	}
 	
+	//Also set Title Tag?
+	$fb_set_title_tag=0;
+
 	$fb_type='article';
 	if (is_singular()) {
 		//It's a Post or a Page or an attachment page - It acan also be the homepage if it's set as a page
@@ -105,13 +108,16 @@ function wonderm00n_open_graph() {
 		if ($fb_show_businessdirectoryplugin==1) {
 			@include_once(ABSPATH . 'wp-admin/includes/plugin.php');
 			if (is_plugin_active('business-directory-plugin/wpbusdirman.php')) {
-				$bdpaction = _wpbdp_current_action();
+				global $wpbdp;
+				//$bdpaction = _wpbdp_current_action();
+				$bdpaction=$wpbdp->controller->get_current_action();
 				switch($bdpaction) {
 					case 'showlisting':
 						//Listing
 						$listing_id = get_query_var('listing') ? wpbdp_get_post_by_slug(get_query_var('listing'))->ID : wpbdp_getv($_GET, 'id', get_query_var('id'));
 						$bdppost=get_post($listing_id);
 						$fb_title=esc_attr(strip_tags(stripslashes($bdppost->post_title))).' - '.$fb_title;
+						$fb_set_title_tag=1;
 						$fb_url=get_permalink($listing_id);
 						if (trim($bdppost->post_excerpt)!='') {
 							//If there's an excerpt that's what we'll use
@@ -143,6 +149,7 @@ function wonderm00n_open_graph() {
 							//Categories
 							$term = get_term_by('slug', get_query_var('category'), wpbdp_categories_taxonomy());
 							$fb_title=esc_attr(strip_tags(stripslashes($term->name))).' - '.$fb_title;
+							$fb_set_title_tag=1;
 							$fb_url=get_term_link($term);
 							if (trim($term->description)!='') {
 								$fb_desc=trim($term->description);
@@ -243,6 +250,9 @@ function wonderm00n_open_graph() {
 ';
 	if (intval($fb_title_show)==1) $html.='<meta property="og:title" content="'.trim($fb_title).'" />
 ';
+	if (intval($fb_set_title_tag)==1) {
+		//Does nothing so far. We try to create the <title> tag but it's too late now
+	}
 	if (intval($fb_title_show_schema)==1) $html.='<meta itemprop="name" content="'.trim($fb_title).'" />
 ';
 	if (intval($fb_url_show)==1) {
