@@ -27,19 +27,19 @@ The Facebook Open Graph Tags that this plugin inserts are:
 * **og:url** : From the post/page permalink.
 * **og:type** : "website" or "blog" for the homepage and "article" for all the others.
 * **og:description** : From post/page excerpt if it exist, or from post/page content. From category/tag description on it's pages, if it exist. From tagline, or custom text, on all the others.
-* **og:image** : From post/page featured/thumbnail image, or if it doesn't exist from the first image in the post content, or if it doesn't exist from the first image on the post media gallery, or if it doesn't exist from the default image defined on the options menu. The same image chosen here will be used and enclosure/media:content on the RSS feed.
+* **og:image** : From a specific custom field of the post/page, or if not set from the post/page featured/thumbnail image, or if it doesn't exist from the first image in the post content, or if it doesn't exist from the first image on the post media gallery, or if it doesn't exist from the default image defined on the options menu. The same image chosen here will be used and enclosure/media:content on the RSS feed.
 
 The Schema.org Tags that this plugin inserts are:
 
-* **name** : Same as "og:title"
-* **description** : Same as "og:description"
-* **image** : Same as "og:image"
+* **name** : Same as "og:title".
+* **description** : Same as "og:description".
+* **image** : Same as "og:image".
 
 Other Tags:
 
-* **meta description** : Same as "og:description"
-* **enclosure** : On RSS feeds, same as "og:image"
-* **media:content** : On RSS feeds, same as "og:image"
+* **meta description** : Same as "og:description".
+* **enclosure** : On RSS feeds, same as "og:image".
+* **media:content** : On RSS feeds, same as "og:image".
 
 
 == Installation ==
