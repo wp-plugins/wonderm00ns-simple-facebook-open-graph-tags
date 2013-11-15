@@ -1,18 +1,18 @@
-=== Wonderm00n's Simple Facebook Open Graph Meta Tags ===
-Contributors: wonderm00n
+=== Facebook Open Graph Meta Tags for WordPress ===
+Contributors: webdados, wonderm00n
 Donate link: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
-Tags: facebook, open graph, seo, share, social, meta
-Requires at least: 3
+Tags: facebook, open graph, open graph protocol, seo, share, social, meta, schema, google+, g+, google, google plus, image, like, meta, search engine optimization
+Requires at least: 3.5
 Tested up to: 3.5.1
-Stable tag: 0.5.4
+Stable tag: 1.0
 
-This plugin inserts Facebook Open Graph Tags into your WordPress Blog/Website for more effective Facebook sharing results.
-It also allows you to add the Meta Description tag and Schema.org Name, Description and Image tags for more effective Google+ sharing results.
+This plugin inserts Facebook Open Graph Tags into your WordPress Blog/Website for more effective and efficient Facebook sharing results.
+It also allows you to add the Meta Description tag and Schema.org Name, Description and Image tags for more effective and efficient Google+ sharing results.
 
 == Description ==
 
-This plugin inserts Facebook Open Graph Tags into your WordPress Blog/Website for more effective Facebook sharing results.
-It also allows you to add the Meta Description tag and Schema.org Name, Description and Image tags for more effective Google+ sharing results.
+This plugin inserts Facebook Open Graph Tags into your WordPress Blog/Website for more effective and efficient Facebook sharing results.
+It also allows you to add the Meta Description tag and Schema.org Name, Description and Image tags for more effective and efficien Google+ sharing results.
 You can also choose to insert the "enclosure" and "media:content" tags to the RSS feeds, so that apps like RSS Graffiti and twitterfeed post the image to Facebook correctly.
 
 It allows the user to choose which tags are, or not, included and also the default image if the post/page doesn't have one.
@@ -46,9 +46,22 @@ Other Tags:
 
 1. Upload the `wonderm00n-open-graph` to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Got to `Options`, `Wonderm00n's Open Graph` to set it up
+3. Got to `Options`, `Facebook Open Graph Tags` to set it up
 
 == Changelog ==
+
+= 1.0 =
+
+* Plugin name changed from "Wonderm00n's Simple Facebook Open Graph Meta Tags" to "Facebook Open Graph Meta Tags for WordPress"
+* You can now set a specific Open Graph image per post, if you don't want it to be the same as the post featured image
+* Settings are now stored on a array instead of multiple variables on the options table (and necessary changes along the code)
+* Internationalization support added
+* Portuguese translation added (we welcome other translations if you want to do it)
+* Added webdados as contributor (Wonderm00n's company)
+* Fix: Several PHP warnings when WP_DEBUG is turned on. Thanks to @flynsarmy (yet again)
+* Fix: og:type was not set correctly for the homepage in case it was a static page. Thanks to yakitori
+* Fix: When the site url was not the same as the wordpress installation folder the wrong url was used in the homepage og:url/canonical tag. Thanks to theonetruebix
+* Using the requested url as og:urgl/canonical on not known areas of wordpress. Not really a canonical url but better than using the homepage one
 
 = 0.5.4 =
 

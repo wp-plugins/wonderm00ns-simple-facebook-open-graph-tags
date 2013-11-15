@@ -1,10 +1,10 @@
 <?php
 /**
- * @package Wonderm00n's Simple Facebook Open Graph Tags
+ * @package Facebook Open Graph Meta Tags for WordPress
  * @subpackage Settings Page
  *
  * @since 0.1
- * @author Marco Almeida (Wonderm00n)
+ * @author Webdados
  *
  *
  */
@@ -13,63 +13,52 @@
 	if ( isset($_POST['action']) ) {
 		if (trim($_POST['action'])=='save') {
 			//This should also use the $wonderm00n_open_graph_plugin_settings array, but because of intval and trim we still can't
-			update_option('wonderm00n_open_graph_fb_app_id_show', intval(wonderm00n_open_graph_post($_POST['fb_app_id_show'])));
-			update_option('wonderm00n_open_graph_fb_app_id', trim(wonderm00n_open_graph_post($_POST['fb_app_id'])));
-			update_option('wonderm00n_open_graph_fb_admin_id_show', intval(wonderm00n_open_graph_post($_POST['fb_admin_id_show'])));
-			update_option('wonderm00n_open_graph_fb_admin_id', trim(wonderm00n_open_graph_post($_POST['fb_admin_id'])));
-			update_option('wonderm00n_open_graph_fb_locale_show', intval(wonderm00n_open_graph_post($_POST['fb_locale_show'])));
-			update_option('wonderm00n_open_graph_fb_locale', trim(wonderm00n_open_graph_post($_POST['fb_locale'])));
-			update_option('wonderm00n_open_graph_fb_sitename_show', intval(wonderm00n_open_graph_post($_POST['fb_sitename_show'])));
-			update_option('wonderm00n_open_graph_fb_title_show', intval(wonderm00n_open_graph_post($_POST['fb_title_show'])));
-			update_option('wonderm00n_open_graph_fb_title_show_schema', intval(wonderm00n_open_graph_post($_POST['fb_title_show_schema'])));
-			update_option('wonderm00n_open_graph_fb_url_show', intval(wonderm00n_open_graph_post($_POST['fb_url_show'])));
-			update_option('wonderm00n_open_graph_fb_url_canonical', intval(wonderm00n_open_graph_post($_POST['fb_url_canonical'])));
-			update_option('wonderm00n_open_graph_fb_url_add_trailing', intval(wonderm00n_open_graph_post($_POST['fb_url_add_trailing'])));
-			update_option('wonderm00n_open_graph_fb_type_show', intval(wonderm00n_open_graph_post($_POST['fb_type_show'])));
-			update_option('wonderm00n_open_graph_fb_type_homepage', trim(wonderm00n_open_graph_post($_POST['fb_type_homepage'])));
-			update_option('wonderm00n_open_graph_fb_desc_show', intval(wonderm00n_open_graph_post($_POST['fb_desc_show'])));
-			update_option('wonderm00n_open_graph_fb_desc_show_meta', intval(wonderm00n_open_graph_post($_POST['fb_desc_show_meta'])));
-			update_option('wonderm00n_open_graph_fb_desc_show_schema', intval(wonderm00n_open_graph_post($_POST['fb_desc_show_schema'])));
-			update_option('wonderm00n_open_graph_fb_desc_chars', intval(wonderm00n_open_graph_post($_POST['fb_desc_chars'])));
-			update_option('wonderm00n_open_graph_fb_desc_homepage', trim(wonderm00n_open_graph_post($_POST['fb_desc_homepage'])));
-			update_option('wonderm00n_open_graph_fb_desc_homepage_customtext', trim(wonderm00n_open_graph_post($_POST['fb_desc_homepage_customtext'])));
-			update_option('wonderm00n_open_graph_fb_image_show', intval(wonderm00n_open_graph_post($_POST['fb_image_show'])));
-			update_option('wonderm00n_open_graph_fb_image_show_schema', intval(wonderm00n_open_graph_post($_POST['fb_image_show_schema'])));
-			update_option('wonderm00n_open_graph_fb_image', trim(wonderm00n_open_graph_post($_POST['fb_image'])));
-			update_option('wonderm00n_open_graph_fb_image_rss', intval(wonderm00n_open_graph_post($_POST['fb_image_rss'])));
-			update_option('wonderm00n_open_graph_fb_image_use_featured', intval(wonderm00n_open_graph_post($_POST['fb_image_use_featured'])));
-			update_option('wonderm00n_open_graph_fb_image_use_content', intval(wonderm00n_open_graph_post($_POST['fb_image_use_content'])));
-			update_option('wonderm00n_open_graph_fb_image_use_media', intval(wonderm00n_open_graph_post($_POST['fb_image_use_media'])));
-			update_option('wonderm00n_open_graph_fb_image_use_default', intval(wonderm00n_open_graph_post($_POST['fb_image_use_default'])));
-			update_option('wonderm00n_open_graph_fb_show_subheading', intval(wonderm00n_open_graph_post($_POST['fb_show_subheading'])));
-			update_option('wonderm00n_open_graph_fb_show_businessdirectoryplugin', intval(wonderm00n_open_graph_post($_POST['fb_show_businessdirectoryplugin'])));
+			$usersettings['fb_app_id_show']= 					intval(wonderm00n_open_graph_post('fb_app_id_show'));
+			$usersettings['fb_app_id']= 						trim(wonderm00n_open_graph_post('fb_app_id'));
+			$usersettings['fb_admin_id_show']= 					intval(wonderm00n_open_graph_post('fb_admin_id_show'));
+			$usersettings['fb_admin_id']= 						trim(wonderm00n_open_graph_post('fb_admin_id'));
+			$usersettings['fb_locale_show']= 					intval(wonderm00n_open_graph_post('fb_locale_show'));
+			$usersettings['fb_locale']= 						trim(wonderm00n_open_graph_post('fb_locale'));
+			$usersettings['fb_sitename_show']= 					intval(wonderm00n_open_graph_post('fb_sitename_show'));
+			$usersettings['fb_title_show']= 					intval(wonderm00n_open_graph_post('fb_title_show'));
+			$usersettings['fb_title_show_schema']= 				intval(wonderm00n_open_graph_post('fb_title_show_schema'));
+			$usersettings['fb_url_show']= 						intval(wonderm00n_open_graph_post('fb_url_show'));
+			$usersettings['fb_url_canonical']= 					intval(wonderm00n_open_graph_post('fb_url_canonical'));
+			$usersettings['fb_url_add_trailing']= 				intval(wonderm00n_open_graph_post('fb_url_add_trailing'));
+			$usersettings['fb_type_show']= 						intval(wonderm00n_open_graph_post('fb_type_show'));
+			$usersettings['fb_type_homepage']= 					trim(wonderm00n_open_graph_post('fb_type_homepage'));
+			$usersettings['fb_desc_show']= 						intval(wonderm00n_open_graph_post('fb_desc_show'));
+			$usersettings['fb_desc_show_meta']= 				intval(wonderm00n_open_graph_post('fb_desc_show_meta'));
+			$usersettings['fb_desc_show_schema']= 				intval(wonderm00n_open_graph_post('fb_desc_show_schema'));
+			$usersettings['fb_desc_chars']= 					intval(wonderm00n_open_graph_post('fb_desc_chars'));
+			$usersettings['fb_desc_homepage']= 					trim(wonderm00n_open_graph_post('fb_desc_homepage'));
+			$usersettings['fb_desc_homepage_customtext']= 		trim(wonderm00n_open_graph_post('fb_desc_homepage_customtext'));
+			$usersettings['fb_image_show']= 					intval(wonderm00n_open_graph_post('fb_image_show'));
+			$usersettings['fb_image_show_schema']= 				intval(wonderm00n_open_graph_post('fb_image_show_schema'));
+			$usersettings['fb_image']= 							trim(wonderm00n_open_graph_post('fb_image'));
+			$usersettings['fb_image_rss']= 						intval(wonderm00n_open_graph_post('fb_image_rss'));
+			$usersettings['fb_image_use_specific']= 			intval(wonderm00n_open_graph_post('fb_image_use_specific'));
+			$usersettings['fb_image_use_featured']= 			intval(wonderm00n_open_graph_post('fb_image_use_featured'));
+			$usersettings['fb_image_use_content']= 				intval(wonderm00n_open_graph_post('fb_image_use_content'));
+			$usersettings['fb_image_use_media']= 				intval(wonderm00n_open_graph_post('fb_image_use_media'));
+			$usersettings['fb_image_use_default']= 				intval(wonderm00n_open_graph_post('fb_image_use_default'));
+			$usersettings['fb_show_subheading']= 				intval(wonderm00n_open_graph_post('fb_show_subheading'));
+			$usersettings['fb_show_businessdirectoryplugin']= 	intval(wonderm00n_open_graph_post('fb_show_businessdirectoryplugin'));
+			//Update
+			update_option('webdados_fb_open_graph_settings', $usersettings);
 		}
 	}
 	
-	//Load the defaults
-	$defaults=wonderm00n_open_graph_default_values();
-	//Load the user settings (if they exist)
-	foreach($wonderm00n_open_graph_plugin_settings as $key) {
-		$usersettings[$key]=get_option('wonderm00n_open_graph_'.$key);
-	}
-	//Merge the settings "all together now" (yes, it's a Beatles reference)
-	foreach($usersettings as $key => $value) {
-		//if ($value=='') {
-		if (strlen(trim($value))==0) {
-			if (!empty($defaults[$key])) {
-				$usersettings[$key]=$defaults[$key];
-			}
-		}
-	}
-	extract($usersettings);
+	//Load the settings
+	extract(wonderm00n_open_graph_load_settings());
 
 	?>
 	<div class="wrap">
 		
 	<?php screen_icon(); ?>
-  	<h2>Wonderm00n's Simple Facebook Open Graph Tags (<?php echo $wonderm00n_open_graph_plugin_version; ?>)</h2>
+  	<h2>Facebook Open Graph Meta Tags for WordPress (<?php echo $wonderm00n_open_graph_plugin_version; ?>)</h2>
   	<br class="clear"/>
-  	<p>Please set some default values and which tags should, or should not, be included. It may be necessary to exclude some tags if other plugins are already including them.</p>
+  	<p><?php _e('Please set some default values and which tags should, or should not, be included. It may be necessary to exclude some tags if other plugins are already including them.', 'wd-fb-og'); ?></p>
   	
   	<?php
   	settings_fields('wonderm00n_open_graph');
@@ -79,17 +68,17 @@
   		<div id="poststuff">
   			<form name="form1" method="post">
 	  			<div id="wonderm00n_open_graph-settings" class="postbox">
-	  				<h3 id="settings">Settings</h3>
+	  				<h3 id="settings"><?php _e('Settings'); ?></h3>
 	  				<div class="inside">
 	  					<table width="100%" class="form-table">
 								<tr>
-									<th scope="row" nowrap="nowrap">Include Facebook Platform App ID (fb:app_id) tag?</th>
+									<th scope="row" nowrap="nowrap"><?php _e('Include Facebook Platform App ID (fb:app_id) tag?', 'wd-fb-og'); ?></th>
 									<td>
 										<input type="checkbox" name="fb_app_id_show" id="fb_app_id_show" value="1" <?php echo (intval($fb_app_id_show)==1 ? ' checked="checked"' : ''); ?> onclick="showAppidOptions();"/>
 									</td>
 								</tr>
 								<tr class="fb_app_id_options">
-									<th scope="row" nowrap="nowrap">Facebook Platform App ID:</th>
+									<th scope="row" nowrap="nowrap"><?php _e('Facebook Platform App ID', 'wd-fb-og'); ?>:</th>
 									<td>
 										<input type="text" name="fb_app_id" id="fb_app_id" size="30" value="<?php echo $fb_app_id; ?>"/>
 									</td>
@@ -98,87 +87,89 @@
 									<td colspan="2"><hr/></td>
 								</tr>
 								<tr>
-									<th scope="row" nowrap="nowrap">Include Facebook Admin(s) ID (fb:admins) tag?</th>
+									<th scope="row" nowrap="nowrap"><?php _e('Include Facebook Admin(s) ID (fb:admins) tag?', 'wd-fb-og'); ?></th>
 									<td>
 										<input type="checkbox" name="fb_admin_id_show" id="fb_admin_id_show" value="1" <?php echo (intval($fb_admin_id_show)==1 ? ' checked="checked"' : ''); ?> onclick="showAdminOptions();"/>
 									</td>
 								</tr>
 								<tr class="fb_admin_id_options">
-									<th scope="row" nowrap="nowrap">Facebook Admin(s) ID:</th>
+									<th scope="row" nowrap="nowrap"><?php _e('Facebook Admin(s) ID', 'wd-fb-og'); ?>:</th>
 									<td>
 										<input type="text" name="fb_admin_id" id="fb_admin_id" size="30" value="<?php echo $fb_admin_id; ?>"/>
 										<br/>
-										Comma separated if more than one
+										<?php _e('Comma separated if more than one', 'wd-fb-og'); ?>
 									</td>
 								</tr>
 								<tr>
 									<td colspan="2"><hr/></td>
 								</tr>
 								<tr>
-									<th scope="row" nowrap="nowrap">Include locale (fb:locale) tag?</th>
+									<th scope="row" nowrap="nowrap"><?php _e('Include locale (fb:locale) tag?', 'wd-fb-og'); ?></th>
 									<td>
 										<input type="checkbox" name="fb_locale_show" id="fb_locale_show" value="1" <?php echo (intval($fb_locale_show)==1 ? ' checked="checked"' : ''); ?> onclick="showLocaleOptions();"/>
 									</td>
 								</tr>
 								<tr class="fb_locale_options">
-									<th scope="row" nowrap="nowrap">Locale:</th>
+									<th scope="row" nowrap="nowrap"><?php _e('Locale', 'wd-fb-og'); ?>:</th>
 									<td>
 										<select name="fb_locale" id="fb_locale">
-											<option value=""<?php if (trim($fb_locale)=='') echo ' selected="selected"'; ?>>Wordpress current locale/language (<?php echo get_locale(); ?>)&nbsp;</option>
-										<?php
-											$listLocales=false;
-											$loadedOnline=false;
-											$loadedOffline=false;
-											//Online
-											if (intval($_GET['localeOnline'])==1) {
-												if ($ch = curl_init('http://www.facebook.com/translations/FacebookLocales.xml')) {
-													curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-													$fb_locales=curl_exec($ch);
-													if (curl_errno($ch)) {
-														//echo curl_error($ch);
-													} else {
-														$info = curl_getinfo($ch);
-														if (intval($info['http_code'])==200) {
-															//Save the file locally
-															$fh = fopen(ABSPATH . 'wp-content/plugins/wonderm00ns-simple-facebook-open-graph-tags/includes/FacebookLocales.xml', 'w') or die("Can't open file");
-															fwrite($fh, $fb_locales);
-															fclose($fh);
-															$listLocales=true;
-															$loadedOnline=true;
+											<option value=""<?php if (trim($fb_locale)=='') echo ' selected="selected"'; ?>><?php _e('WordPress current locale/language', 'wd-fb-og'); ?> (<?php echo get_locale(); ?>)&nbsp;</option>
+											<?php
+												$listLocales=false;
+												$loadedOnline=false;
+												$loadedOffline=false;
+												//Online
+												if (!empty($_GET['localeOnline'])) {
+													if (intval($_GET['localeOnline'])==1) {
+														if ($ch = curl_init('http://www.facebook.com/translations/FacebookLocales.xml')) {
+															curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+															$fb_locales=curl_exec($ch);
+															if (curl_errno($ch)) {
+																//echo curl_error($ch);
+															} else {
+																$info = curl_getinfo($ch);
+																if (intval($info['http_code'])==200) {
+																	//Save the file locally
+																	$fh = fopen(ABSPATH . 'wp-content/plugins/wonderm00ns-simple-facebook-open-graph-tags/includes/FacebookLocales.xml', 'w') or die("Can't open file");
+																	fwrite($fh, $fb_locales);
+																	fclose($fh);
+																	$listLocales=true;
+																	$loadedOnline=true;
+																}
+															}
+															curl_close($ch);
 														}
 													}
-													curl_close($ch);
 												}
-											}
-											//Offline
-											if (!$listLocales) {
-												if ($fb_locales=file_get_contents(ABSPATH . 'wp-content/plugins/wonderm00ns-simple-facebook-open-graph-tags/includes/FacebookLocales.xml')) {
-													$listLocales=true;
-													$loadedOffline=true;
-												}
-											}
-											//OK
-											if ($listLocales) {
-												$xml=simplexml_load_string($fb_locales);
-												$json = json_encode($xml);
-												$locales = json_decode($json,TRUE);
-												if (is_array($locales['locale'])) {
-													foreach ($locales['locale'] as $locale) {
-														?><option value="<?php echo $locale['codes']['code']['standard']['representation']; ?>"<?php if (trim($fb_locale)==trim($locale['codes']['code']['standard']['representation'])) echo ' selected="selected"'; ?>><?php echo $locale['englishName']; ?> (<?php echo $locale['codes']['code']['standard']['representation']; ?>)</option><?php
+												//Offline
+												if (!$listLocales) {
+													if ($fb_locales=file_get_contents(ABSPATH . 'wp-content/plugins/wonderm00ns-simple-facebook-open-graph-tags/includes/FacebookLocales.xml')) {
+														$listLocales=true;
+														$loadedOffline=true;
 													}
 												}
-											}
-										?>
+												//OK
+												if ($listLocales) {
+													$xml=simplexml_load_string($fb_locales);
+													$json = json_encode($xml);
+													$locales = json_decode($json,TRUE);
+													if (is_array($locales['locale'])) {
+														foreach ($locales['locale'] as $locale) {
+															?><option value="<?php echo $locale['codes']['code']['standard']['representation']; ?>"<?php if (trim($fb_locale)==trim($locale['codes']['code']['standard']['representation'])) echo ' selected="selected"'; ?>><?php echo $locale['englishName']; ?> (<?php echo $locale['codes']['code']['standard']['representation']; ?>)</option><?php
+														}
+													}
+												}
+											?>
 										</select>
 										<br/>
 										<?php
 										if ($loadedOnline) {
-											?>List loaded from Facebook (online)<?php
+											_e('List loaded from Facebook (online)', 'wd-fb-og');
 										} else {
 											if ($loadedOffline) {
-												?>List loaded from local cache (offline) - <a href="?page=wonderm00n-open-graph.php&amp;localeOnline=1" onClick="return(confirm('You\'l lose any changes you haven\'t saved. Are you sure?'));">Reload from Facebook</a><?php
+												_e('List loaded from local cache (offline)', 'wd-fb-og'); ?> - <a href="?page=wonderm00n-open-graph.php&amp;localeOnline=1" onClick="return(confirm('<?php _e('You\\\'l lose any changes you haven\\\'t saved. Are you sure?', 'wd-fb-og'); ?>'));"><?php _e('Reload from Facebook', 'wd-fb-og'); ?></a><?php
 											} else {
-												?>List not loaded<?php
+												_e('List not loaded', 'wd-fb-og');
 											}
 										}
 										?>
@@ -188,7 +179,7 @@
 									<td colspan="2"><hr/></td>
 								</tr>
 								<tr>
-									<th scope="row" nowrap="nowrap">Include Site Name (og:site_name) tag?</th>
+									<th scope="row" nowrap="nowrap"><?php _e('Include Site Name (og:site_name) tag?', 'wd-fb-og');?></th>
 									<td>
 										<input type="checkbox" name="fb_sitename_show" id="fb_sitename_show" value="1" <?php echo (intval($fb_sitename_show)==1 ? ' checked="checked"' : ''); ?>/>
 									</td>
@@ -197,32 +188,32 @@
 									<td colspan="2"><hr/></td>
 								</tr>
 								<tr>
-									<th scope="row" nowrap="nowrap">Include Post/Page title (og:title) tag?</th>
+									<th scope="row" nowrap="nowrap"><?php _e('Include Post/Page title (og:title) tag?', 'wd-fb-og');?></th>
 									<td>
 										<input type="checkbox" name="fb_title_show" id="fb_title_show" value="1" <?php echo (intval($fb_title_show)==1 ? ' checked="checked"' : ''); ?> onclick="showTitleOptions();"/>
 									</td>
 								</tr>
 								<tr class="fb_title_options">
-									<th scope="row" nowrap="nowrap">Also include Schema.org "itemprop" Name tag?</th>
+									<th scope="row" nowrap="nowrap"><?php _e('Also include Schema.org "itemprop" Name tag?', 'wd-fb-og');?></th>
 									<td>
 										<input type="checkbox" name="fb_title_show_schema" id="fb_title_show_schema" value="1" <?php echo (intval($fb_title_show_schema)==1 ? ' checked="checked"' : ''); ?>/>
 										<br/>
 										<i>&lt;meta itemprop="name" content="..."/&gt;</i>
 										<br/>
-										Recommended for G+ sharing purposes if no other plugin is setting it already
+										<?php _e('Recommended for Google+ sharing purposes if no other plugin is setting it already', 'wd-fb-og');?>
 									</td>
 								</tr>
 								<tr>
 									<td colspan="2"><hr/></td>
 								</tr>
 								<tr>
-									<th scope="row" nowrap="nowrap">Include URL (og:url) tag?</th>
+									<th scope="row" nowrap="nowrap"><?php _e('Include URL (og:url) tag?', 'wd-fb-og');?></th>
 									<td>
 										<input type="checkbox" name="fb_url_show" id="fb_url_show" value="1" <?php echo (intval($fb_url_show)==1 ? ' checked="checked"' : ''); ?> onclick="showUrlOptions();"/>
 									</td>
 								</tr>
 								<tr class="fb_url_options">
-									<th scope="row" nowrap="nowrap">Also set Canonical URL:</th>
+									<th scope="row" nowrap="nowrap"><?php _e('Also set Canonical URL', 'wd-fb-og');?>:</th>
 									<td>
 										<input type="checkbox" name="fb_url_canonical" id="fb_url_canonical" value="1" <?php echo (intval($fb_url_canonical)==1 ? ' checked="checked"' : ''); ?>/>
 										<br/>
@@ -230,28 +221,28 @@
 									</td>
 								</tr>
 								<tr class="fb_url_options">
-									<th scope="row" nowrap="nowrap">Add trailing slash at the end:</th>
+									<th scope="row" nowrap="nowrap"><?php _e('Add trailing slash at the end', 'wd-fb-og');?>:</th>
 									<td>
 										<input type="checkbox" name="fb_url_add_trailing" id="fb_url_add_trailing" value="1" <?php echo (intval($fb_url_add_trailing)==1 ? ' checked="checked"' : ''); ?> onclick="showUrlTrail();"/>
 										<br/>
-										On the homepage will be: <i><?php echo get_option('siteurl'); ?><span id="fb_url_add_trailing_example">/</span></i>
+										<?php _e('On the homepage will be', 'wd-fb-og');?>: <i><?php echo get_option('siteurl'); ?><span id="fb_url_add_trailing_example">/</span></i>
 									</td>
 								</tr>
 								<tr>
 									<td colspan="2"><hr/></td>
 								</tr>
 								<tr>
-									<th scope="row" nowrap="nowrap">Include Type (og:type) tag?</th>
+									<th scope="row" nowrap="nowrap"><?php _e('Include Type (og:type) tag?', 'wd-fb-og');?></th>
 									<td>
 										<input type="checkbox" name="fb_type_show" id="fb_type_show" value="1" <?php echo (intval($fb_type_show)==1 ? ' checked="checked"' : ''); ?> onclick="showTypeOptions();"/>
 										<br/>
-										Will be &quot;article&quot; for posts and pages and &quot;website&quot; or &quot;blog&quot; for the homepage
+										<?php printf( __('Will be "%1$s" for posts and pages and "%2$s" or "%3$s"; for the homepage', 'wd-fb-og'), 'article', 'website', 'blog' );?>
 									</td>
 								</tr>
 								<tr class="fb_type_options">
-									<th scope="row" nowrap="nowrap">Homepage type:</th>
+									<th scope="row" nowrap="nowrap"><?php _e('Homepage type', 'wd-fb-og');?>:</th>
 									<td>
-										Use
+										<?php _e('Use', 'wd-fb-og');?>
 										<select name="fb_type_homepage" id="fb_type_homepage">
 											<option value="website"<?php if (trim($fb_type_homepage)=='' || trim($fb_type_homepage)=='website') echo ' selected="selected"'; ?>>website&nbsp;</option>
 											<option value="blog"<?php if (trim($fb_type_homepage)=='blog') echo ' selected="selected"'; ?>>blog&nbsp;</option>
@@ -262,46 +253,46 @@
 									<td colspan="2"><hr/></td>
 								</tr>
 								<tr>
-									<th scope="row" nowrap="nowrap">Include Description (og:description) tag?</th>
+									<th scope="row" nowrap="nowrap"><?php _e('Include Description (og:description) tag?', 'wd-fb-og');?></th>
 									<td>
 										<input type="checkbox" name="fb_desc_show" id="fb_desc_show" value="1" <?php echo (intval($fb_desc_show)==1 ? ' checked="checked"' : ''); ?> onclick="showDescriptionOptions();"/>
 									</td>
 								</tr>
 								<tr class="fb_description_options">
-									<th scope="row" nowrap="nowrap">Also include Meta Description tag?</th>
+									<th scope="row" nowrap="nowrap"><?php _e('Also include Meta Description tag?', 'wd-fb-og');?></th>
 									<td>
 										<input type="checkbox" name="fb_desc_show_meta" id="fb_desc_show_meta" value="1" <?php echo (intval($fb_desc_show_meta)==1 ? ' checked="checked"' : ''); ?>/>
 										<br/>
 										<i>&lt;meta name="description" content="..."/&gt;</i>
 										<br/>
-										Recommended for SEO purposes if no other plugin is setting it already
+										<?php _e('Recommended for SEO purposes if no other plugin is setting it already', 'wd-fb-og');?>
 									</td>
 								</tr>
 								<tr class="fb_description_options">
-									<th scope="row" nowrap="nowrap">Also include Schema.org "itemprop" Description tag?</th>
+									<th scope="row" nowrap="nowrap"><?php _e('Also include Schema.org "itemprop" Description tag?', 'wd-fb-og');?></th>
 									<td>
 										<input type="checkbox" name="fb_desc_show_schema" id="fb_desc_show_schema" value="1" <?php echo (intval($fb_desc_show_schema)==1 ? ' checked="checked"' : ''); ?>/>
 										<br/>
 										<i>&lt;meta itemprop="description" content="..."/&gt;</i>
 										<br/>
-										Recommended for G+ sharing purposes if no other plugin is setting it already
+										<?php _e('Recommended for Google+ sharing purposes if no other plugin is setting it already', 'wd-fb-og');?>
 									</td>
 								</tr>
 								<tr class="fb_description_options">
-									<th scope="row" nowrap="nowrap">Description maximum length:</th>
+									<th scope="row" nowrap="nowrap"><?php _e('Description maximum length', 'wd-fb-og');?>:</th>
 									<td>
 										<input type="text" name="fb_desc_chars" id="fb_desc_chars" size="3" maxlength="3" value="<?php echo (intval($fb_desc_chars)>0 ? intval($fb_desc_chars) : ''); ?>"/> characters,
 										<br/>
-										0 or blank for no maximum length
+										<?php _e('0 or blank for no maximum length', 'wd-fb-og');?>
 									</td>
 								</tr>
 								<tr class="fb_description_options">
-									<th scope="row" nowrap="nowrap">Homepage description:</th>
+									<th scope="row" nowrap="nowrap"><?php _e('Homepage description', 'wd-fb-og');?>:</th>
 									<td>
-										Use
+										<?php _e('Use', 'wd-fb-og');?>
 										<select name="fb_desc_homepage" id="fb_desc_homepage" onchange="showDescriptionCustomText();">
-											<option value=""<?php if (trim($fb_desc_homepage)=='') echo ' selected="selected"'; ?>>Website tagline&nbsp;</option>
-											<option value="custom"<?php if (trim($fb_desc_homepage)=='custom') echo ' selected="selected"'; ?>>Custom text&nbsp;</option>
+											<option value=""<?php if (trim($fb_desc_homepage)=='') echo ' selected="selected"'; ?>><?php _e('Website tagline', 'wd-fb-og');?>&nbsp;</option>
+											<option value="custom"<?php if (trim($fb_desc_homepage)=='custom') echo ' selected="selected"'; ?>><?php _e('Custom text', 'wd-fb-og');?>&nbsp;</option>
 										</select>
 										<div id="fb_desc_homepage_customtext_div">
 											<textarea name="fb_desc_homepage_customtext" id="fb_desc_homepage_customtext" rows="3" cols="50"><?php echo $fb_desc_homepage_customtext; ?></textarea>
@@ -312,58 +303,64 @@
 									<td colspan="2"><hr/></td>
 								</tr>
 								<tr>
-									<th scope="row" nowrap="nowrap">Include Image (og:image) tag?</th>
+									<th scope="row" nowrap="nowrap"><?php _e('Include Image (og:image) tag?', 'wd-fb-og');?></th>
 									<td>
 										<input type="checkbox" name="fb_image_show" id="fb_image_show" value="1" <?php echo (intval($fb_image_show)==1 ? ' checked="checked"' : ''); ?> onclick="showImageOptions();"/>
 										<br/>
-										It's HIGHLY recommended that all images have at least 200px on both dimensions in order to Facebook to properly load them
+										<?php _e('All images MUST have at least 200px on both dimensions in order to Facebook to load them at all. Minimum of 600x315px is recommended.', 'wd-fb-og');?>
 									</td>
 								</tr>
 								<tr class="fb_image_options">
-									<th scope="row" nowrap="nowrap">Also include Schema.org "itemprop" Image tag?</th>
+									<th scope="row" nowrap="nowrap"><?php _e('Also include Schema.org "itemprop" Image tag?', 'wd-fb-og');?></th>
 									<td>
 										<input type="checkbox" name="fb_image_show_schema" id="fb_image_show_schema" value="1" <?php echo (intval($fb_image_show_schema)==1 ? ' checked="checked"' : ''); ?>/>
 										<br/>
 										<i>&lt;meta itemprop="image" content="..."/&gt;</i>
 										<br/>
-										Recommended for G+ sharing purposes if no other plugin is setting it already
+										<?php _e('Recommended for Google+ sharing purposes if no other plugin is setting it already', 'wd-fb-og');?>
 									</td>
 								</tr>
 								<tr class="fb_image_options">
-									<th scope="row" nowrap="nowrap">Default image:</th>
+									<th scope="row" nowrap="nowrap"><?php _e('Default image', 'wd-fb-og');?>:</th>
 									<td>
 										<input type="text" name="fb_image" id="fb_image" size="50" value="<?php echo $fb_image; ?>"/>
 										<input id="fb_image_button" class="button" type="button" value="Upload/Choose image" />
 										<br/>
-										Full URL with http://
+										<?php _e('Full URL with http://', 'wd-fb-og');?>
+										<br/>
+										<?php _e('Recommended size: 1200x630px', 'wd-fb-og'); ?>
 									</td>
 								</tr>
 								<tr class="fb_image_options">
-									<th scope="row" nowrap="nowrap">Also add image to RSS/RSS2 feeds?</th>
+									<th scope="row" nowrap="nowrap"><?php _e('Also add image to RSS/RSS2 feeds?', 'wd-fb-og');?></th>
 									<td>
 										<input type="checkbox" name="fb_image_rss" id="fb_image_rss" value="1" <?php echo (intval($fb_image_rss)==1 ? ' checked="checked"' : ''); ?> onclick="showImageOptions();"/>
 										<br/>
-										For auto-posting apps like RSS Graffiti, twitterfeed, ...
+										<?php _e('For auto-posting apps like RSS Graffiti, twitterfeed, ...', 'wd-fb-og');?>
 									</td>
 								</tr>
 								<tr class="fb_image_options">
-									<th scope="row" nowrap="nowrap">On posts/pages:</th>
+									<th scope="row" nowrap="nowrap"><?php _e('On posts/pages', 'wd-fb-og');?>:</th>
 									<td>
 										<div>
-											1) <input type="checkbox" name="fb_image_use_featured" id="fb_image_use_featured" value="1" <?php echo (intval($fb_image_use_featured)==1 ? ' checked="checked"' : ''); ?>/>
-											Image will be fetched from post/page featured/thumbnail picture
+											1) <input type="checkbox" name="fb_image_use_specific" id="fb_image_use_specific" value="1" <?php echo (intval($fb_image_use_specific)==1 ? ' checked="checked"' : ''); ?>/>
+											<?php _e('Image will be fetched from the specific "Open Graph Image" custom field on the post', 'wd-fb-og');?>
 										</div>
 										<div>
-											2) <input type="checkbox" name="fb_image_use_content" id="fb_image_use_content" value="1" <?php echo (intval($fb_image_use_content)==1 ? ' checked="checked"' : ''); ?>/>
-											If it doesn't exist, use the first image from the post/page content
+											2) <input type="checkbox" name="fb_image_use_featured" id="fb_image_use_featured" value="1" <?php echo (intval($fb_image_use_featured)==1 ? ' checked="checked"' : ''); ?>/>
+											<?php _e('If it\'s not set, image will be fetched from post/page featured/thumbnail picture', 'wd-fb-og');?>
 										</div>
 										<div>
-											3) <input type="checkbox" name="fb_image_use_media" id="fb_image_use_media" value="1" <?php echo (intval($fb_image_use_media)==1 ? ' checked="checked"' : ''); ?>/>
-											If it doesn't exist, use first image from the post/page media gallery
+											3) <input type="checkbox" name="fb_image_use_content" id="fb_image_use_content" value="1" <?php echo (intval($fb_image_use_content)==1 ? ' checked="checked"' : ''); ?>/>
+											<?php _e('If it doesn\'t exist, use the first image from the post/page content', 'wd-fb-og');?>
 										</div>
 										<div>
-											4) <input type="checkbox" name="fb_image_use_default" id="fb_image_use_default" value="1" <?php echo (intval($fb_image_use_default)==1 ? ' checked="checked"' : ''); ?>/>
-											If it doesn't exist, use the default image above
+											4) <input type="checkbox" name="fb_image_use_media" id="fb_image_use_media" value="1" <?php echo (intval($fb_image_use_media)==1 ? ' checked="checked"' : ''); ?>/>
+											<?php _e('If it doesn\'t exist, use first image from the post/page media gallery', 'wd-fb-og');?>
+										</div>
+										<div>
+											5) <input type="checkbox" name="fb_image_use_default" id="fb_image_use_default" value="1" <?php echo (intval($fb_image_use_default)==1 ? ' checked="checked"' : ''); ?>/>
+											<?php _e('If it doesn\'t exist, use the default image above', 'wd-fb-og');?>
 										</div>
 									</td>
 								</tr>
@@ -371,7 +368,7 @@
 	  				</div>
 	  			</div>
 	  			<div id="wonderm00n_open_graph-thirdparty" class="postbox">
-	  				<h3 id="thirdparty">3rd Party Integration</h3>
+	  				<h3 id="thirdparty"><?php _e('3rd Party Integration', 'wd-fb-og');?></h3>
 	  				<div class="inside">
 	  					<?php
 	  					$thirdparty=false;
@@ -381,7 +378,7 @@
 	  						<h4><a href="http://wordpress.org/extend/plugins/subheading/" target="_blank">SubHeading</a></h4>
 	  						<table width="100%" class="form-table">
 									<tr>
-										<th scope="row" nowrap="nowrap">Add SubHeading to Post/Page title?</th>
+										<th scope="row" nowrap="nowrap"><?php _e('Add SubHeading to Post/Page title?', 'wd-fb-og');?></th>
 										<td>
 											<input type="checkbox" name="fb_show_subheading" id="fb_show_subheading" value="1" <?php echo (intval($fb_show_subheading)==1 ? ' checked="checked"' : ''); ?>/>
 										</td>
@@ -395,11 +392,11 @@
 	  						<h4><a href="http://wordpress.org/extend/plugins/business-directory-plugin/" target="_blank">Business Directory Plugin</a></h4>
 	  						<table width="100%" class="form-table">
 									<tr>
-										<th scope="row" nowrap="nowrap">Use listing BDP listing contents as OG tags?</th>
+										<th scope="row" nowrap="nowrap"><?php _e('Use BDP listing contents as OG tags?', 'wd-fb-og');?></th>
 										<td>
 											<input type="checkbox" name="fb_show_businessdirectoryplugin" id="fb_show_businessdirectoryplugin" value="1" <?php echo (intval($fb_show_businessdirectoryplugin)==1 ? ' checked="checked"' : ''); ?>/>
 											<br/>
-											Setting "Include URL", "Also set Canonical URL", "Include Description" and "Include Image" options above is HIGHLY recommended
+											<?php _e('Setting "Include URL", "Also set Canonical URL", "Include Description" and "Include Image" options above is HIGHLY recommended', 'wd-fb-og');?>
 										</td>
 									</tr>
 								</table>
@@ -407,8 +404,8 @@
 	  					}
 	  					if (!$thirdparty) {
 	  						?>
-	  						<p>You don't have any compatible 3rd Party plugin installed/active.</p>
-	  						<p>This plugin is currently compatible with:</p>
+	  						<p><?php _e('You don\'t have any compatible 3rd Party plugin installed/active.', 'wd-fb-og');?></p>
+	  						<p><?php _e('This plugin is currently compatible with:', 'wd-fb-og');?></p>
 	  						<ul>
 	  							<li><a href="http://wordpress.org/extend/plugins/subheading/" target="_blank">SubHeading</a></li>
 	  							<li><a href="http://wordpress.org/extend/plugins/business-directory-plugin/" target="_blank">Business Directory Plugin</a></li>
@@ -427,35 +424,41 @@
   	</div>
   	
   	<?php
-  		$links[0]['text']='Test your URLs at Facebook URL Linter / Debugger';
+  		$links[0]['text']=__('Test your URLs at Facebook URL Linter / Debugger', 'wd-fb-og');
   		$links[0]['url']='https://developers.facebook.com/tools/debug';
-  		$links[10]['text']='About the Open Graph Protocol (on Facebook)';
+
+  		$links[10]['text']=__('About the Open Graph Protocol (on Facebook)', 'wd-fb-og');
   		$links[10]['url']='https://developers.facebook.com/docs/opengraph/';
-  		$links[20]['text']='The Open Graph Protocol (official website)';
+
+  		$links[20]['text']=__('The Open Graph Protocol (official website)', 'wd-fb-og');
   		$links[20]['url']='http://ogp.me/';
-  		$links[30]['text']='Plugin official URL (feedback is welcomed)';
-  		$links[30]['url']='http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/';
-  		$links[40]['text']='Author\'s website: Marco Almeida (Wonderm00n)';
-  		$links[40]['url']='http://wonderm00n.com';
-  		$links[50]['text']='Author\'s Twitter account: @Wonderm00n';
-  		$links[50]['url']='http://twitter.com/wonderm00n';
-  		$links[60]['text']='Author\'s Facebook account: Wonderm00n';
-  		$links[60]['url']='http://www.facebook.com/wonderm00n';
+
+  		$links[30]['text']=__('Plugin official URL', 'wd-fb-og');
+  		$links[30]['url']='http://www.webdados.pt/produtos-e-servicos/internet/desenvolvimento-wordpress/facebook-open-graph-meta-tags-wordpress/';
+
+  		$links[40]['text']=__('Author\'s website: Webdados', 'wd-fb-og');
+  		$links[40]['url']='http://www.webdados.pt';
+
+  		$links[50]['text']=__('Author\'s Facebook page: Webdados', 'wd-fb-og');
+  		$links[50]['url']='http://www.facebook.com/Webdados';
+
+  		$links[60]['text']=__('Author\'s Twitter account: @Wonderm00n<br/>(Webdados founder)', 'wd-fb-og');
+  		$links[60]['url']='http://twitter.com/wonderm00n';
   	?>
   	<div class="postbox-container" style="width: 29%; float: right;">
   		
   		<div id="poststuff">
   			<div id="wonderm00n_open_graph_links" class="postbox">
-  				<h3 id="settings">Rate this plugin</h3>
+  				<h3 id="settings"><?php _e('Rate this plugin', 'wd-fb-og');?></h3>
   				<div class="inside">
-  					If you like this plugin, <a href="http://wordpress.org/extend/plugins/wonderm00ns-simple-facebook-open-graph-tags/" target="_blank">please give it a high Rating</a>.
+  					<?php _e('If you like this plugin,', 'wd-fb-og');?> <a href="http://wordpress.org/extend/plugins/wonderm00ns-simple-facebook-open-graph-tags/" target="_blank"><?php _e('please give it a high Rating', 'wd-fb-og');?></a>.
   				</div>
   			</div>
   		</div>
 		
   		<div id="poststuff">
   			<div id="wonderm00n_open_graph_links" class="postbox">
-  				<h3 id="settings">Useful links</h3>
+  				<h3 id="settings"><?php _e('Useful links', 'wd-fb-og');?></h3>
   				<div class="inside">
   					<ul>
   						<?php foreach($links as $link) { ?>
@@ -468,9 +471,9 @@
   	
   		<div id="poststuff">
   			<div id="wonderm00n_open_graph_donation" class="postbox">
-  				<h3 id="settings">Donate</h3>
+  				<h3 id="settings"><?php _e('Donate', 'wd-fb-og');?></h3>
   				<div class="inside">
-  					<p>If you find this plugin useful and want to make a contribution towards future development please consider making a small, or big ;-), donation.</p>
+  					<p><?php _e('If you find this plugin useful and want to make a contribution towards future development please consider making a small, or big ;-), donation.', 'wd-fb-og');?></p>
   					<center><form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
 						<input type="hidden" name="cmd" value="_donations">
 						<input type="hidden" name="business" value="wonderm00n@gmail.com">
@@ -489,7 +492,7 @@
   	</div>
   	
   	<div class="clear">
-  		<p><br/>&copy 2011<?php if(date('Y')>2011) echo '-'.date('Y'); ?> <a href="http://wonderm00n.com" target="_blank">Marco Almeida (Wonderm00n)</a></p>
+  		<p><br/>&copy 2011<?php if(date('Y')>2011) echo '-'.date('Y'); ?> <a href="http://www.webdados.pt" target="_blank">Webdados</a> &amp; <a href="http://wonderm00n.com" target="_blank">Marco Almeida (Wonderm00n)</a></p>
   	</div>
 		
 	</div>
