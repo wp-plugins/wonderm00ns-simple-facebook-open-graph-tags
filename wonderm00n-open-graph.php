@@ -182,8 +182,8 @@ function wonderm00n_open_graph_add_options() {
 
 function wonderm00n_open_graph_activate() {
 	update_option("wonderm00n_open_graph_activated", 1);
-	update_option("wonderm00n_open_graph_fb_admin_id_show", 1);
-	update_option("wonderm00n_open_graph_fb_app_id_show", 1);
+	update_option("wonderm00n_open_graph_fb_admin_id_show", 0);
+	update_option("wonderm00n_open_graph_fb_app_id_show", 0);
 	update_option("wonderm00n_open_graph_fb_sitename_show", 1);
 	update_option("wonderm00n_open_graph_fb_title_show", 1);
 	update_option("wonderm00n_open_graph_fb_url_show", 1);
@@ -194,7 +194,8 @@ function wonderm00n_open_graph_activate() {
 }
 
 function wonderm00n_open_graph_settings_link( $links, $file ) {
- 	if( $file == 'wonderm00n-open-graph/wonderm00n-open-graph.php' && function_exists( "admin_url" ) ) {
+	$this_plugin = plugin_basename(__FILE__);
+ 	if( $file == $this_plugin ) {
 		$settings_link = '<a href="' . admin_url( 'options-general.php?page=wonderm00n-open-graph.php' ) . '">' . __('Settings') . '</a>';
 		array_push( $links, $settings_link ); // after other links
 	}
