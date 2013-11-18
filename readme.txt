@@ -4,7 +4,7 @@ Donate link: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-faceb
 Tags: facebook, open graph, open graph protocol, seo, share, social, meta, schema, google+, g+, google, google plus, image, like, meta, search engine optimization
 Requires at least: 3.5
 Tested up to: 3.5.1
-Stable tag: 1.0
+Stable tag: 1.0.1
 
 This plugin inserts Facebook Open Graph Tags into your WordPress Blog/Website for more effective and efficient Facebook sharing results.
 It also allows you to add the Meta Description tag and Schema.org Name, Description and Image tags for more effective and efficient Google+ sharing results.
@@ -49,6 +49,11 @@ Other Tags:
 3. Got to `Options`, `Facebook Open Graph Tags` to set it up
 
 == Changelog ==
+
+= 1.0.1 =
+
+* Corrected a nasty bug which would break the "Add Media" option. Thanks to @flynsarmy (yet again)
+* Fix: version field upgrade on the database
 
 = 1.0 =
 

@@ -3,9 +3,10 @@ msgstr ""
 "Project-Id-Version: Facebook Open Graph Meta Tags for WordPress v1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2013-11-15 14:24-0000\n"
+"PO-Revision-Date: 2013-11-18 10:33-0000\n"
 "Last-Translator: Wonderm00n <wonderm00n@gmail.com>\n"
 "Language-Team: Webdados <info@webdados.pt>\n"
+"Language: pt_PT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -16,7 +17,6 @@ msgstr ""
 "_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
 "X-Poedit-Basepath: ../\n"
 "X-Textdomain-Support: yes\n"
-"Language: pt_PT\n"
 "X-Poedit-SearchPath-0: .\n"
 
 # @ wd-fb-og
@@ -413,3 +413,8 @@ msgstr "Utilizar esta imagem:"
 #: wonderm00n-open-graph.php:503 wonderm00n-open-graph.php:508
 msgid "Upload/Choose Open Graph Image"
 msgstr "Carregar/Escolher Imagem Open Graph"
+
+# @ wd-fb-og
+#: wonderm00n-open-graph.php:589
+msgid "Use as Image Open Graph Tag"
+msgstr "Utilizar como Imagem Open Graph"

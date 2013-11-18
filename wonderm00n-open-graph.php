@@ -1,13 +1,13 @@
 <?php
 /**
  * @package Facebook Open Graph Meta Tags for WordPress
- * @version 1.0
+ * @version 1.0.1
  */
 /*
 Plugin Name: Facebook Open Graph Meta Tags for WordPress
 Plugin URI: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
 Description: This plugin (formerly known as "Wonderm00n's Simple Facebook Open Graph Meta Tags") inserts Facebook Open Graph Tags into your WordPress Blog/Website for more effective and efficient Facebook sharing results. It also allows you to add the Meta Description tag and Schema.org Name, Description and Image tags for more effective and efficient Google+ sharing results. You can also choose to insert the "enclosure" and "media:content" tags to the RSS feeds, so that apps like RSS Graffiti and twitterfeed post the image to Facebook correctly.
-Version: 1.0
+Version: 1.0.1
 Author: Webdados
 Author URI: http://www.webdados.pt
 Text Domain: wd-fb-og
@@ -16,7 +16,7 @@ Domain Path: /lang
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-$wonderm00n_open_graph_plugin_version='1.0';
+$wonderm00n_open_graph_plugin_version='1.0.1';
 $wonderm00n_open_graph_plugin_settings=array(
 		'fb_app_id_show',
 		'fb_app_id',
@@ -504,14 +504,15 @@ if ( is_admin() ) {
   		echo '<br/>'.__('Recommended size: 1200x630px', 'wd-fb-og');
   		echo '<script type="text/javascript">
 				jQuery(document).ready(function() {
-					jQuery(\'#webdados_fb_open_graph_specific_image_button\').click(function(){
-						tb_show(\''.__('Upload/Choose Open Graph Image', 'wd-fb-og').'\',"media-upload.php?type=image&TB_iframe=true&post_id='.$post->ID.'", false);
+					jQuery(document).ready(function(){
+						jQuery(\'#webdados_fb_open_graph_specific_image_button\').live(\'click\', function() {
+							tb_show(\'Upload image\', \'media-upload.php?post_id='.$post->ID.'&type=image&context=webdados_fb_open_graph_specific_image_button&TB_iframe=true\');
+						});
 					});
-					window.send_to_editor = function(html) {
-						imgurl=jQuery("<div>" + html + "</div>").find(\'img\').attr(\'src\');
-						jQuery("#webdados_fb_open_graph_specific_image").val(imgurl);
-						tb_remove();
-					}
+					//function webdados_fb_open_graph_media_insert(url) {
+					//	jQuery(\'#webdados_fb_open_graph_specific_image\').val(url);
+					//    tb_remove();
+					//}
 				});
 				</script>';
 	}
@@ -558,6 +559,47 @@ if ( is_admin() ) {
 	  update_post_meta( $post_id, '_webdados_fb_open_graph_specific_image', $mydata );
 	}
 	add_action('save_post', 'wonderm00n_open_graph_add_posts_options_box_save' );
+
+	// Media insert code
+	function webdados_fb_open_graph_media_admin_head() {
+
+		?>
+		<script type="text/javascript">
+			function wdfbogFieldsFileMediaTrigger(guid) {
+				window.parent.jQuery('#webdados_fb_open_graph_specific_image').val(guid);
+				window.parent.jQuery('#TB_closeWindowButton').trigger('click');
+			}
+		</script>
+		<style type="text/css">
+		    tr.submit, .ml-submit, #save, #media-items .A1B1 p:last-child  { display: none; }
+		</style>
+		<?php
+	}
+	function webdados_fb_open_graph_media_fields_to_edit_filter($form_fields, $post) {
+		// Reset form
+		$form_fields = array();
+		$url = wp_get_attachment_url( $post->ID );
+		$form_fields['wd-fb-og_fields_file'] = array(
+			'label' => '',
+			'input' => 'html',
+			'html' => '<a href="#" title="' . $url
+			. '" class="wd-fb-og-fields-file-insert-button'
+			. ' button-primary" onclick="wdfbogFieldsFileMediaTrigger(\''
+			. $url . '\')">'
+			. __( 'Use as Image Open Graph Tag', 'wd-fb-og') . '</a><br /><br />',
+		);
+		return $form_fields;
+	}
+    if ( (isset( $_GET['context'] ) && $_GET['context'] == 'webdados_fb_open_graph_specific_image_button')
+            || (isset( $_SERVER['HTTP_REFERER'] )
+            && strpos( $_SERVER['HTTP_REFERER'],
+                    'context=webdados_fb_open_graph_specific_image_button' ) !== false)
+    ) {
+        // Add button
+        add_filter( 'attachment_fields_to_edit', 'webdados_fb_open_graph_media_fields_to_edit_filter', 9999, 2 );
+        // Add JS
+        add_action( 'admin_head', 'webdados_fb_open_graph_media_admin_head' );
+    }
 }
 
 
@@ -616,6 +658,11 @@ function wonderm00n_open_graph_upgrade() {
 		update_option('webdados_fb_open_graph_settings', $webdados_fb_open_graph_settings);
 		foreach($wonderm00n_open_graph_plugin_settings as $key) {
 			delete_option('wonderm00n_open_graph_'.$key);
+		}
+	} else {
+		if ($v<$wonderm00n_open_graph_plugin_version) {
+			//Any version upgrade
+			$upgrade=true;
 		}
 	}
 	//Set version on database

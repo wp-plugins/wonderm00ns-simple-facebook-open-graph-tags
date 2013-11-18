@@ -387,3 +387,8 @@ msgstr ""
 #: wonderm00n-open-graph.php:503 wonderm00n-open-graph.php:508
 msgid "Upload/Choose Open Graph Image"
 msgstr ""
+
+#@ wd-fb-og
+#: wonderm00n-open-graph.php:589
+msgid "Use as Image Open Graph Tag"
+msgstr ""
