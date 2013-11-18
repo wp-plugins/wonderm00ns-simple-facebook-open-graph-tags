@@ -6,8 +6,7 @@ Requires at least: 3.5
 Tested up to: 3.5.1
 Stable tag: 1.0.1
 
-This plugin inserts Facebook Open Graph Tags into your WordPress Blog/Website for more effective and efficient Facebook sharing results.
-It also allows you to add the Meta Description tag and Schema.org Name, Description and Image tags for more effective and efficient Google+ sharing results.
+This plugin inserts Facebook Open Graph, Google+/Schema.org and other Meta Tags into your WordPress Website for more efficient sharing results.
 
 == Description ==
 
