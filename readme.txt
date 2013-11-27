@@ -18,35 +18,35 @@ You can also choose to insert the "enclosure" and "media:content" tags to the RS
 
 It allows the user to choose which tags are, or not, included and also the default image if the post/page doesn't have one.
 
-The Facebook Open Graph Tags that this plugin inserts are:
+= The Facebook Open Graph Tags that this plugin inserts are: =
 
-* **fb:app_id** : From settings on the options screen.
-* **fb:admins** : From settings on the options screen.
-* **og:locale** : From Wordpress locale or chosen by the user.
-* **og:site_name** : From blog title.
-* **og:title** : From post/page/archive/tag/... title.
-* **og:url** : From the post/page permalink.
-* **og:type** : "website" or "blog" for the homepage and "article" for all the others.
-* **og:description** : From post/page excerpt if it exist, or from post/page content. From category/tag description on it's pages, if it exist. From tagline, or custom text, on all the others.
-* **og:image** : From a specific custom field of the post/page, or if not set from the post/page featured/thumbnail image, or if it doesn't exist from the first image in the post content, or if it doesn't exist from the first image on the post media gallery, or if it doesn't exist from the default image defined on the options menu. The same image chosen here will be used and enclosure/media:content on the RSS feed.
+* **fb:app_id**: From settings on the options screen.
+* **fb:admins**: From settings on the options screen.
+* **og:locale**: From Wordpress locale or chosen by the user.
+* **og:site_name**: From blog title.
+* **og:title**: From post/page/archive/tag/... title.
+* **og:url**: From the post/page permalink.
+* **og:type**: "website" or "blog" for the homepage and "article" for all the others.
+* **og:description**: From post/page excerpt if it exist, or from post/page content. From category/tag description on it's pages, if it exist. From tagline, or custom text, on all the others.
+* **og:image**: From a specific custom field of the post/page, or if not set from the post/page featured/thumbnail image, or if it doesn't exist from the first image in the post content, or if it doesn't exist from the first image on the post media gallery, or if it doesn't exist from the default image defined on the options menu. The same image chosen here will be used and enclosure/media:content on the RSS feed.
 
-The Schema.org Tags that this plugin inserts are:
+= The Schema.org Tags that this plugin inserts are: =
 
-* **name** : Same as "og:title".
-* **description** : Same as "og:description".
-* **image** : Same as "og:image".
+* **name**: Same as "og:title".
+* **description**: Same as "og:description".
+* **image**: Same as "og:image".
 
-Other Tags:
+= Other Tags: =
 
-* **meta description** : Same as "og:description".
-* **enclosure** : On RSS feeds, same as "og:image".
-* **media:content** : On RSS feeds, same as "og:image".
+* **meta description**: Same as "og:description".
+* **enclosure**: On RSS feeds, same as "og:image".
+* **media:content**: On RSS feeds, same as "og:image".
 
-3rd Party Integration:
+= 3rd Party Integration: =
 
-* **[WordPress SEO by Yoast] (http://wordpress.org/plugins/wordpress-seo/)** : Allows you to use title, url (canonical) and description from WPSEO plugin.
-* **[SubHeading] (http://wordpress.org/extend/plugins/subheading/)** : Add the SubHeading to the post/page title.
-* **[Business Directory Plugin] (http://wordpress.org/extend/plugins/business-directory-plugin/)** : Allows you to use BDP listing contents as Open Graph Tags.
+* **[WordPress SEO by Yoast](http://wordpress.org/plugins/wordpress-seo/)**: Allows you to use title, url (canonical) and description from WPSEO plugin.
+* **[SubHeading](http://wordpress.org/extend/plugins/subheading/)**: Add the SubHeading to the post/page title.
+* **[Business Directory Plugin](http://wordpress.org/extend/plugins/business-directory-plugin/)**: Allows you to use BDP listing contents as Open Graph Tags.
 
 
 == Installation ==
