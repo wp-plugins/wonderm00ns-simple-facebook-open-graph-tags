@@ -1,13 +1,13 @@
 <?php
 /**
  * @package Facebook Open Graph Meta Tags for WordPress
- * @version 1.0.1
+ * @version 1.1
  */
 /*
 Plugin Name: Facebook Open Graph Meta Tags for WordPress
 Plugin URI: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
 Description: This plugin (formerly known as "Wonderm00n's Simple Facebook Open Graph Meta Tags") inserts Facebook Open Graph Tags into your WordPress Blog/Website for more effective and efficient Facebook sharing results. It also allows you to add the Meta Description tag and Schema.org Name, Description and Image tags for more effective and efficient Google+ sharing results. You can also choose to insert the "enclosure" and "media:content" tags to the RSS feeds, so that apps like RSS Graffiti and twitterfeed post the image to Facebook correctly.
-Version: 1.0.1
+Version: 1.1
 Author: Webdados
 Author URI: http://www.webdados.pt
 Text Domain: wd-fb-og
@@ -16,7 +16,7 @@ Domain Path: /lang
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-$wonderm00n_open_graph_plugin_version='1.0.1';
+$wonderm00n_open_graph_plugin_version='1.1';
 $wonderm00n_open_graph_plugin_settings=array(
 		'fb_app_id_show',
 		'fb_app_id',
@@ -47,6 +47,7 @@ $wonderm00n_open_graph_plugin_settings=array(
 		'fb_image_use_content',
 		'fb_image_use_media',
 		'fb_image_use_default',
+		'fb_show_wpseoyoast',
 		'fb_show_subheading',
 		'fb_show_businessdirectoryplugin'
 );
@@ -86,20 +87,6 @@ function wonderm00n_open_graph() {
 		//It's a Post or a Page or an attachment page - It can also be the homepage if it's set as a page
 		global $post;
 		$fb_title=esc_attr(strip_tags(stripslashes($post->post_title)));
-		//All In One SEO - To Do
-		/*if ($fb_show_allinoneseo==1) {
-			@include_once(ABSPATH . 'wp-admin/includes/plugin.php');
-			if (is_plugin_active('all-in-one-seo-pack/all_in_one_seo_pack.php')) {
-				//Code still missing here
-			}
-		}*/
-		//Platinum SEO - To Do
-		/*if ($fb_show_platinumseo==1) {
-			@include_once(ABSPATH . 'wp-admin/includes/plugin.php');
-			if (is_plugin_active('platinum-seo-pack/platinum_seo_pack.php')) {
-				//Code still missing here
-			}
-		}*/
 		//SubHeading
 		if ($fb_show_subheading==1) {
 			@include_once(ABSPATH . 'wp-admin/includes/plugin.php');
@@ -261,6 +248,35 @@ function wonderm00n_open_graph() {
 	}
 	//If no description let's just add the title
 	if (trim($fb_desc)=='') $fb_desc=$fb_title;
+
+	//YOAST?
+	var_dump($fb_show_wpseoyoast);
+	if ($fb_show_wpseoyoast==1) {
+		if ( defined('WPSEO_VERSION') ) {
+			$wpseo = new WPSEO_Frontend();
+			//App ID - From our plugin
+			//Admin ID - From our plugin
+			//Locale - From our plugin
+			//Sitename - From our plugin
+			//Title - From WPSEO
+			$fb_title=$wpseo->title(false);
+			//Title - SubHeading plugin
+			if ($fb_show_subheading==1) {
+				@include_once(ABSPATH . 'wp-admin/includes/plugin.php');
+				if (is_plugin_active('subheading/index.php')) {
+					if (function_exists('get_the_subheading')) {
+						$fb_title.=' - '.get_the_subheading();
+					}
+				}
+			}
+			//URL - From WPSEO
+			$fb_url=$wpseo->canonical(false);
+			//Description - From WPSEO or our pligun
+			$fb_desc_temp=$wpseo->metadesc(false);
+			$fb_desc=(trim($fb_desc_temp)!='' ? trim($fb_desc_temp) : $fb_desc);
+			//Image - From our plugin
+		}
+	}
 	
 	$html='
 <!-- START - Facebook Open Graph Meta Tags for WordPress '.$wonderm00n_open_graph_plugin_version.' -->
@@ -503,18 +519,12 @@ if ( is_admin() ) {
   			  <input id="webdados_fb_open_graph_specific_image_button" class="button" type="button" value="'.__('Upload/Choose Open Graph Image','wd-fb-og').'" />';
   		echo '<br/>'.__('Recommended size: 1200x630px', 'wd-fb-og');
   		echo '<script type="text/javascript">
-				jQuery(document).ready(function() {
-					jQuery(document).ready(function(){
-						jQuery(\'#webdados_fb_open_graph_specific_image_button\').live(\'click\', function() {
-							tb_show(\'Upload image\', \'media-upload.php?post_id='.$post->ID.'&type=image&context=webdados_fb_open_graph_specific_image_button&TB_iframe=true\');
-						});
+				jQuery(document).ready(function(){
+					jQuery(\'#webdados_fb_open_graph_specific_image_button\').live(\'click\', function() {
+						tb_show(\'Upload image\', \'media-upload.php?post_id='.$post->ID.'&type=image&context=webdados_fb_open_graph_specific_image_button&TB_iframe=true\');
 					});
-					//function webdados_fb_open_graph_media_insert(url) {
-					//	jQuery(\'#webdados_fb_open_graph_specific_image\').val(url);
-					//    tb_remove();
-					//}
 				});
-				</script>';
+			</script>';
 	}
 	add_action('add_meta_boxes', 'wonderm00n_open_graph_add_posts_options');
 	function wonderm00n_open_graph_add_posts_options_box_save( $post_id ) {

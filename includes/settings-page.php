@@ -8,6 +8,8 @@
  *
  *
  */
+
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 		
 	//First we save!
 	if ( isset($_POST['action']) ) {
@@ -42,6 +44,7 @@
 			$usersettings['fb_image_use_content']= 				intval(wonderm00n_open_graph_post('fb_image_use_content'));
 			$usersettings['fb_image_use_media']= 				intval(wonderm00n_open_graph_post('fb_image_use_media'));
 			$usersettings['fb_image_use_default']= 				intval(wonderm00n_open_graph_post('fb_image_use_default'));
+			$usersettings['fb_show_wpseoyoast']= 				intval(wonderm00n_open_graph_post('fb_show_wpseoyoast'));
 			$usersettings['fb_show_subheading']= 				intval(wonderm00n_open_graph_post('fb_show_subheading'));
 			$usersettings['fb_show_businessdirectoryplugin']= 	intval(wonderm00n_open_graph_post('fb_show_businessdirectoryplugin'));
 			//Update
@@ -372,6 +375,24 @@
 	  				<div class="inside">
 	  					<?php
 	  					$thirdparty=false;
+	  					//WordPress SEO by Yoast
+	  					if ( defined('WPSEO_VERSION') ) {
+	  						$thirdparty=true;
+	  						?>
+	  						<h4><a href="http://wordpress.org/plugins/wordpress-seo/" target="_blank">WordPress SEO by Yoast</a></h4>
+	  						<table width="100%" class="form-table">
+									<tr>
+										<th scope="row" nowrap="nowrap"><?php _e('Use title, url (canonical) and description from WPSEO?', 'wd-fb-og');?></th>
+										<td>
+											<input type="checkbox" name="fb_show_wpseoyoast" id="fb_show_wpseoyoast" value="1" <?php echo (intval($fb_show_wpseoyoast)==1 ? ' checked="checked"' : ''); ?>/>
+											<br/>
+											<?php _e('It\'s HIGHLY recommended to go to <a href="admin.php?page=wpseo_social">SEO &gt; Social</a> and disable "Add Open Graph meta data"', 'wd-fb-og'); ?>
+										</td>
+									</tr>
+								</table>
+	  						<?php
+	  					}
+	  					//SubHeading
 	  					if(is_plugin_active('subheading/index.php')) {
 	  						$thirdparty=true;
 	  						?>
@@ -386,6 +407,7 @@
 								</table>
 	  						<?php
 	  					}
+	  					//Business Directory Plugin 
 	  					if(is_plugin_active('business-directory-plugin/wpbusdirman.php')) {
 	  						$thirdparty=true;
 	  						?>
@@ -407,6 +429,7 @@
 	  						<p><?php _e('You don\'t have any compatible 3rd Party plugin installed/active.', 'wd-fb-og');?></p>
 	  						<p><?php _e('This plugin is currently compatible with:', 'wd-fb-og');?></p>
 	  						<ul>
+	  							<li><a href="http://wordpress.org/extend/plugins/wordpress-seo/" target="_blank">WordPress SEO by Yoast</a></li>
 	  							<li><a href="http://wordpress.org/extend/plugins/subheading/" target="_blank">SubHeading</a></li>
 	  							<li><a href="http://wordpress.org/extend/plugins/business-directory-plugin/" target="_blank">Business Directory Plugin</a></li>
 	  						</ul>
@@ -434,10 +457,10 @@
   		$links[20]['url']='http://ogp.me/';
 
   		$links[30]['text']=__('Plugin official URL', 'wd-fb-og');
-  		$links[30]['url']='http://www.webdados.pt/produtos-e-servicos/internet/desenvolvimento-wordpress/facebook-open-graph-meta-tags-wordpress/';
+  		$links[30]['url']='http://www.webdados.pt/produtos-e-servicos/internet/desenvolvimento-wordpress/facebook-open-graph-meta-tags-wordpress/?utm_source=fb_og_wp_plugin_settings&amp;utm_medium=link&amp;utm_campaign=fb_og_wp_plugin';
 
   		$links[40]['text']=__('Author\'s website: Webdados', 'wd-fb-og');
-  		$links[40]['url']='http://www.webdados.pt';
+  		$links[40]['url']='http://www.webdados.pt/?utm_source=fb_og_wp_plugin_settings&amp;utm_medium=link&amp;utm_campaign=fb_og_wp_plugin';
 
   		$links[50]['text']=__('Author\'s Facebook page: Webdados', 'wd-fb-og');
   		$links[50]['url']='http://www.facebook.com/Webdados';
@@ -492,7 +515,7 @@
   	</div>
   	
   	<div class="clear">
-  		<p><br/>&copy 2011<?php if(date('Y')>2011) echo '-'.date('Y'); ?> <a href="http://www.webdados.pt" target="_blank">Webdados</a> &amp; <a href="http://wonderm00n.com" target="_blank">Marco Almeida (Wonderm00n)</a></p>
+  		<p><br/>&copy 2011<?php if(date('Y')>2011) echo '-'.date('Y'); ?> <a href="http://www.webdados.pt/?utm_source=fb_og_wp_plugin_settings&amp;utm_medium=link&amp;utm_campaign=fb_og_wp_plugin" target="_blank">Webdados</a> &amp; <a href="http://wonderm00n.com/?utm_source=fb_og_wp_plugin_settings&amp;utm_medium=link&amp;utm_campaign=fb_og_wp_plugin" target="_blank">Marco Almeida (Wonderm00n)</a></p>
   	</div>
 		
 	</div>
