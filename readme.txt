@@ -42,6 +42,12 @@ Other Tags:
 * **enclosure** : On RSS feeds, same as "og:image".
 * **media:content** : On RSS feeds, same as "og:image".
 
+3rd Party Integration:
+
+* **[WordPress SEO by Yoast] (http://wordpress.org/plugins/wordpress-seo/)** : Allows you to use title, url (canonical) and description from WPSEO plugin.
+* **[SubHeading] (http://wordpress.org/extend/plugins/subheading/)** : Add the SubHeading to the post/page title.
+* **[Business Directory Plugin] (http://wordpress.org/extend/plugins/business-directory-plugin/)** : Allows you to use BDP listing contents as Open Graph Tags.
+
 
 == Installation ==
 
