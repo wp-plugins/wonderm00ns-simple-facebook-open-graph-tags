@@ -3,8 +3,8 @@ Contributors: webdados, wonderm00n
 Donate link: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
 Tags: facebook, open graph, open graph protocol, seo, share, social, meta, schema, google+, g+, google, google plus, image, like, meta, search engine optimization
 Requires at least: 3.5
-Tested up to: 3.7.1
-Stable tag: 1.1.1
+Tested up to: 3.9
+Stable tag: 1.1.2
 
 This plugin inserts Facebook Open Graph, Google+/Schema.org and other Meta Tags into your WordPress Website for more efficient sharing results.
 
@@ -56,6 +56,11 @@ It allows the user to choose which tags are, or not, included and also the defau
 3. Got to `Options`, `Facebook Open Graph Tags` to set it up
 
 == Changelog ==
+
+= 1.1.2 =
+* Fix: Specific post image was not working properly
+* Added a "Clear field" button to the specific post image options box
+* When the homepage is set as a static page, the "homepage description" section on the settings page will reflect that
 
 = 1.1.1 =
 * Fix: a debug var_dump was left uncommented

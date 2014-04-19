@@ -292,13 +292,21 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 								<tr class="fb_description_options">
 									<th scope="row" nowrap="nowrap"><?php _e('Homepage description', 'wd-fb-og');?>:</th>
 									<td>
-										<?php _e('Use', 'wd-fb-og');?>
-										<select name="fb_desc_homepage" id="fb_desc_homepage" onchange="showDescriptionCustomText();">
-											<option value=""<?php if (trim($fb_desc_homepage)=='') echo ' selected="selected"'; ?>><?php _e('Website tagline', 'wd-fb-og');?>&nbsp;</option>
-											<option value="custom"<?php if (trim($fb_desc_homepage)=='custom') echo ' selected="selected"'; ?>><?php _e('Custom text', 'wd-fb-og');?>&nbsp;</option>
-										</select>
-										<div id="fb_desc_homepage_customtext_div">
-											<textarea name="fb_desc_homepage_customtext" id="fb_desc_homepage_customtext" rows="3" cols="50"><?php echo $fb_desc_homepage_customtext; ?></textarea>
+										<?php
+										$hide_home_description=false;
+										if (get_option('show_on_front')=='page') {
+											$hide_home_description=true;
+											_e('The description of your front page:', 'wd-fb-og');
+											echo '<a href="'.get_edit_post_link(get_option('page_on_front')).'" target="_blank">'.get_the_title(get_option('page_on_front')).'</a>';
+										}; ?>
+										<div<?php if ($hide_home_description) echo ' style="display: none;"'; ?>><?php _e('Use', 'wd-fb-og');?>
+											<select name="fb_desc_homepage" id="fb_desc_homepage" onchange="showDescriptionCustomText();">
+												<option value=""<?php if (trim($fb_desc_homepage)=='') echo ' selected="selected"'; ?>><?php _e('Website tagline', 'wd-fb-og');?>&nbsp;</option>
+												<option value="custom"<?php if (trim($fb_desc_homepage)=='custom') echo ' selected="selected"'; ?>><?php _e('Custom text', 'wd-fb-og');?>&nbsp;</option>
+											</select>
+											<div id="fb_desc_homepage_customtext_div">
+												<textarea name="fb_desc_homepage_customtext" id="fb_desc_homepage_customtext" rows="3" cols="50"><?php echo $fb_desc_homepage_customtext; ?></textarea>
+											</div>
 										</div>
 									</td>
 								</tr>

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Facebook Open Graph Meta Tags for WordPress v1.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2013-11-27 10:18-0000\n"
+"PO-Revision-Date: 2014-04-19 13:28-0000\n"
 "Last-Translator: Webdados <info@webdados.pt>\n"
 "Language-Team: Webdados <info@webdados.pt>\n"
 "MIME-Version: 1.0\n"
@@ -403,4 +403,15 @@ msgstr ""
 msgid ""
 "It's HIGHLY recommended to go to <a href=\"admin.php?page=wpseo_social\">SEO "
 "&gt; Social</a> and disable \"Add Open Graph meta data\""
+msgstr ""
+
+
+# @ wd-fb-og
+#: wonderm00n-open-graph.php:519
+msgid "Clear field"
+msgstr ""
+
+# @ wd-fb-og
+#: includes/settings-page.php:299
+msgid "The description of your front page:"
 msgstr ""
