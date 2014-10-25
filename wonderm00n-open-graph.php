@@ -1,13 +1,13 @@
 <?php
 /**
  * @package Facebook Open Graph Meta Tags for WordPress
- * @version 1.1.2
+ * @version 1.2
  */
 /*
 Plugin Name: Facebook Open Graph Meta Tags for WordPress
 Plugin URI: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
 Description: This plugin (formerly known as "Wonderm00n's Simple Facebook Open Graph Meta Tags") inserts Facebook Open Graph Tags into your WordPress Blog/Website for more effective and efficient Facebook sharing results. It also allows you to add the Meta Description tag and Schema.org Name, Description and Image tags for more effective and efficient Google+ sharing results. You can also choose to insert the "enclosure" and "media:content" tags to the RSS feeds, so that apps like RSS Graffiti and twitterfeed post the image to Facebook correctly.
-Version: 1.1.2
+Version: 1.2
 Author: Webdados
 Author URI: http://www.webdados.pt
 Text Domain: wd-fb-og
@@ -16,7 +16,7 @@ Domain Path: /lang
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-$wonderm00n_open_graph_plugin_version='1.1.2';
+$wonderm00n_open_graph_plugin_version='1.2';
 $wonderm00n_open_graph_plugin_settings=array(
 		'fb_app_id_show',
 		'fb_app_id',
@@ -276,6 +276,11 @@ function wonderm00n_open_graph() {
 			//Image - From our plugin
 		}
 	}
+
+	//Apply Filters
+	$fb_title = apply_filters('fb_og_title', $fb_title);
+	$fb_desc = apply_filters('fb_og_desc', $fb_desc);
+	$fb_image = apply_filters('fb_og_image', $fb_image);
 	
 	$html='
 <!-- START - Facebook Open Graph Meta Tags for WordPress '.$wonderm00n_open_graph_plugin_version.' -->
