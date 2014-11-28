@@ -1,18 +1,20 @@
-=== Facebook Open Graph Meta Tags for WordPress ===
+=== Facebook Open Graph, Google+ and Twitter Card Tags ===
 Contributors: webdados, wonderm00n
 Donate link: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
-Tags: facebook, open graph, open graph protocol, seo, share, social, meta, schema, google+, g+, google, google plus, image, like, meta, search engine optimization
+Tags: facebook, open graph, open graph protocol, seo, share, social, meta, twitter card, twitter, schema, google+, g+, google, google plus, image, like, meta, search engine optimization
 Requires at least: 3.5
-Tested up to: 3.9
-Stable tag: 1.2
+Tested up to: 4.0.1
+Stable tag: 1.3
 
-This plugin inserts Facebook Open Graph, Google+/Schema.org and other Meta Tags into your WordPress Website for more efficient sharing results.
+Inserts Facebook Open Graph, Google+/Schema.org, Twitter and other Meta Tags into your WordPress Website for more efficient sharing results.
 
 == Description ==
 
 This plugin inserts Facebook Open Graph Tags into your WordPress Blog/Website for more effective and efficient Facebook sharing results.
 
 It also allows you to add the Meta Description tag and Schema.org Name, Description and Image tags for more effective and efficient Google+ sharing results.
+
+It also allows you to add the Twitter Card tags for more effective and efficient Twitter sharing results.
 
 You can also choose to insert the "enclosure" and "media:content" tags to the RSS feeds, so that apps like RSS Graffiti and twitterfeed post the image to Facebook correctly.
 
@@ -27,17 +29,32 @@ It allows the user to choose which tags are, or not, included and also the defau
 * **og:title**: From post/page/archive/tag/... title.
 * **og:url**: From the post/page permalink.
 * **og:type**: "website" or "blog" for the homepage and "article" for all the others.
+* **article:publisher**: From settings on the options screen.
+* **article:author**: From the user (post author) Faceboook Profile URL.
 * **og:description**: From post/page excerpt if it exist, or from post/page content. From category/tag description on it's pages, if it exist. From tagline, or custom text, on all the others.
 * **og:image**: From a specific custom field of the post/page, or if not set from the post/page featured/thumbnail image, or if it doesn't exist from the first image in the post content, or if it doesn't exist from the first image on the post media gallery, or if it doesn't exist from the default image defined on the options menu. The same image chosen here will be used and enclosure/media:content on the RSS feed.
 
 = The Schema.org Tags that this plugin inserts are: =
 
 * **name**: Same as "og:title".
+* **author**: From the user (post author) Google+ profile URL.
 * **description**: Same as "og:description".
 * **image**: Same as "og:image".
 
+= The Twitter Card Tags that this plugin inserts are: =
+
+* **twitter:title**: Same as "og:title".
+* **twitter:url**: Sames as "ug:url".
+* **twitter:site**: The website twitter account.
+* **twitter:creator**: From the user (post author) Twitter account.
+* **twitter:description**: Same as "og:description".
+* **twitter:image:src**: Same as "og:image".
+* **twitter:card:src**: With value "summary_large_image".
+
 = Other Tags: =
 
+* **meta author**: From the user (post author) Display Name.
+* **link rel author**: From the user (post author) Google+ Profile URL.
 * **meta description**: Same as "og:description".
 * **enclosure**: On RSS feeds, same as "og:image".
 * **media:content**: On RSS feeds, same as "og:image".
@@ -52,10 +69,19 @@ It allows the user to choose which tags are, or not, included and also the defau
 == Installation ==
 
 1. Upload the `wonderm00n-open-graph` to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
+2. Activate the plugin through the `Plugins` menu in WordPress
 3. Got to `Options`, `Facebook Open Graph Tags` to set it up
 
 == Changelog ==
+
+= 1.3 =
+* Changed name to "Facebook Open Graph, Google+ and Twitter Card Tags"
+* Added Twitter Card tags
+* Added new tag "article:publisher" in order to link the article with a Facebook page
+* Added new tags "article:author", meta author and Google+ link rel in order to link the article with his author (Facebook profile, Name and Google+ profile)
+* Title, URL, Description and Image Meta/Google+/Twitter tags can now be set even if Open Graph ones aren't
+* Several HTML/CSS tweaks on the settings page
+* Fix: esc_attr on all tags
 
 = 1.2 =
 * Added filters for title, description and images, so another plugin or theme can override these values. The filters are fb_og_title, fb_og_desc and fb_og_image

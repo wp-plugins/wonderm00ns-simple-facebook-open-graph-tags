@@ -1,13 +1,13 @@
 <?php
 /**
- * @package Facebook Open Graph Meta Tags for WordPress
- * @version 1.2
+ * @package Facebook Open Graph, Google+ and Twitter Card Tags
+ * @version 1.3
  */
 /*
-Plugin Name: Facebook Open Graph Meta Tags for WordPress
-Plugin URI: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-facebook-open-graph-tags/
-Description: This plugin (formerly known as "Wonderm00n's Simple Facebook Open Graph Meta Tags") inserts Facebook Open Graph Tags into your WordPress Blog/Website for more effective and efficient Facebook sharing results. It also allows you to add the Meta Description tag and Schema.org Name, Description and Image tags for more effective and efficient Google+ sharing results. You can also choose to insert the "enclosure" and "media:content" tags to the RSS feeds, so that apps like RSS Graffiti and twitterfeed post the image to Facebook correctly.
-Version: 1.2
+Plugin Name: Facebook Open Graph, Google+ and Twitter Card Tags
+Plugin URI: http://www.webdados.pt/produtos-e-servicos/internet/desenvolvimento-wordpress/facebook-open-graph-meta-tags-wordpress/
+Description: Inserts Facebook Open Graph, Google+ / Schema.org and Twitter Card Tags into your WordPress Blog/Website for more effective and efficient Facebook, Google+ and Twitter sharing results. You can also choose to insert the "enclosure" and "media:content" tags to the RSS feeds, so that apps like RSS Graffiti and twitterfeed post the image to Facebook correctly.
+Version: 1.3
 Author: Webdados
 Author URI: http://www.webdados.pt
 Text Domain: wd-fb-og
@@ -16,7 +16,8 @@ Domain Path: /lang
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-$wonderm00n_open_graph_plugin_version='1.2';
+$wonderm00n_open_graph_plugin_version='1.3';
+$wonderm00n_open_graph_plugin_name='Facebook Open Graph, Google+ and Twitter Card Tags';
 $wonderm00n_open_graph_plugin_settings=array(
 		'fb_app_id_show',
 		'fb_app_id',
@@ -27,19 +28,31 @@ $wonderm00n_open_graph_plugin_settings=array(
 		'fb_sitename_show',
 		'fb_title_show',
 		'fb_title_show_schema',
+		'fb_title_show_twitter',
 		'fb_url_show',
+		'fb_url_show_twitter',
 		'fb_url_canonical',
 		'fb_url_add_trailing',
 		'fb_type_show',
 		'fb_type_homepage',
+		'fb_pubslisher_show',
+		'fb_pubslisher',
+		'fb_publisher_show_twitter',
+		'fb_publisher_twitteruser',
+		'fb_author_show',
+		'fb_author_show_meta',
+		'fb_author_show_linkrelgp',
+		'fb_author_show_twitter',
 		'fb_desc_show',
 		'fb_desc_show_meta',
 		'fb_desc_show_schema',
+		'fb_desc_show_twitter',
 		'fb_desc_chars',
 		'fb_desc_homepage',
 		'fb_desc_homepage_customtext',
 		'fb_image_show',
 		'fb_image_show_schema',
+		'fb_image_show_twitter',
 		'fb_image',
 		'fb_image_rss',
 		'fb_image_use_specific',
@@ -110,8 +123,16 @@ function wonderm00n_open_graph() {
 			$fb_desc=trim($post->post_content);
 		}
 		$fb_desc=(intval($fb_desc_chars)>0 ? substr(esc_attr(strip_tags(strip_shortcodes(stripslashes($fb_desc)))),0,$fb_desc_chars) : esc_attr(strip_tags(strip_shortcodes(stripslashes($fb_desc)))));
-		if (intval($fb_image_show)==1) {
+		if (intval($fb_image_show)==1 || intval($fb_image_show_schema)==1 || intval($fb_image_show_twitter)==1) {
 			$fb_image=wonderm00n_open_graph_post_image($fb_image_use_specific, $fb_image_use_featured, $fb_image_use_content, $fb_image_use_media, $fb_image_use_default, $fb_image);
+		}
+		//Author
+		$author_id=$post->post_author;
+		if ($author_id>0) {
+			$fb_author=get_the_author_meta('facebook', $author_id);
+			$fb_author_meta=get_the_author_meta('display_name', $author_id);
+			$fb_author_linkrelgp=get_the_author_meta('googleplus', $author_id);
+			$fb_author_twitter=get_the_author_meta('twitter', $author_id);
 		}
 		//Business Directory Plugin
 		if ($fb_show_businessdirectoryplugin==1) {
@@ -136,7 +157,7 @@ function wonderm00n_open_graph() {
 							$fb_desc=trim($bdppost->post_content);
 						}
 						$fb_desc=(intval($fb_desc_chars)>0 ? substr(esc_attr(strip_tags(strip_shortcodes(stripslashes($fb_desc)))),0,$fb_desc_chars) : esc_attr(strip_tags(strip_shortcodes(stripslashes($fb_desc)))));
-						if (intval($fb_image_show)==1) {
+						if (intval($fb_image_show)==1 || intval($fb_image_show_schema)==1 || intval($fb_image_show_twitter)==1) {
 							$thumbdone=false;
 							if (intval($fb_image_use_featured)==1) {
 								//Featured
@@ -270,7 +291,7 @@ function wonderm00n_open_graph() {
 			}
 			//URL - From WPSEO
 			$fb_url=$wpseo->canonical(false);
-			//Description - From WPSEO or our pligun
+			//Description - From WPSEO or our plugin
 			$fb_desc_temp=$wpseo->metadesc(false);
 			$fb_desc=(trim($fb_desc_temp)!='' ? trim($fb_desc_temp) : $fb_desc);
 			//Image - From our plugin
@@ -283,45 +304,62 @@ function wonderm00n_open_graph() {
 	$fb_image = apply_filters('fb_og_image', $fb_image);
 	
 	$html='
-<!-- START - Facebook Open Graph Meta Tags for WordPress '.$wonderm00n_open_graph_plugin_version.' -->
+<!-- START - '.$wonderm00n_open_graph_plugin_name.' '.$wonderm00n_open_graph_plugin_version.' -->
 ';
-	if (intval($fb_app_id_show)==1 && trim($fb_app_id)!='') $html.='<meta property="fb:app_id" content="'.trim($fb_app_id).'" />
+	if (intval($fb_app_id_show)==1 && trim($fb_app_id)!='') $html.='<meta property="fb:app_id" content="'.trim(esc_attr($fb_app_id)).'"/>
 ';
-	if (intval($fb_admin_id_show)==1 && trim($fb_admin_id)!='') $html.='<meta property="fb:admins" content="'.trim($fb_admin_id).'" />
+	if (intval($fb_admin_id_show)==1 && trim($fb_admin_id)!='') $html.='<meta property="fb:admins" content="'.trim(esc_attr($fb_admin_id)).'"/>
 ';
-	if (intval($fb_locale_show)==1) $html.='<meta property="og:locale" content="'.trim(trim($fb_locale)!='' ? trim($fb_locale) : trim(get_locale())).'" />
+	if (intval($fb_locale_show)==1) $html.='<meta property="og:locale" content="'.trim(esc_attr(trim($fb_locale)!='' ? trim($fb_locale) : trim(get_locale()))).'"/>
 ';
-	if (intval($fb_sitename_show)==1) $html.='<meta property="og:site_name" content="'.get_bloginfo('name').'" />
+	if (intval($fb_sitename_show)==1) $html.='<meta property="og:site_name" content="'.trim(esc_attr(get_bloginfo('name'))).'"/>
 ';
-	if (intval($fb_title_show)==1) $html.='<meta property="og:title" content="'.trim($fb_title).'" />
+	if (intval($fb_title_show)==1) $html.='<meta property="og:title" content="'.trim(esc_attr($fb_title)).'"/>
 ';
 	if (intval($fb_set_title_tag)==1) {
 		//Does nothing so far. We try to create the <title> tag but it's too late now
 	}
-	if (intval($fb_title_show_schema)==1) $html.='<meta itemprop="name" content="'.trim($fb_title).'" />
+	if (intval($fb_title_show_schema)==1) $html.='<meta itemprop="name" content="'.trim(esc_attr($fb_title)).'"/>
 ';
-	if (intval($fb_url_show)==1) {
-		$html.='<meta property="og:url" content="'.trim(esc_attr($fb_url)).'" />
+	if (intval($fb_title_show_twitter)==1) $html.='<meta name="twitter:title" content="'.trim(esc_attr($fb_title)).'"/>
 ';
-		if (intval($fb_url_canonical)==1) {
-			//remove_action('wp_head', 'rel_canonical'); //This is already done
-			$html.='<link rel="canonical" href="'.trim(esc_attr($fb_url)).'" />
+	if (intval($fb_url_show)==1) $html.='<meta property="og:url" content="'.trim(esc_attr($fb_url)).'"/>
 ';
-		}
-	}
-	if (intval($fb_type_show)==1) $html.='<meta property="og:type" content="'.trim(esc_attr($fb_type)).'" />
+	if (intval($fb_url_show_twitter)==1) $html.='<meta name="twitter:url" content="'.trim(esc_attr($fb_url)).'"/>
 ';
-	if (intval($fb_desc_show)==1) $html.='<meta property="og:description" content="'.trim($fb_desc).'" />
+	if (intval($fb_url_canonical)==1) $html.='<link rel="canonical" href="'.trim(esc_attr($fb_url)).'"/>
 ';
-	if (intval($fb_desc_show_meta)==1) $html.='<meta name="description" content="'.trim($fb_desc).'" />
+	if (intval($fb_type_show)==1) $html.='<meta property="og:type" content="'.trim(esc_attr($fb_type)).'"/>
 ';
-	if (intval($fb_desc_show_schema)==1) $html.='<meta itemprop="description" content="'.trim($fb_desc).'" />
+	if (intval($fb_publisher_show)==1 && trim($fb_publisher)!='') $html.='<meta property="article:publisher" content="'.trim(esc_attr($fb_publisher)).'"/>
 ';
-	if(intval($fb_image_show)==1 && trim($fb_image)!='') $html.='<meta property="og:image" content="'.trim(esc_attr($fb_image)).'" />
+	if (intval($fb_publisher_show_twitter)==1 && trim($fb_publisher_twitteruser)!='') $html.='<meta name="twitter:site" content="@'.trim(esc_attr($fb_publisher_twitteruser)).'"/>
 ';
-	if(intval($fb_image_show_schema)==1 && trim($fb_image)!='') $html.='<meta itemprop="image" content="'.trim(esc_attr($fb_image)).'" />
+	if (intval($fb_author_show)==1 && $fb_author!='') $html.='<meta property="article:author" content="'.trim(esc_attr($fb_author)).'"/>
 ';
-	$html.='<!-- END - Facebook Open Graph Meta Tags for WordPress -->
+	if (intval($fb_author_show_meta)==1 && $fb_author_meta!='') $html.='<meta name="author" content="'.trim(esc_attr($fb_author_meta)).'"/>
+';
+	if (intval($fb_author_show_linkrelgp)==1 && trim($fb_author_linkrelgp)!='') $html.='<link rel="author" href="'.trim(esc_attr($fb_author_linkrelgp)).'"/>
+';
+	if (intval($fb_author_show_twitter)==1 && (trim($fb_author_twitter)!='' || trim($fb_publisher_twitteruser)!='')) $html.='<meta name="twitter:creator" content="@'.trim(esc_attr( (trim($fb_author_twitter)!='' ? trim($fb_author_twitter) : trim($fb_publisher_twitteruser) ))).'"/>
+';
+	if (intval($fb_desc_show)==1) $html.='<meta property="og:description" content="'.trim(esc_attr($fb_desc)).'"/>
+';
+	if (intval($fb_desc_show_meta)==1) $html.='<meta name="description" content="'.trim(esc_attr($fb_desc)).'"/>
+';
+	if (intval($fb_desc_show_schema)==1) $html.='<meta itemprop="description" content="'.trim(esc_attr($fb_desc)).'"/>
+';
+	if (intval($fb_desc_show_twitter)==1) $html.='<meta name="twitter:description" content="'.trim(esc_attr($fb_desc)).'"/>
+';
+	if(intval($fb_image_show)==1 && trim($fb_image)!='') $html.='<meta property="og:image" content="'.trim(esc_attr($fb_image)).'"/>
+';
+	if(intval($fb_image_show_schema)==1 && trim($fb_image)!='') $html.='<meta itemprop="image" content="'.trim(esc_attr($fb_image)).'"/>
+';
+	if(intval($fb_image_show_twitter)==1 && trim($fb_image)!='') $html.='<meta name="twitter:image:src" content="'.trim(esc_attr($fb_image)).'"/>
+';
+	if(intval($fb_title_show_twitter)==1 || intval($fb_url_show_twitter)==1 || $fb_author_show_twitter==1 || $fb_publisher_show_twitter==1 || $fb_image_show_twitter==1) $html.='<meta name="twitter:card" content="summary_large_image"/>
+';
+	$html.='<!-- END - '.$wonderm00n_open_graph_plugin_name.' -->
 ';
 	echo $html;
 }
@@ -375,8 +413,8 @@ function wonderm00n_open_graph_images_on_feed_image() {
 			$url=$fb_image;				
 		}
 		list($width, $height, $type, $attr) = getimagesize($url);
-		echo '<enclosure url="' . $fb_image . '" length="' . $filesize . '" type="'.image_type_to_mime_type($type).'" />';
-		echo '<media:content url="'.$fb_image.'" width="'.$width.'" height="'.$height.'" medium="image" type="'.image_type_to_mime_type($type).'" />';
+		echo '<enclosure url="' . $fb_image . '" length="' . $filesize . '" type="'.image_type_to_mime_type($type).'"/>';
+		echo '<media:content url="'.$fb_image.'" width="'.$width.'" height="'.$height.'" medium="image" type="'.image_type_to_mime_type($type).'"/>';
 	}
 }
 add_action("do_feed_rss","wonderm00n_open_graph_images_on_feed",5,1);
@@ -462,13 +500,18 @@ if ( is_admin() ) {
 	register_activation_hook(__FILE__, 'wonderm00n_open_graph_activate');
 	
 	function wonderm00n_open_graph_add_options() {
+		global $wonderm00n_open_graph_plugin_name;
 		if(function_exists('add_options_page')){
-			add_options_page('Facebook Open Graph Tags', 'Facebook Open Graph Tags', 'manage_options', basename(__FILE__), 'wonderm00n_open_graph_admin');
+			add_options_page($wonderm00n_open_graph_plugin_name, $wonderm00n_open_graph_plugin_name, 'manage_options', basename(__FILE__), 'wonderm00n_open_graph_admin');
 		}
 	}
 	
 	function wonderm00n_open_graph_activate() {
-		// Let's not!
+		//Clear WPSEO notices
+		global $wpdb;
+		$wpdb->query(
+			$wpdb->prepare("DELETE FROM $wpdb->usermeta WHERE meta_key LIKE 'wd_fb_og_wpseo_notice_ignore'")
+		);
 	}
 	
 	function wonderm00n_open_graph_settings_link( $links, $file ) {
@@ -482,7 +525,7 @@ if ( is_admin() ) {
 	
 	
 	function wonderm00n_open_graph_admin() {
-		global $wonderm00n_open_graph_plugin_settings, $wonderm00n_open_graph_plugin_version;
+		global $wonderm00n_open_graph_plugin_settings, $wonderm00n_open_graph_plugin_name, $wonderm00n_open_graph_plugin_version;
 		wonderm00n_open_graph_upgrade();
 		include_once 'includes/settings-page.php';
 	}
@@ -499,12 +542,12 @@ if ( is_admin() ) {
 	add_action('admin_print_styles', 'wonderm00n_open_graph_styles');
 
 	function wonderm00n_open_graph_add_posts_options() {
-		global $webdados_fb_open_graph_settings;
+		global $webdados_fb_open_graph_settings, $wonderm00n_open_graph_plugin_name;
 		if (intval($webdados_fb_open_graph_settings['fb_image_use_specific'])==1) {
 			global $post;
 			add_meta_box(
 				'webdados_fb_open_graph',
-				'Facebook Open Graph Meta Tags for WordPress',
+				$wonderm00n_open_graph_plugin_name,
 	            'wonderm00n_open_graph_add_posts_options_box',
 	            	$post->post_type
 	        );
@@ -519,8 +562,8 @@ if ( is_admin() ) {
   		echo '<label for="webdados_fb_open_graph_specific_image">';
        	_e('Use this image:', 'wd-fb-og');
   		echo '</label> ';
-  		echo '<input type="text" id="webdados_fb_open_graph_specific_image" name="webdados_fb_open_graph_specific_image" value="' . esc_attr( $value ) . '" size="75" />
-  			  <input id="webdados_fb_open_graph_specific_image_button" class="button" type="button" value="'.__('Upload/Choose Open Graph Image','wd-fb-og').'" />
+  		echo '<input type="text" id="webdados_fb_open_graph_specific_image" name="webdados_fb_open_graph_specific_image" value="' . esc_attr( $value ) . '" size="75"/>
+  			  <input id="webdados_fb_open_graph_specific_image_button" class="button" type="button" value="'.__('Upload/Choose Open Graph Image','wd-fb-og').'"/>
   			  <input id="webdados_fb_open_graph_specific_image_button_clear" class="button" type="button" value="'.__('Clear field','wd-fb-og').'"/>';
   		echo '<br/>'.__('Recommended size: 1200x630px', 'wd-fb-og');
   		echo '<script type="text/javascript">
@@ -618,6 +661,56 @@ if ( is_admin() ) {
         // Add JS
         add_action( 'admin_head', 'webdados_fb_open_graph_media_admin_head' );
     }
+
+    //Facebook, Google+ and Twitter user fields
+    function webdados_fb_open_graph_add_usercontacts($usercontacts) {
+		if (defined('WPSEO_VERSION')) {
+			//Google+
+			$usercontacts['googleplus'] = __('Google+', 'wd-fb-og');
+			//Twitter
+			$usercontacts['twitter'] = __('Twitter username (without @)', 'wd-fb-og');
+			//Facebook
+			$usercontacts['facebook'] = __('Facebook profile URL', 'wd-fb-og');
+		}
+		return $usercontacts;
+	}
+	//WPSEO already adds the fields, so we'll just add them if WPSEO is not active
+	add_filter('user_contactmethods', 'webdados_fb_open_graph_add_usercontacts', 10, 1);
+
+	//WPSEO warning
+	function webdados_fb_open_graph_wpseo_notice() {
+		if (defined('WPSEO_VERSION')) {
+			global $current_user, $wonderm00n_open_graph_plugin_name;
+			$user_id=$current_user->ID;
+			if (!get_user_meta($user_id,'wd_fb_og_wpseo_notice_ignore')) {
+				?>
+				<div class="error">
+					<p>
+						<b><?php echo $wonderm00n_open_graph_plugin_name; ?>:</b>
+						<br/>
+						<?php _e('Please ignore the (dumb) Yoast WordPress SEO warning regarding open graph issues with this plugin. Just disable WPSEO Social settings at', 'wd-fb-og'); ?>
+						<a href="admin.php?page=wpseo_social&amp;wd_fb_og_wpseo_notice_ignore=1"><?php _e('SEO &gt; Social','wd-fb-og'); ?></a>
+					</p>
+					<p><a href="?wd_fb_og_wpseo_notice_ignore=1">Ignore this message</a></p>
+				</div>
+				<?php
+			}
+		}
+	}
+	add_action('admin_notices', 'webdados_fb_open_graph_wpseo_notice');
+	function webdados_fb_open_graph_wpseo_notice_ignore() {
+		if (defined('WPSEO_VERSION')) {
+			global $current_user;
+			$user_id=$current_user->ID;
+			if (isset($_GET['wd_fb_og_wpseo_notice_ignore'])) {
+				if (intval($_GET['wd_fb_og_wpseo_notice_ignore'])==1) {
+					add_user_meta($user_id, 'wd_fb_og_wpseo_notice_ignore', '1', true);
+				}
+			}
+		}
+	}
+	add_action('admin_init', 'webdados_fb_open_graph_wpseo_notice_ignore');
+
 }
 
 
