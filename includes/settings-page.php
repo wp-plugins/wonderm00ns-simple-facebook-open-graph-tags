@@ -33,6 +33,8 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 			$usersettings['fb_type_homepage']= 					trim(wonderm00n_open_graph_post('fb_type_homepage'));
 			$usersettings['fb_publisher_show']= 				intval(wonderm00n_open_graph_post('fb_publisher_show'));
 			$usersettings['fb_publisher']= 						trim(wonderm00n_open_graph_post('fb_publisher'));
+			$usersettings['fb_publisher_show_schema']= 			intval(wonderm00n_open_graph_post('fb_publisher_show_schema'));
+			$usersettings['fb_publisher_schema']= 				trim(wonderm00n_open_graph_post('fb_publisher_schema'));
 			$usersettings['fb_publisher_show_twitter']= 		intval(wonderm00n_open_graph_post('fb_publisher_show_twitter'));
 			$usersettings['fb_publisher_twitteruser']= 			trim(wonderm00n_open_graph_post('fb_publisher_twitteruser'));
 			$usersettings['fb_author_show']= 					intval(wonderm00n_open_graph_post('fb_author_show'));
@@ -292,9 +294,25 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 										</td>
 									</tr>
 									<tr class="fb_publisher_options">
-										<th scope="row"><i class="dashicons-before dashicons-facebook-alt"></i><?php _e('Publisher Facebook Page', 'wd-fb-og');?>:</th>
+										<th scope="row"><i class="dashicons-before dashicons-facebook-alt"></i><?php _e('Website\'s Facebook Page', 'wd-fb-og');?>:</th>
 										<td>
 											<input type="text" name="fb_publisher" id="fb_publisher" size="50" value="<?php echo trim(esc_attr($fb_publisher)); ?>"/>
+											<br/>
+											<?php _e('Full URL with http://', 'wd-fb-og');?>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row"><i class="dashicons-before dashicons-googleplus"></i><?php _e('Include Google+ "publisher" tag', 'wd-fb-og');?>:</th>
+										<td>
+											<input type="checkbox" name="fb_publisher_show_schema" id="fb_publisher_show_schema" value="1" <?php echo (intval($fb_publisher_show_schema)==1 ? ' checked="checked"' : ''); ?> onclick="showPublisherSchemaOptions();"/>
+											<br/>
+											<?php _e('Links the website to the publisher Google+ Page.', 'wd-fb-og');?>
+										</td>
+									</tr>
+									<tr class="fb_publisher_schema_options">
+										<th scope="row"><i class="dashicons-before dashicons-googleplus"></i><?php _e('Website\'s Google+ Page', 'wd-fb-og');?>:</th>
+										<td>
+											<input type="text" name="fb_publisher_schema" id="fb_publisher_schema" size="50" value="<?php echo trim(esc_attr($fb_publisher_schema)); ?>"/>
 											<br/>
 											<?php _e('Full URL with http://', 'wd-fb-og');?>
 										</td>
@@ -304,11 +322,11 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 										<td>
 											<input type="checkbox" name="fb_publisher_show_twitter" id="fb_publisher_show_twitter" value="1" <?php echo (intval($fb_publisher_show_twitter)==1 ? ' checked="checked"' : ''); ?> onclick="showPublisherTwitterOptions();"/>
 											<br/>
-											<?php _e('Links the website to the website Twitter Username.', 'wd-fb-og');?>
+											<?php _e('Links the website to the publisher Twitter Username.', 'wd-fb-og');?>
 										</td>
 									</tr>
 									<tr class="fb_publisher_twitter_options">
-										<th scope="row"><i class="dashicons-before dashicons-twitter"></i><?php _e('Website Twitter Username', 'wd-fb-og');?>:</th>
+										<th scope="row"><i class="dashicons-before dashicons-twitter"></i><?php _e('Website\'s Twitter Username', 'wd-fb-og');?>:</th>
 										<td>
 											<input type="text" name="fb_publisher_twitteruser" id="fb_publisher_twitteruser" size="20" value="<?php echo trim(esc_attr($fb_publisher_twitteruser)); ?>"/>
 											<br/>
@@ -678,6 +696,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 			showLocaleOptions();
 			showTypeOptions();
 			showPublisherOptions();
+			showPublisherSchemaOptions();
 			showPublisherTwitterOptions();
 			showAuthorOptions();
 			showUrlOptions();
@@ -752,6 +771,13 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 				jQuery('.fb_publisher_twitter_options').show();
 			} else {
 				jQuery('.fb_publisher_twitter_options').hide();
+			}
+		}
+		function showPublisherSchemaOptions() {
+			if (jQuery('#fb_publisher_show_schema').is(':checked')) {
+				jQuery('.fb_publisher_schema_options').show();
+			} else {
+				jQuery('.fb_publisher_schema_options').hide();
 			}
 		}
 		function showTypeOptions() {
