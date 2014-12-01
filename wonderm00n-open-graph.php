@@ -1,13 +1,13 @@
 <?php
 /**
  * @package Facebook Open Graph, Google+ and Twitter Card Tags
- * @version 1.3.2
+ * @version 1.3.3
  */
 /*
 Plugin Name: Facebook Open Graph, Google+ and Twitter Card Tags
 Plugin URI: http://www.webdados.pt/produtos-e-servicos/internet/desenvolvimento-wordpress/facebook-open-graph-meta-tags-wordpress/
 Description: Inserts Facebook Open Graph, Google+ / Schema.org and Twitter Card Tags into your WordPress Blog/Website for more effective and efficient Facebook, Google+ and Twitter sharing results. You can also choose to insert the "enclosure" and "media:content" tags to the RSS feeds, so that apps like RSS Graffiti and twitterfeed post the image to Facebook correctly.
-Version: 1.3.2
+Version: 1.3.3
 Author: Webdados
 Author URI: http://www.webdados.pt
 Text Domain: wd-fb-og
@@ -16,7 +16,7 @@ Domain Path: /lang
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-$wonderm00n_open_graph_plugin_version='1.3.2';
+$wonderm00n_open_graph_plugin_version='1.3.3';
 $wonderm00n_open_graph_plugin_name='Facebook Open Graph, Google+ and Twitter Card Tags';
 $wonderm00n_open_graph_plugin_settings=array(
 		'fb_app_id_show',
@@ -82,7 +82,7 @@ function wonderm00n_open_graph_init() {
 add_action('plugins_loaded', 'wonderm00n_open_graph_init');
 
 function wonderm00n_open_graph() {
-	global $wonderm00n_open_graph_plugin_settings, $wonderm00n_open_graph_plugin_version, $webdados_fb_open_graph_settings;
+	global $wonderm00n_open_graph_plugin_settings, $wonderm00n_open_graph_plugin_name, $wonderm00n_open_graph_plugin_version, $webdados_fb_open_graph_settings;
 
 	//Upgrade
 	wonderm00n_open_graph_upgrade();
@@ -455,13 +455,17 @@ function wonderm00n_open_graph_post_image($fb_image_use_specific=1,$fb_image_use
 			$imgreg = '/<img .*src=["\']([^ ^"^\']*)["\']/';
 			preg_match_all($imgreg, trim($post->post_content), $matches);
 			if ($matches[1]) {
+				$imagetemp=false;
 				foreach($matches[1] as $image) {
 					//There's an image on the content
 					$pos = strpos($image, site_url());
 					if ($pos === false) {
 						if (stristr($image, 'http://') || stristr($image, 'https://')) {
 							//Complete URL - offsite
-							$imagetemp=$image;
+							if (intval(ini_get('allow_url_fopen'))==1) {
+								//If it's offsite we can't probably getimagesize'it, so we won't use it
+								$imagetemp=$image;
+							}
 						} else {
 							$imagetemp=site_url().$image;
 						}
@@ -469,13 +473,14 @@ function wonderm00n_open_graph_post_image($fb_image_use_specific=1,$fb_image_use
 						//Complete URL - onsite
 						$imagetemp=$image;
 					}
-					$img_size = getimagesize($imagetemp);
-					if ($img_size[0] >= 200 && $img_size[1] >= 200) {
-						$fb_image=$imagetemp;
-						$thumbdone=true;
-						break;
+					if ($imagetemp) {
+						$img_size = getimagesize(ABSPATH.str_replace(trailingslashit(site_url()), '', $imagetemp));
+						if ($img_size[0] >= 200 && $img_size[1] >= 200) {
+							$fb_image=$imagetemp;
+							$thumbdone=true;
+							break;
+						}
 					}
-
 				}
 			}
 		}
@@ -487,7 +492,7 @@ function wonderm00n_open_graph_post_image($fb_image_use_specific=1,$fb_image_use
 			if ($images) {
 				foreach($images as $image) {
 					$imagetemp=wp_get_attachment_url($image->ID, false);
-					$img_size = getimagesize($imagetemp);
+					$img_size = getimagesize(ABSPATH.str_replace(trailingslashit(site_url()), '', $imagetemp));
 					if ($img_size[0] >= 200 && $img_size[1] >= 200) {
 						$fb_image=$imagetemp;
 						$thumbdone=true;
