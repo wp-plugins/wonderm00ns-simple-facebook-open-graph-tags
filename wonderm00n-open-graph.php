@@ -1,13 +1,13 @@
 <?php
 /**
  * @package Facebook Open Graph, Google+ and Twitter Card Tags
- * @version 1.3.3
+ * @version 1.3.4
  */
 /*
 Plugin Name: Facebook Open Graph, Google+ and Twitter Card Tags
 Plugin URI: http://www.webdados.pt/produtos-e-servicos/internet/desenvolvimento-wordpress/facebook-open-graph-meta-tags-wordpress/
 Description: Inserts Facebook Open Graph, Google+ / Schema.org and Twitter Card Tags into your WordPress Blog/Website for more effective and efficient Facebook, Google+ and Twitter sharing results. You can also choose to insert the "enclosure" and "media:content" tags to the RSS feeds, so that apps like RSS Graffiti and twitterfeed post the image to Facebook correctly.
-Version: 1.3.3
+Version: 1.3.4
 Author: Webdados
 Author URI: http://www.webdados.pt
 Text Domain: wd-fb-og
@@ -16,7 +16,7 @@ Domain Path: /lang
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-$wonderm00n_open_graph_plugin_version='1.3.3';
+$wonderm00n_open_graph_plugin_version='1.3.4';
 $wonderm00n_open_graph_plugin_name='Facebook Open Graph, Google+ and Twitter Card Tags';
 $wonderm00n_open_graph_plugin_settings=array(
 		'fb_app_id_show',
@@ -62,9 +62,11 @@ $wonderm00n_open_graph_plugin_settings=array(
 		'fb_image_use_content',
 		'fb_image_use_media',
 		'fb_image_use_default',
+		'fb_image_min_size',
 		'fb_show_wpseoyoast',
 		'fb_show_subheading',
-		'fb_show_businessdirectoryplugin'
+		'fb_show_businessdirectoryplugin',
+		'fb_keep_data_uninstall'
 );
 
 //We have to remove canonical NOW because the plugin runs too late - We're also loading the settings which is cool
@@ -426,9 +428,10 @@ add_action("do_feed_rss2","wonderm00n_open_graph_images_on_feed",5,1);
 
 //Post image
 function wonderm00n_open_graph_post_image($fb_image_use_specific=1,$fb_image_use_featured=1, $fb_image_use_content=1, $fb_image_use_media=1, $fb_image_use_default=1, $default_image='') {
-	global $post;
+	global $post, $webdados_fb_open_graph_settings;
 	$thumbdone=false;
 	$fb_image='';
+	$minsize=intval($webdados_fb_open_graph_settings['fb_image_min_size']);
 	//Specific post image
 	if (intval($fb_image_use_specific)==1) {
 		if ($fb_image=trim(get_post_meta($post->ID, '_webdados_fb_open_graph_specific_image', true))) {
@@ -463,19 +466,36 @@ function wonderm00n_open_graph_post_image($fb_image_use_specific=1,$fb_image_use
 						if (stristr($image, 'http://') || stristr($image, 'https://')) {
 							//Complete URL - offsite
 							if (intval(ini_get('allow_url_fopen'))==1) {
-								//If it's offsite we can't probably getimagesize'it, so we won't use it
 								$imagetemp=$image;
+								$imagetempsize=$imagetemp;
+							} else {
+								//If it's offsite we can't getimagesize'it, so we won't use it
+								//We could save a temporary version locally and then getimagesize'it but do we want to do this every single time?
 							}
 						} else {
 							$imagetemp=site_url().$image;
+							$imagetempsize=(
+								intval(ini_get('allow_url_fopen'))==1
+								?
+								$imagetemp
+								:
+								ABSPATH.str_replace(trailingslashit(site_url()), '', $imagetemp)
+							);
 						}
 					} else {
 						//Complete URL - onsite
 						$imagetemp=$image;
+						$imagetempsize=(
+							intval(ini_get('allow_url_fopen'))==1
+							?
+							$imagetemp
+							:
+							ABSPATH.str_replace(trailingslashit(site_url()), '', $imagetemp)
+						);
 					}
 					if ($imagetemp) {
-						$img_size = getimagesize(ABSPATH.str_replace(trailingslashit(site_url()), '', $imagetemp));
-						if ($img_size[0] >= 200 && $img_size[1] >= 200) {
+						$img_size = getimagesize($imagetempsize);
+						if ($img_size[0] >= $minsize && $img_size[1] >= $minsize) {
 							$fb_image=$imagetemp;
 							$thumbdone=true;
 							break;
@@ -492,8 +512,15 @@ function wonderm00n_open_graph_post_image($fb_image_use_specific=1,$fb_image_use
 			if ($images) {
 				foreach($images as $image) {
 					$imagetemp=wp_get_attachment_url($image->ID, false);
-					$img_size = getimagesize(ABSPATH.str_replace(trailingslashit(site_url()), '', $imagetemp));
-					if ($img_size[0] >= 200 && $img_size[1] >= 200) {
+					$imagetempsize=(
+						intval(ini_get('allow_url_fopen'))==1
+						?
+						$imagetemp
+						:
+						ABSPATH.str_replace(trailingslashit(site_url()), '', $imagetemp)
+					);
+					$img_size = getimagesize($imagetempsize);
+					if ($img_size[0] >= $minsize && $img_size[1] >= $minsize) {
 						$fb_image=$imagetemp;
 						$thumbdone=true;
 						break;
@@ -533,7 +560,7 @@ if ( is_admin() ) {
 		//Clear WPSEO notices
 		global $wpdb;
 		$wpdb->query(
-			$wpdb->prepare("DELETE FROM $wpdb->usermeta WHERE meta_key LIKE 'wd_fb_og_wpseo_notice_ignore'")
+			$wpdb->prepare("DELETE FROM %s WHERE meta_key LIKE 'wd_fb_og_wpseo_notice_ignore'", $wpdb->usermeta)
 		);
 	}
 	
@@ -754,22 +781,37 @@ function wonderm00n_open_graph_default_values() {
 		'fb_image_use_content' => 1,
 		'fb_image_use_media' => 1,
 		'fb_image_use_default' => 1,
-		'fb_keep_data_uninstall' => 1
+		'fb_keep_data_uninstall' => 1,
+		'fb_image_min_size' => 200
 	);
 }
 function wonderm00n_open_graph_load_settings() {
+	global $wonderm00n_open_graph_plugin_settings;
 	$defaults=wonderm00n_open_graph_default_values();
 	//Load the user settings (if they exist)
 	if ($usersettings=get_option('webdados_fb_open_graph_settings')) {
 		//Merge the settings "all together now" (yes, it's a Beatles reference)
-		foreach($usersettings as $key => $value) {
+		foreach($wonderm00n_open_graph_plugin_settings as $key) {
+			if (isset($usersettings[$key])) {
+				if (strlen(trim($usersettings[$key]))==0) {
+					if (!empty($defaults[$key])) {
+						$usersettings[$key]=$defaults[$key];
+					}
+				}
+			} else {
+				if (!empty($defaults[$key])) {
+					$usersettings[$key]=$defaults[$key];
+				}
+			}
+		}
+		/*foreach($usersettings as $key => $value) {
 			//if ($value=='') {
 			if (strlen(trim($value))==0) {
 				if (!empty($defaults[$key])) {
 					$usersettings[$key]=$defaults[$key];
 				}
 			}
-		}
+		}*/
 	} else {
 		$usersettings=$defaults;
 	}
