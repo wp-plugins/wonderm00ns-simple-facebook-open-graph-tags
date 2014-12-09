@@ -1,13 +1,13 @@
 <?php
 /**
  * @package Facebook Open Graph, Google+ and Twitter Card Tags
- * @version 1.3.4
+ * @version 1.4
  */
 /*
 Plugin Name: Facebook Open Graph, Google+ and Twitter Card Tags
 Plugin URI: http://www.webdados.pt/produtos-e-servicos/internet/desenvolvimento-wordpress/facebook-open-graph-meta-tags-wordpress/
 Description: Inserts Facebook Open Graph, Google+ / Schema.org and Twitter Card Tags into your WordPress Blog/Website for more effective and efficient Facebook, Google+ and Twitter sharing results. You can also choose to insert the "enclosure" and "media:content" tags to the RSS feeds, so that apps like RSS Graffiti and twitterfeed post the image to Facebook correctly.
-Version: 1.3.4
+Version: 1.4
 Author: Webdados
 Author URI: http://www.webdados.pt
 Text Domain: wd-fb-og
@@ -16,7 +16,7 @@ Domain Path: /lang
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-$wonderm00n_open_graph_plugin_version='1.3.4';
+$wonderm00n_open_graph_plugin_version='1.4';
 $wonderm00n_open_graph_plugin_name='Facebook Open Graph, Google+ and Twitter Card Tags';
 $wonderm00n_open_graph_plugin_settings=array(
 		'fb_app_id_show',
@@ -35,8 +35,10 @@ $wonderm00n_open_graph_plugin_settings=array(
 		'fb_url_add_trailing',
 		'fb_type_show',
 		'fb_type_homepage',
-		'fb_pubslisher_show',
-		'fb_pubslisher',
+		'fb_article_dates_show',
+		'fb_article_sections_show',
+		'fb_publisher_show',
+		'fb_publisher',
 		'fb_publisher_show_schema',
 		'fb_publisher_schema',
 		'fb_publisher_show_twitter',
@@ -66,14 +68,16 @@ $wonderm00n_open_graph_plugin_settings=array(
 		'fb_show_wpseoyoast',
 		'fb_show_subheading',
 		'fb_show_businessdirectoryplugin',
-		'fb_keep_data_uninstall'
+		'fb_keep_data_uninstall',
+		'fb_adv_force_local'
 );
 
 //We have to remove canonical NOW because the plugin runs too late - We're also loading the settings which is cool
-$webdados_fb_open_graph_settings=wonderm00n_open_graph_load_settings();
-if (intval($webdados_fb_open_graph_settings['fb_url_show'])==1) {
-	if (intval($webdados_fb_open_graph_settings['fb_url_canonical'])==1) {
-		remove_action('wp_head', 'rel_canonical');
+if ($webdados_fb_open_graph_settings=wonderm00n_open_graph_load_settings()) {  //To avoid activation errors
+	if (intval($webdados_fb_open_graph_settings['fb_url_show'])==1) {
+		if (intval($webdados_fb_open_graph_settings['fb_url_canonical'])==1) {
+			remove_action('wp_head', 'rel_canonical');
+		}
 	}
 }
 
@@ -137,6 +141,21 @@ function wonderm00n_open_graph() {
 			$fb_author_meta=get_the_author_meta('display_name', $author_id);
 			$fb_author_linkrelgp=get_the_author_meta('googleplus', $author_id);
 			$fb_author_twitter=get_the_author_meta('twitter', $author_id);
+		}
+		//Published and Modified time
+		if (is_singular('post')) {
+			$fb_article_pub_date=get_the_date('c');
+			$fb_article_mod_date=get_the_modified_date('c');
+		}
+		//Categories
+		if (is_singular('post')) {
+			$cats = get_the_category();
+			if (!is_wp_error($cats) && (is_array($cats) && count($cats)>0)) {
+				$fb_sections=array();
+				foreach ($cats as $cat) {
+					$fb_sections[]=$cat->name;
+				}
+			}
 		}
 		//Business Directory Plugin
 		if ($fb_show_businessdirectoryplugin==1) {
@@ -204,7 +223,7 @@ function wonderm00n_open_graph() {
 		//Other pages - Defaults
 		$fb_title=esc_attr(strip_tags(stripslashes(get_bloginfo('name'))));
 		//$fb_url=get_option('home').(intval($fb_url_add_trailing)==1 ? '/' : ''); //2013-11-4 changed from 'siteurl' to 'home'
-		$fb_url=((!empty($s['HTTPS']) && $s['HTTPS'] == 'on') ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];  //Not really canonical but will work for now
+		$fb_url=((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];  //Not really canonical but will work for now
 
 		switch(trim($fb_desc_homepage)) {
 			case 'custom':
@@ -335,7 +354,18 @@ function wonderm00n_open_graph() {
 ';
 	if (intval($fb_type_show)==1) $html.='<meta property="og:type" content="'.trim(esc_attr($fb_type)).'"/>
 ';
+if (intval($fb_article_dates_show)==1) $html.='<meta property="article:published_time" content="'.trim(esc_attr($fb_article_pub_date)).'"/>
+<meta property="article:modified_time" content="'.trim(esc_attr($fb_article_mod_date)).'" />
+<meta property="og:updated_time" content="'.trim(esc_attr($fb_article_mod_date)).'" />
+';
+if (intval($fb_article_sections_show)==1 && is_array($fb_sections) && count($fb_sections)>0) {
+	foreach($fb_sections as $fb_section) {
+		$html.='<meta property="article:section" content="'.trim(esc_attr($fb_section)).'"/>
+';
+	}
+}
 	if (intval($fb_publisher_show)==1 && trim($fb_publisher)!='') $html.='<meta property="article:publisher" content="'.trim(esc_attr($fb_publisher)).'"/>
+}
 ';
 	if (intval($fb_publisher_show_schema)==1 && trim($fb_publisher_schema)!='') $html.='<link rel="publisher" href="'.trim(esc_attr($fb_publisher_schema)).'"/>
 ';
@@ -418,7 +448,7 @@ function wonderm00n_open_graph_images_on_feed_image() {
 			$filesize=$header['Content-Length'];	
 			$url=$fb_image;				
 		}
-		list($width, $height, $type, $attr) = getimagesize($url);
+		list($width, $height, $type, $attr) = wonderm00n_open_graph_getimagesize($url);
 		echo '<enclosure url="' . $fb_image . '" length="' . $filesize . '" type="'.image_type_to_mime_type($type).'"/>';
 		echo '<media:content url="'.$fb_image.'" width="'.$width.'" height="'.$height.'" medium="image" type="'.image_type_to_mime_type($type).'"/>';
 	}
@@ -463,21 +493,29 @@ function wonderm00n_open_graph_post_image($fb_image_use_specific=1,$fb_image_use
 					//There's an image on the content
 					$pos = strpos($image, site_url());
 					if ($pos === false) {
-						if (stristr($image, 'http://') || stristr($image, 'https://')) {
+						if (stristr($image, 'http://') || stristr($image, 'https://') || substr($image, 0, 2)=='//') {
+							if (substr($image, 0, 2)=='//') $image=((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https:' : 'http:').$image;
 							//Complete URL - offsite
-							if (intval(ini_get('allow_url_fopen'))==1) {
+							//if (intval(ini_get('allow_url_fopen'))==1) {
 								$imagetemp=$image;
 								$imagetempsize=$imagetemp;
-							} else {
+							//} else {
 								//If it's offsite we can't getimagesize'it, so we won't use it
 								//We could save a temporary version locally and then getimagesize'it but do we want to do this every single time?
-							}
+							//}
 						} else {
+							//Partial URL - we guess it's onsite because no http(s)://
 							$imagetemp=site_url().$image;
 							$imagetempsize=(
 								intval(ini_get('allow_url_fopen'))==1
 								?
-								$imagetemp
+								(
+									intval($webdados_fb_open_graph_settings['fb_adv_force_local'])==1
+									?
+									ABSPATH.str_replace(trailingslashit(site_url()), '', $imagetemp)
+									:
+									$imagetemp
+								)
 								:
 								ABSPATH.str_replace(trailingslashit(site_url()), '', $imagetemp)
 							);
@@ -488,17 +526,24 @@ function wonderm00n_open_graph_post_image($fb_image_use_specific=1,$fb_image_use
 						$imagetempsize=(
 							intval(ini_get('allow_url_fopen'))==1
 							?
-							$imagetemp
+							(
+								intval($webdados_fb_open_graph_settings['fb_adv_force_local'])==1
+								?
+								ABSPATH.str_replace(trailingslashit(site_url()), '', $imagetemp)
+								:
+								$imagetemp
+							)
 							:
 							ABSPATH.str_replace(trailingslashit(site_url()), '', $imagetemp)
 						);
 					}
 					if ($imagetemp) {
-						$img_size = getimagesize($imagetempsize);
-						if ($img_size[0] >= $minsize && $img_size[1] >= $minsize) {
-							$fb_image=$imagetemp;
-							$thumbdone=true;
-							break;
+						if ($img_size = wonderm00n_open_graph_getimagesize($imagetempsize)) {
+							if ($img_size[0] >= $minsize && $img_size[1] >= $minsize) {
+								$fb_image=$imagetemp;
+								$thumbdone=true;
+								break;
+							}
 						}
 					}
 				}
@@ -515,15 +560,22 @@ function wonderm00n_open_graph_post_image($fb_image_use_specific=1,$fb_image_use
 					$imagetempsize=(
 						intval(ini_get('allow_url_fopen'))==1
 						?
-						$imagetemp
+						(
+							intval($webdados_fb_open_graph_settings['fb_adv_force_local'])==1
+							?
+							ABSPATH.str_replace(trailingslashit(site_url()), '', $imagetemp)
+							:
+							$imagetemp
+						)
 						:
 						ABSPATH.str_replace(trailingslashit(site_url()), '', $imagetemp)
 					);
-					$img_size = getimagesize($imagetempsize);
-					if ($img_size[0] >= $minsize && $img_size[1] >= $minsize) {
-						$fb_image=$imagetemp;
-						$thumbdone=true;
-						break;
+					if ($img_size = wonderm00n_open_graph_getimagesize($imagetempsize)) {
+						if ($img_size[0] >= $minsize && $img_size[1] >= $minsize) {
+							$fb_image=$imagetemp;
+							$thumbdone=true;
+							break;
+						}
 					}
 				}
 			}
@@ -542,8 +594,63 @@ function wonderm00n_open_graph_post_image($fb_image_use_specific=1,$fb_image_use
 	return $fb_image;
 }
 
+//Get image size
+function wonderm00n_open_graph_getimagesize($image) {
+	echo $image;
+	if (stristr($image, 'http://') || stristr($image, 'https://') || substr($image, 0, 2)=='//') {
+		if (function_exists('curl_version')) {
+			//We'll get just a part of the image to speed things up. From http://stackoverflow.com/questions/4635936/super-fast-getimagesize-in-php
+			$headers = array(
+				"Range: bytes=0-32768"
+			);
+			$curl = curl_init($image);
+			curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+			if ($data = curl_exec($curl)) {
+				$im = @imagecreatefromstring($data); //Mute errors because we're not loading the all image
+				if ($x=imagesx($im)) {
+					//We have to fake the image type - For RSS
+					$ext = pathinfo($image, PATHINFO_EXTENSION);
+					switch(strtolower($ext)) {
+						case 'gif':
+							$type=1;
+							break;
+						case 'jpg':
+						case 'jpeg':
+							$type=2;
+							break;
+						case 'png':
+							$type=3;
+							break;
+						default:
+							$type=2;
+							break;
+					}
+					$img_size=array($x, imagesy($im), $type, '');
+				} else {
+					$img_size=false;
+				}
+			} else {
+				$img_size=false;
+			}
+			curl_close($curl);
+		} else {
+			if (intval(ini_get('allow_url_fopen'))==1) {
+				$img_size=getimagesize($image);
+			} else {
+				//We give up!
+				$img_size=false;
+			}
+		}
+	} else {
+		//Local path
+		$img_size=getimagesize($image);
+	}
+	return $img_size;
+}
+
 //Admin
-if ( is_admin() ) {
+if (is_admin()) {
 	
 	add_action('admin_menu', 'wonderm00n_open_graph_add_options');
 	
@@ -560,7 +667,7 @@ if ( is_admin() ) {
 		//Clear WPSEO notices
 		global $wpdb;
 		$wpdb->query(
-			$wpdb->prepare("DELETE FROM %s WHERE meta_key LIKE 'wd_fb_og_wpseo_notice_ignore'", $wpdb->usermeta)
+			$wpdb->prepare("DELETE FROM ".$wpdb->usermeta." WHERE meta_key LIKE %s", 'wd_fb_og_wpseo_notice_ignore')
 		);
 	}
 	
@@ -598,9 +705,9 @@ if ( is_admin() ) {
 			add_meta_box(
 				'webdados_fb_open_graph',
 				$wonderm00n_open_graph_plugin_name,
-	            'wonderm00n_open_graph_add_posts_options_box',
-	            	$post->post_type
-	        );
+				'wonderm00n_open_graph_add_posts_options_box',
+					$post->post_type
+			);
 		}
 	}
 	function wonderm00n_open_graph_add_posts_options_box() {
@@ -610,7 +717,7 @@ if ( is_admin() ) {
   		// Current value
   		$value = get_post_meta($post->ID, '_webdados_fb_open_graph_specific_image', true);
   		echo '<label for="webdados_fb_open_graph_specific_image">';
-       	_e('Use this image:', 'wd-fb-og');
+	   	_e('Use this image:', 'wd-fb-og');
   		echo '</label> ';
   		echo '<input type="text" id="webdados_fb_open_graph_specific_image" name="webdados_fb_open_graph_specific_image" value="' . esc_attr( $value ) . '" size="75"/>
   			  <input id="webdados_fb_open_graph_specific_image_button" class="button" type="button" value="'.__('Upload/Choose Open Graph Image','wd-fb-og').'"/>
@@ -637,28 +744,28 @@ if ( is_admin() ) {
 
 	  // Check if our nonce is set.
 	  if ( ! isset( $_POST['webdados_fb_open_graph_custom_box_nonce'] ) )
-	    return $post_id;
+		return $post_id;
 
 	  $nonce = $_POST['webdados_fb_open_graph_custom_box_nonce'];
 
 	  // Verify that the nonce is valid.
 	  if ( ! wp_verify_nonce( $nonce, 'webdados_fb_open_graph_custom_box' ) )
-	      return $post_id;
+		  return $post_id;
 
 	  // If this is an autosave, our form has not been submitted, so we don't want to do anything.
 	  if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) 
-	      return $post_id;
+		  return $post_id;
 
 	  // Check the user's permissions.
 	  if ( 'page' == $_POST['post_type'] ) {
 
-	    if ( ! current_user_can( 'edit_page', $post_id ) )
-	        return $post_id;
+		if ( ! current_user_can( 'edit_page', $post_id ) )
+			return $post_id;
 	  
 	  } else {
 
-	    if ( ! current_user_can( 'edit_post', $post_id ) )
-	        return $post_id;
+		if ( ! current_user_can( 'edit_post', $post_id ) )
+			return $post_id;
 	  }
 
 	  /* OK, its safe for us to save the data now. */
@@ -682,7 +789,7 @@ if ( is_admin() ) {
 			}
 		</script>
 		<style type="text/css">
-		    tr.submit, .ml-submit, #save, #media-items .A1B1 p:last-child  { display: none; }
+			tr.submit, .ml-submit, #save, #media-items .A1B1 p:last-child  { display: none; }
 		</style>
 		<?php
 	}
@@ -701,19 +808,19 @@ if ( is_admin() ) {
 		);
 		return $form_fields;
 	}
-    if ( (isset( $_GET['context'] ) && $_GET['context'] == 'webdados_fb_open_graph_specific_image_button')
-            || (isset( $_SERVER['HTTP_REFERER'] )
-            && strpos( $_SERVER['HTTP_REFERER'],
-                    'context=webdados_fb_open_graph_specific_image_button' ) !== false)
-    ) {
-        // Add button
-        add_filter( 'attachment_fields_to_edit', 'webdados_fb_open_graph_media_fields_to_edit_filter', 9999, 2 );
-        // Add JS
-        add_action( 'admin_head', 'webdados_fb_open_graph_media_admin_head' );
-    }
+	if ( (isset( $_GET['context'] ) && $_GET['context'] == 'webdados_fb_open_graph_specific_image_button')
+			|| (isset( $_SERVER['HTTP_REFERER'] )
+			&& strpos( $_SERVER['HTTP_REFERER'],
+					'context=webdados_fb_open_graph_specific_image_button' ) !== false)
+	) {
+		// Add button
+		add_filter( 'attachment_fields_to_edit', 'webdados_fb_open_graph_media_fields_to_edit_filter', 9999, 2 );
+		// Add JS
+		add_action( 'admin_head', 'webdados_fb_open_graph_media_admin_head' );
+	}
 
-    //Facebook, Google+ and Twitter user fields
-    function webdados_fb_open_graph_add_usercontacts($usercontacts) {
+	//Facebook, Google+ and Twitter user fields
+	function webdados_fb_open_graph_add_usercontacts($usercontacts) {
 		if (defined('WPSEO_VERSION')) {
 			//Google+
 			$usercontacts['googleplus'] = __('Google+', 'wd-fb-og');
@@ -770,12 +877,16 @@ function wonderm00n_open_graph_default_values() {
 		'fb_locale_show' => 1,
 		'fb_sitename_show' => 1,
 		'fb_title_show' => 1,
+		'fb_title_show_schema' => 1,
 		'fb_url_show' => 1,
-		'fb_url_canonical' => 1,
 		'fb_type_show' => 1,
+		'fb_article_dates_show' => 1,
+		'fb_article_sections_show' => 1,
 		'fb_desc_show' => 1,
+		'fb_desc_show_schema' => 1,
 		'fb_desc_chars' => 300,
 		'fb_image_show' => 1,
+		'fb_image_show_schema' => 1,
 		'fb_image_use_specific' => 1,
 		'fb_image_use_featured' => 1,
 		'fb_image_use_content' => 1,
@@ -787,35 +898,47 @@ function wonderm00n_open_graph_default_values() {
 }
 function wonderm00n_open_graph_load_settings() {
 	global $wonderm00n_open_graph_plugin_settings;
-	$defaults=wonderm00n_open_graph_default_values();
-	//Load the user settings (if they exist)
-	if ($usersettings=get_option('webdados_fb_open_graph_settings')) {
-		//Merge the settings "all together now" (yes, it's a Beatles reference)
-		foreach($wonderm00n_open_graph_plugin_settings as $key) {
-			if (isset($usersettings[$key])) {
-				if (strlen(trim($usersettings[$key]))==0) {
+	if (is_array($wonderm00n_open_graph_plugin_settings)) {  //To avoid activation errors
+		$defaults=wonderm00n_open_graph_default_values();
+		//Load the user settings (if they exist)
+		if ($usersettings=get_option('webdados_fb_open_graph_settings')) {
+			//Merge the settings "all together now" (yes, it's a Beatles reference)
+			foreach($wonderm00n_open_graph_plugin_settings as $key) {
+				if (isset($usersettings[$key])) {
+					if (strlen(trim($usersettings[$key]))==0) {
+						if (!empty($defaults[$key])) {
+							$usersettings[$key]=$defaults[$key];
+						}
+					}
+				} else {
+					if (!empty($defaults[$key])) {
+						$usersettings[$key]=$defaults[$key];
+					} else {
+						$usersettings[$key]=''; //Avoid notices
+					}
+				}
+			}
+			/*foreach($usersettings as $key => $value) {
+				//if ($value=='') {
+				if (strlen(trim($value))==0) {
 					if (!empty($defaults[$key])) {
 						$usersettings[$key]=$defaults[$key];
 					}
 				}
-			} else {
+			}*/
+		} else {
+			foreach($wonderm00n_open_graph_plugin_settings as $key) {
 				if (!empty($defaults[$key])) {
 					$usersettings[$key]=$defaults[$key];
+				} else {
+					$usersettings[$key]=''; //Avoid notices
 				}
 			}
 		}
-		/*foreach($usersettings as $key => $value) {
-			//if ($value=='') {
-			if (strlen(trim($value))==0) {
-				if (!empty($defaults[$key])) {
-					$usersettings[$key]=$defaults[$key];
-				}
-			}
-		}*/
+		return $usersettings;
 	} else {
-		$usersettings=$defaults;
+		return false; //To avoid activation errors
 	}
-	return $usersettings;
 }
 
 function wonderm00n_open_graph_upgrade() {
@@ -865,5 +988,3 @@ function wonderm00n_open_graph_uninstall() {
 function wonderm00n_open_graph_post($var, $default='') {
 	return isset($_POST[$var]) ? $_POST[$var] : $default;
 }
-
-?>

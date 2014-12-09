@@ -4,7 +4,7 @@ Donate link: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-faceb
 Tags: facebook, open graph, open graph protocol, seo, share, social, meta, twitter card, twitter, schema, google+, g+, google, google plus, image, like, meta, search engine optimization
 Requires at least: 3.5
 Tested up to: 4.0.1
-Stable tag: 1.3.4
+Stable tag: 1.4
 
 Inserts Facebook Open Graph, Google+/Schema.org, Twitter and other Meta Tags into your WordPress Website for more efficient sharing results.
 
@@ -20,7 +20,7 @@ You can also choose to insert the "enclosure" and "media:content" tags to the RS
 
 It allows the user to choose which tags are, or not, included and also the default image if the post/page doesn't have one.
 
-= The Facebook Open Graph Tags that this plugin inserts are: =
+= The (Facebook) Open Graph Tags that this plugin inserts are: =
 
 * **fb:app_id**: From settings on the options screen.
 * **fb:admins**: From settings on the options screen.
@@ -29,12 +29,15 @@ It allows the user to choose which tags are, or not, included and also the defau
 * **og:title**: From post/page/archive/tag/... title.
 * **og:url**: From the post/page permalink.
 * **og:type**: "website" or "blog" for the homepage and "article" for all the others.
+* **article:published_time**: Article published time (for posts only)
+* **article:modified_time** and **og:updated_time**: Article modified time (for posts only)
 * **article:publisher**: From settings on the options screen.
+* **article:section**: From post categories.
 * **article:author**: From the user (post author) Faceboook Profile URL.
 * **og:description**: From post/page excerpt if it exist, or from post/page content. From category/tag description on it's pages, if it exist. From tagline, or custom text, on all the others.
 * **og:image**: From a specific custom field of the post/page, or if not set from the post/page featured/thumbnail image, or if it doesn't exist from the first image in the post content, or if it doesn't exist from the first image on the post media gallery, or if it doesn't exist from the default image defined on the options menu. The same image chosen here will be used and enclosure/media:content on the RSS feed.
 
-= The Schema.org Tags that this plugin inserts are: =
+= The (Google+) Schema.org Tags that this plugin inserts are: =
 
 * **name**: Same as "og:title".
 * **author**: From the user (post author) Google+ profile URL.
@@ -73,6 +76,13 @@ It allows the user to choose which tags are, or not, included and also the defau
 3. Got to `Options`, `Facebook Open Graph Tags` to set it up
 
 == Changelog ==
+
+= 1.4 =
+* Added article published and modified date/time tags
+* Added "article:section" tag
+* Several fixes regarding getting the content or media gallery image size
+* Several fixes on the way the defaults and settings are loaded to avoid php warnings and notices
+* Some changes on the default values for first time users
 
 = 1.3.4 =
 * Fix getting image size when a remote image is used on the post content (thanks contemplate and Steve)
