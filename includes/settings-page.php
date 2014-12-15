@@ -15,68 +15,70 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 	if ( isset($_POST['action']) ) {
 		if (trim($_POST['action'])=='save') {
 			//This should also use the $wonderm00n_open_graph_plugin_settings array, but because of intval and trim we still can't
-			$usersettings['fb_app_id_show']= 					intval(wonderm00n_open_graph_post('fb_app_id_show'));
-			$usersettings['fb_app_id']= 						trim(wonderm00n_open_graph_post('fb_app_id'));
-			$usersettings['fb_admin_id_show']= 					intval(wonderm00n_open_graph_post('fb_admin_id_show'));
-			$usersettings['fb_admin_id']= 						trim(wonderm00n_open_graph_post('fb_admin_id'));
-			$usersettings['fb_locale_show']= 					intval(wonderm00n_open_graph_post('fb_locale_show'));
-			$usersettings['fb_locale']= 						trim(wonderm00n_open_graph_post('fb_locale'));
-			$usersettings['fb_sitename_show']= 					intval(wonderm00n_open_graph_post('fb_sitename_show'));
-			$usersettings['fb_title_show']= 					intval(wonderm00n_open_graph_post('fb_title_show'));
-			$usersettings['fb_title_show_schema']= 				intval(wonderm00n_open_graph_post('fb_title_show_schema'));
-			$usersettings['fb_title_show_twitter']= 			intval(wonderm00n_open_graph_post('fb_title_show_twitter'));
-			$usersettings['fb_url_show']= 						intval(wonderm00n_open_graph_post('fb_url_show'));
-			$usersettings['fb_url_show_twitter']= 				intval(wonderm00n_open_graph_post('fb_url_show_twitter'));
-			$usersettings['fb_url_canonical']= 					intval(wonderm00n_open_graph_post('fb_url_canonical'));
-			$usersettings['fb_url_add_trailing']= 				intval(wonderm00n_open_graph_post('fb_url_add_trailing'));
-			$usersettings['fb_type_show']= 						intval(wonderm00n_open_graph_post('fb_type_show'));
-			$usersettings['fb_type_homepage']= 					trim(wonderm00n_open_graph_post('fb_type_homepage'));
-			$usersettings['fb_article_dates_show']=				intval(wonderm00n_open_graph_post('fb_article_dates_show'));
-			$usersettings['fb_article_sections_show']=			intval(wonderm00n_open_graph_post('fb_article_sections_show'));
-			$usersettings['fb_publisher_show']= 				intval(wonderm00n_open_graph_post('fb_publisher_show'));
-			$usersettings['fb_publisher']= 						trim(wonderm00n_open_graph_post('fb_publisher'));
-			$usersettings['fb_publisher_show_schema']= 			intval(wonderm00n_open_graph_post('fb_publisher_show_schema'));
-			$usersettings['fb_publisher_schema']= 				trim(wonderm00n_open_graph_post('fb_publisher_schema'));
-			$usersettings['fb_publisher_show_twitter']= 		intval(wonderm00n_open_graph_post('fb_publisher_show_twitter'));
-			$usersettings['fb_publisher_twitteruser']= 			trim(wonderm00n_open_graph_post('fb_publisher_twitteruser'));
-			$usersettings['fb_author_show']= 					intval(wonderm00n_open_graph_post('fb_author_show'));
-			$usersettings['fb_author_show_meta']= 				intval(wonderm00n_open_graph_post('fb_author_show_meta'));
-			$usersettings['fb_author_show_linkrelgp']= 			intval(wonderm00n_open_graph_post('fb_author_show_linkrelgp'));
-			$usersettings['fb_author_show_twitter']= 			intval(wonderm00n_open_graph_post('fb_author_show_twitter'));
-			$usersettings['fb_desc_show']= 						intval(wonderm00n_open_graph_post('fb_desc_show'));
-			$usersettings['fb_desc_show_meta']= 				intval(wonderm00n_open_graph_post('fb_desc_show_meta'));
-			$usersettings['fb_desc_show_schema']= 				intval(wonderm00n_open_graph_post('fb_desc_show_schema'));
-			$usersettings['fb_desc_show_twitter']= 				intval(wonderm00n_open_graph_post('fb_desc_show_twitter'));
-			$usersettings['fb_desc_chars']= 					intval(wonderm00n_open_graph_post('fb_desc_chars'));
-			$usersettings['fb_desc_homepage']= 					trim(wonderm00n_open_graph_post('fb_desc_homepage'));
-			$usersettings['fb_desc_homepage_customtext']= 		trim(wonderm00n_open_graph_post('fb_desc_homepage_customtext'));
-			$usersettings['fb_image_show']= 					intval(wonderm00n_open_graph_post('fb_image_show'));
-			$usersettings['fb_image_show_schema']= 				intval(wonderm00n_open_graph_post('fb_image_show_schema'));
-			$usersettings['fb_image_show_twitter']= 			intval(wonderm00n_open_graph_post('fb_image_show_twitter'));
-			$usersettings['fb_image']= 							trim(wonderm00n_open_graph_post('fb_image'));
-			$usersettings['fb_image_rss']= 						intval(wonderm00n_open_graph_post('fb_image_rss'));
-			$usersettings['fb_image_use_specific']= 			intval(wonderm00n_open_graph_post('fb_image_use_specific'));
-			$usersettings['fb_image_use_featured']= 			intval(wonderm00n_open_graph_post('fb_image_use_featured'));
-			$usersettings['fb_image_use_content']= 				intval(wonderm00n_open_graph_post('fb_image_use_content'));
-			$usersettings['fb_image_use_media']= 				intval(wonderm00n_open_graph_post('fb_image_use_media'));
-			$usersettings['fb_image_use_default']= 				intval(wonderm00n_open_graph_post('fb_image_use_default'));
-			$usersettings['fb_show_wpseoyoast']= 				intval(wonderm00n_open_graph_post('fb_show_wpseoyoast'));
-			$usersettings['fb_show_subheading']= 				intval(wonderm00n_open_graph_post('fb_show_subheading'));
-			$usersettings['fb_show_businessdirectoryplugin']=	intval(wonderm00n_open_graph_post('fb_show_businessdirectoryplugin'));
-			$usersettings['fb_adv_force_local']= 				intval(wonderm00n_open_graph_post('fb_adv_force_local'));
+			$usersettings['fb_app_id_show']= 					intval(webdados_fb_open_graph_post('fb_app_id_show'));
+			$usersettings['fb_app_id']= 						trim(webdados_fb_open_graph_post('fb_app_id'));
+			$usersettings['fb_admin_id_show']= 					intval(webdados_fb_open_graph_post('fb_admin_id_show'));
+			$usersettings['fb_admin_id']= 						trim(webdados_fb_open_graph_post('fb_admin_id'));
+			$usersettings['fb_locale_show']= 					intval(webdados_fb_open_graph_post('fb_locale_show'));
+			$usersettings['fb_locale']= 						trim(webdados_fb_open_graph_post('fb_locale'));
+			$usersettings['fb_sitename_show']= 					intval(webdados_fb_open_graph_post('fb_sitename_show'));
+			$usersettings['fb_title_show']= 					intval(webdados_fb_open_graph_post('fb_title_show'));
+			$usersettings['fb_title_show_schema']= 				intval(webdados_fb_open_graph_post('fb_title_show_schema'));
+			$usersettings['fb_title_show_twitter']= 			intval(webdados_fb_open_graph_post('fb_title_show_twitter'));
+			$usersettings['fb_url_show']= 						intval(webdados_fb_open_graph_post('fb_url_show'));
+			$usersettings['fb_url_show_twitter']= 				intval(webdados_fb_open_graph_post('fb_url_show_twitter'));
+			$usersettings['fb_url_canonical']= 					intval(webdados_fb_open_graph_post('fb_url_canonical'));
+			$usersettings['fb_url_add_trailing']= 				intval(webdados_fb_open_graph_post('fb_url_add_trailing'));
+			$usersettings['fb_type_show']= 						intval(webdados_fb_open_graph_post('fb_type_show'));
+			$usersettings['fb_type_homepage']= 					trim(webdados_fb_open_graph_post('fb_type_homepage'));
+			$usersettings['fb_article_dates_show']=				intval(webdados_fb_open_graph_post('fb_article_dates_show'));
+			$usersettings['fb_article_sections_show']=			intval(webdados_fb_open_graph_post('fb_article_sections_show'));
+			$usersettings['fb_publisher_show']= 				intval(webdados_fb_open_graph_post('fb_publisher_show'));
+			$usersettings['fb_publisher']= 						trim(webdados_fb_open_graph_post('fb_publisher'));
+			$usersettings['fb_publisher_show_schema']= 			intval(webdados_fb_open_graph_post('fb_publisher_show_schema'));
+			$usersettings['fb_publisher_schema']= 				trim(webdados_fb_open_graph_post('fb_publisher_schema'));
+			$usersettings['fb_publisher_show_twitter']= 		intval(webdados_fb_open_graph_post('fb_publisher_show_twitter'));
+			$usersettings['fb_publisher_twitteruser']= 			trim(webdados_fb_open_graph_post('fb_publisher_twitteruser'));
+			$usersettings['fb_author_show']= 					intval(webdados_fb_open_graph_post('fb_author_show'));
+			$usersettings['fb_author_show_meta']= 				intval(webdados_fb_open_graph_post('fb_author_show_meta'));
+			$usersettings['fb_author_show_linkrelgp']= 			intval(webdados_fb_open_graph_post('fb_author_show_linkrelgp'));
+			$usersettings['fb_author_show_twitter']= 			intval(webdados_fb_open_graph_post('fb_author_show_twitter'));
+			$usersettings['fb_desc_show']= 						intval(webdados_fb_open_graph_post('fb_desc_show'));
+			$usersettings['fb_desc_show_meta']= 				intval(webdados_fb_open_graph_post('fb_desc_show_meta'));
+			$usersettings['fb_desc_show_schema']= 				intval(webdados_fb_open_graph_post('fb_desc_show_schema'));
+			$usersettings['fb_desc_show_twitter']= 				intval(webdados_fb_open_graph_post('fb_desc_show_twitter'));
+			$usersettings['fb_desc_chars']= 					intval(webdados_fb_open_graph_post('fb_desc_chars'));
+			$usersettings['fb_desc_homepage']= 					trim(webdados_fb_open_graph_post('fb_desc_homepage'));
+			$usersettings['fb_desc_homepage_customtext']= 		trim(webdados_fb_open_graph_post('fb_desc_homepage_customtext'));
+			$usersettings['fb_image_show']= 					intval(webdados_fb_open_graph_post('fb_image_show'));
+			$usersettings['fb_image_show_schema']= 				intval(webdados_fb_open_graph_post('fb_image_show_schema'));
+			$usersettings['fb_image_show_twitter']= 			intval(webdados_fb_open_graph_post('fb_image_show_twitter'));
+			$usersettings['fb_image']= 							trim(webdados_fb_open_graph_post('fb_image'));
+			$usersettings['fb_image_rss']= 						intval(webdados_fb_open_graph_post('fb_image_rss'));
+			$usersettings['fb_image_use_specific']= 			intval(webdados_fb_open_graph_post('fb_image_use_specific'));
+			$usersettings['fb_image_use_featured']= 			intval(webdados_fb_open_graph_post('fb_image_use_featured'));
+			$usersettings['fb_image_use_content']= 				intval(webdados_fb_open_graph_post('fb_image_use_content'));
+			$usersettings['fb_image_use_media']= 				intval(webdados_fb_open_graph_post('fb_image_use_media'));
+			$usersettings['fb_image_use_default']= 				intval(webdados_fb_open_graph_post('fb_image_use_default'));
+			$usersettings['fb_show_wpseoyoast']= 				intval(webdados_fb_open_graph_post('fb_show_wpseoyoast'));
+			$usersettings['fb_show_subheading']= 				intval(webdados_fb_open_graph_post('fb_show_subheading'));
+			$usersettings['fb_show_businessdirectoryplugin']=	intval(webdados_fb_open_graph_post('fb_show_businessdirectoryplugin'));
+			$usersettings['fb_adv_force_local']= 				intval(webdados_fb_open_graph_post('fb_adv_force_local'));
+			$usersettings['fb_adv_notify_fb']= 					intval(webdados_fb_open_graph_post('fb_adv_notify_fb'));
+			$usersettings['fb_adv_supress_fb_notice']= 			intval(webdados_fb_open_graph_post('fb_adv_supress_fb_notice'));
 			//Update
-			update_option('webdados_fb_open_graph_settings', $usersettings);
+			update_option('wonderm00n_open_graph_settings', $usersettings);
 		}
 	}
 	
 	//Load the settings
-	extract(wonderm00n_open_graph_load_settings());
+	extract(webdados_fb_open_graph_load_settings());
 
 	?>
 	<div class="wrap">
 		
 	<?php screen_icon(); ?>
-	<h2><?php echo $wonderm00n_open_graph_plugin_name; ?> (<?php echo $wonderm00n_open_graph_plugin_version; ?>)</h2>
+	<h2><?php echo $webdados_fb_open_graph_plugin_name; ?> (<?php echo $webdados_fb_open_graph_plugin_version; ?>)</h2>
 	<br class="clear"/>
 	<p><?php _e('Please set some default values and which tags should, or should not, be included. It may be necessary to exclude some tags if other plugins are already including them.', 'wd-fb-og'); ?></p>
 	
@@ -88,7 +90,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 		<div id="poststuff">
 			<form name="form1" method="post">
 				
-				<div id="wonderm00n_open_graph-settings" class="postbox">
+				<div id="webdados_fb_open_graph-settings" class="postbox">
 					<h3 id="settings"><?php _e('Settings'); ?></h3>
 					<div class="inside">
 						<table width="100%" class="form-table">
@@ -549,7 +551,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 					</div>
 				</div>
 
-				<div id="wonderm00n_open_graph-thirdparty" class="postbox">
+				<div id="webdados_fb_open_graph-thirdparty" class="postbox">
 					<h3 id="thirdparty"><?php _e('3rd Party Integration', 'wd-fb-og');?></h3>
 					<div class="inside">
 						<?php
@@ -621,7 +623,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 					</div>
 				</div>
 
-				<div id="wonderm00n_open_graph-advanced" class="postbox">
+				<div id="webdados_fb_open_graph-advanced" class="postbox">
 					<h3 id="advanced"><?php _e('Advanced settings', 'wd-fb-og');?></h3>
 					<div class="inside">
 						<p><?php _e('Don\'t mess with this unless you know what you\'re doing', 'wd-fb-og');?></p>
@@ -632,6 +634,18 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 									<input type="checkbox" name="fb_adv_force_local" id="fb_adv_force_local" value="1" <?php echo (intval($fb_adv_force_local)==1 ? ' checked="checked"' : ''); ?>/>
 									<br/>
 									<?php _e('May cause problems with some multisite configurations but fix "HTTP request failed" errors', 'wd-fb-og');?>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row"><i class="dashicons-before dashicons-admin-generic"></i><?php _e('Try to update Facebook Open Graph Tags cache when saving the post', 'wd-fb-og'); ?></th>
+								<td>
+									<input type="checkbox" name="fb_adv_notify_fb" id="fb_adv_notify_fb" value="1" onclick="showFBNotifyOptions();"<?php echo (intval($fb_adv_notify_fb)==1 ? ' checked="checked"' : ''); ?>/>
+								</td>
+							</tr>
+							<tr class="fb_adv_notify_fb_options">
+								<th scope="row"><i class="dashicons-before dashicons-admin-generic"></i><?php _e('Supress Facebook Open Graph Tags cache updated notice', 'wd-fb-og'); ?></th>
+								<td>
+									<input type="checkbox" name="fb_adv_supress_fb_notice" id="fb_adv_supress_fb_notice" value="1" <?php echo (intval($fb_adv_supress_fb_notice)==1 ? ' checked="checked"' : ''); ?>/>
 								</td>
 							</tr>
 						</table>
@@ -678,7 +692,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 	<div class="postbox-container og_right_col">
 		
 		<div id="poststuff">
-			<div id="wonderm00n_open_graph_links" class="postbox">
+			<div id="webdados_fb_open_graph_links" class="postbox">
 				<h3 id="settings"><?php _e('Rate this plugin', 'wd-fb-og');?></h3>
 				<div class="inside">
 					<?php _e('If you like this plugin,', 'wd-fb-og');?> <a href="http://wordpress.org/extend/plugins/wonderm00ns-simple-facebook-open-graph-tags/" target="_blank"><?php _e('please give it a high Rating', 'wd-fb-og');?></a>.
@@ -687,7 +701,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 		</div>
 		
 		<div id="poststuff">
-			<div id="wonderm00n_open_graph_links" class="postbox">
+			<div id="webdados_fb_open_graph_links" class="postbox">
 				<h3 id="settings"><?php _e('Useful links', 'wd-fb-og');?></h3>
 				<div class="inside">
 					<ul>
@@ -700,7 +714,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 		</div>
 	
 		<div id="poststuff">
-			<div id="wonderm00n_open_graph_donation" class="postbox">
+			<div id="webdados_fb_open_graph_donation" class="postbox">
 				<h3 id="settings"><?php _e('Donate', 'wd-fb-og');?></h3>
 				<div class="inside">
 					<p><?php _e('If you find this plugin useful and want to make a contribution towards future development please consider making a small, or big ;-), donation.', 'wd-fb-og');?></p>
@@ -733,7 +747,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 				tb_show('',"media-upload.php?type=image&TB_iframe=true");
 			});
 			window.send_to_editor = function(html) {
-				imgurl = jQuery('img',html).attr('src');
+				var imgurl = jQuery('<div>'+html+'</div>').find('img').attr('src');
 				jQuery("input"+"#fb_image").val(imgurl);
 				tb_remove();
 			}
@@ -753,6 +767,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 			jQuery('#fb_desc_homepage_customtext').hide();
 			showDescriptionCustomText();
 			showImageOptions();
+			showFBNotifyOptions();
 		});
 		function showAppidOptions() {
 			if (jQuery('#fb_app_id_show').is(':checked')) {
@@ -863,6 +878,13 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 				jQuery('.fb_image_options').hide();
 			}*/
 			jQuery('.fb_image_options').show();
+		}
+		function showFBNotifyOptions() {
+			if (jQuery('#fb_adv_notify_fb').is(':checked')) {
+				jQuery('.fb_adv_notify_fb_options').show();
+			} else {
+				jQuery('.fb_adv_notify_fb_options').hide();
+			}
 		}
 	</script>
 	<style type="text/css">
