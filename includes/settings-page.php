@@ -637,13 +637,13 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 								</td>
 							</tr>
 							<tr>
-								<th scope="row"><i class="dashicons-before dashicons-admin-generic"></i><?php _e('Try to update Facebook Open Graph Tags cache when saving the post', 'wd-fb-og'); ?></th>
+								<th scope="row"><i class="dashicons-before dashicons-facebook-alt"></i><?php _e('Try to update Facebook Open Graph Tags cache when saving the post', 'wd-fb-og'); ?></th>
 								<td>
 									<input type="checkbox" name="fb_adv_notify_fb" id="fb_adv_notify_fb" value="1" onclick="showFBNotifyOptions();"<?php echo (intval($fb_adv_notify_fb)==1 ? ' checked="checked"' : ''); ?>/>
 								</td>
 							</tr>
 							<tr class="fb_adv_notify_fb_options">
-								<th scope="row"><i class="dashicons-before dashicons-admin-generic"></i><?php _e('Supress Facebook Open Graph Tags cache updated notice', 'wd-fb-og'); ?></th>
+								<th scope="row"><i class="dashicons-before dashicons-facebook-alt"></i><?php _e('Supress Facebook Open Graph Tags cache updated notice', 'wd-fb-og'); ?></th>
 								<td>
 									<input type="checkbox" name="fb_adv_supress_fb_notice" id="fb_adv_supress_fb_notice" value="1" <?php echo (intval($fb_adv_supress_fb_notice)==1 ? ' checked="checked"' : ''); ?>/>
 								</td>

@@ -4,7 +4,7 @@ Donate link: http://blog.wonderm00n.com/2011/10/14/wordpress-plugin-simple-faceb
 Tags: facebook, open graph, open graph protocol, seo, share, social, meta, twitter card, twitter, schema, google+, g+, google, google plus, image, like, meta, search engine optimization
 Requires at least: 3.5
 Tested up to: 4.0.1
-Stable tag: 1.5
+Stable tag: 1.5.1
 Inserts Facebook Open Graph, Google+/Schema.org, Twitter and other Meta Tags into your WordPress Website for more efficient sharing results.
 
 == Description ==
@@ -75,6 +75,11 @@ It allows the user to choose which tags are, or not, included and also the defau
 3. Got to `Options`, `Facebook Open Graph Tags` to set it up
 
 == Changelog ==
+
+= 1.5.1 =
+* Fix: error checking and reporting when updating/purging Facebook Open Graph Tags cache to avoid fatal errors on failure
+* Fix: change Facebook cache update call from https to http to avoid errors on some server configurations
+* Updated FacebookLocales.xml
 
 = 1.5 =
 * Each time a post/page is saved we try to update/purge Facebook Open Graph Tags cache so you can share it right away from the post edit screen
