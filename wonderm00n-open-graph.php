@@ -1,13 +1,13 @@
 <?php
 /**
  * @package Facebook Open Graph, Google+ and Twitter Card Tags
- * @version 1.5.1
+ * @version 1.5.2
  */
 /*
 Plugin Name: Facebook Open Graph, Google+ and Twitter Card Tags
 Plugin URI: http://www.webdados.pt/produtos-e-servicos/internet/desenvolvimento-wordpress/facebook-open-graph-meta-tags-wordpress/
 Description: Inserts Facebook Open Graph, Google+ / Schema.org and Twitter Card Tags into your WordPress Blog/Website for more effective and efficient Facebook, Google+ and Twitter sharing results. You can also choose to insert the "enclosure" and "media:content" tags to the RSS feeds, so that apps like RSS Graffiti and twitterfeed post the image to Facebook correctly.
-Version: 1.5.1
+Version: 1.5.2
 Author: Webdados
 Author URI: http://www.webdados.pt
 Text Domain: wd-fb-og
@@ -16,7 +16,7 @@ Domain Path: /lang
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-$webdados_fb_open_graph_plugin_version='1.5.1';
+$webdados_fb_open_graph_plugin_version='1.5.2';
 $webdados_fb_open_graph_plugin_name='Facebook Open Graph, Google+ and Twitter Card Tags';
 $webdados_fb_open_graph_plugin_settings=array(
 		'fb_app_id_show',
@@ -317,7 +317,7 @@ function webdados_fb_open_graph() {
 	//YOAST?
 	if ($fb_show_wpseoyoast==1) {
 		if ( defined('WPSEO_VERSION') ) {
-			$wpseo = new WPSEO_Frontend();
+			$wpseo = WPSEO_Frontend::get_instance();
 			//App ID - From our plugin
 			//Admin ID - From our plugin
 			//Locale - From our plugin
@@ -773,8 +773,17 @@ if (is_admin()) {
 		$save=true;
 
 		// If this is an autosave, our form has not been submitted, so we don't want to do anything.
-		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+		if ( (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || empty($_POST['post_type']))
 			return $post_id;
+
+		// If the post is not publicly_queryable (or a page) this doesn't make sense
+		$post_type=get_post_type_object(get_post_type($post_id));
+		if ($post_type->publicly_queryable || $post_type->name=='page') {
+			//OK - Go on
+		} else {
+			//Not publicly_queryable (or page) -> Go away
+			return $post_id;
+		}
 
 		// Check if our nonce is set.
 		if (!isset($_POST['webdados_fb_open_graph_custom_box_nonce']))
@@ -803,21 +812,23 @@ if (is_admin()) {
 			update_post_meta($post_id, '_webdados_fb_open_graph_specific_image', $mydata);
 		}
 
-		//Force Facebook update anyway - Our meta box could be hidden
-		if (get_post_status($post_id)=='publish' && intval($webdados_fb_open_graph_settings['fb_adv_notify_fb'])==1) {
-			$fb_debug_url='http://graph.facebook.com/?id='.urlencode(get_permalink($post_id)).'&scrape=true&method=post';
-			$response=wp_remote_get($fb_debug_url);
-			if (is_wp_error($response)) {
-				$_SESSION['wd_fb_og_updated_error']=1;
-				$_SESSION['wd_fb_og_updated_error_message']=__('URL failed:', 'wd-fb-og').' '.$fb_debug_url;
-			} else {
-				if ($response['response']['code']==200 && intval($webdados_fb_open_graph_settings['fb_adv_supress_fb_notice'])==0) {
-					$_SESSION['wd_fb_og_updated']=1;
+		if ($save) {
+			//Force Facebook update anyway - Our meta box could be hidden - Not really! We'll just update if we got our metabox
+			if (get_post_status($post_id)=='publish' && intval($webdados_fb_open_graph_settings['fb_adv_notify_fb'])==1) {
+				$fb_debug_url='http://graph.facebook.com/?id='.urlencode(get_permalink($post_id)).'&scrape=true&method=post';
+				$response=wp_remote_get($fb_debug_url);
+				if (is_wp_error($response)) {
+					$_SESSION['wd_fb_og_updated_error']=1;
+					$_SESSION['wd_fb_og_updated_error_message']=__('URL failed:', 'wd-fb-og').' '.$fb_debug_url;
 				} else {
-					if ($response['response']['code']==500) {
-						$_SESSION['wd_fb_og_updated_error']=1;
-						$error=json_decode($response['body']);
-						$_SESSION['wd_fb_og_updated_error_message']=__('Facebook returned:', 'wd-fb-og').' '.$error->error->message;
+					if ($response['response']['code']==200 && intval($webdados_fb_open_graph_settings['fb_adv_supress_fb_notice'])==0) {
+						$_SESSION['wd_fb_og_updated']=1;
+					} else {
+						if ($response['response']['code']==500) {
+							$_SESSION['wd_fb_og_updated_error']=1;
+							$error=json_decode($response['body']);
+							$_SESSION['wd_fb_og_updated_error_message']=__('Facebook returned:', 'wd-fb-og').' '.$error->error->message;
+						}
 					}
 				}
 			}
@@ -829,14 +840,15 @@ if (is_admin()) {
 	add_action('save_post', 'webdados_fb_open_graph_add_posts_options_box_save');
 	function webdados_fb_open_graph_facebook_updated() {
 		if ($screen = get_current_screen()) {
-			if (isset($_SESSION['wd_fb_og_updated']) && $_SESSION['wd_fb_og_updated']==1 && $screen->id=='post') {
+			if (isset($_SESSION['wd_fb_og_updated']) && $_SESSION['wd_fb_og_updated']==1 && $screen->parent_base=='edit' && $screen->base=='post') {
+				global $post;
 				?>
 				<div class="updated">
-					<p><?php _e('Facebook Open Graph Tags cache updated/purged.', 'wd-fb-og'); ?> <a href="http://www.facebook.com/sharer.php?u=<?php echo urlencode(get_permalink($post_id));?>" target="_blank"><?php _e('Share this on Facebook', 'wd-fb-og'); ?></a></p>
+					<p><?php _e('Facebook Open Graph Tags cache updated/purged.', 'wd-fb-og'); ?> <a href="http://www.facebook.com/sharer.php?u=<?php echo urlencode(get_permalink($post->ID));?>" target="_blank"><?php _e('Share this on Facebook', 'wd-fb-og'); ?></a></p>
 				</div>
 				<?php
 			} else {
-				if (isset($_SESSION['wd_fb_og_updated_error']) && $_SESSION['wd_fb_og_updated_error']==1 && $screen->id=='post') {
+				if (isset($_SESSION['wd_fb_og_updated_error']) && $_SESSION['wd_fb_og_updated_error']==1 && $screen->parent_base=='edit' && $screen->base=='post') {
 					?>
 					<div class="error">
 						<p><?php
