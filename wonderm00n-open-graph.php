@@ -1,13 +1,13 @@
 <?php
 /**
  * @package Facebook Open Graph, Google+ and Twitter Card Tags
- * @version 1.5.2
+ * @version 1.6
  */
 /*
 Plugin Name: Facebook Open Graph, Google+ and Twitter Card Tags
 Plugin URI: http://www.webdados.pt/produtos-e-servicos/internet/desenvolvimento-wordpress/facebook-open-graph-meta-tags-wordpress/
 Description: Inserts Facebook Open Graph, Google+ / Schema.org and Twitter Card Tags into your WordPress Blog/Website for more effective and efficient Facebook, Google+ and Twitter sharing results. You can also choose to insert the "enclosure" and "media:content" tags to the RSS feeds, so that apps like RSS Graffiti and twitterfeed post the image to Facebook correctly.
-Version: 1.5.2
+Version: 1.6
 Author: Webdados
 Author URI: http://www.webdados.pt
 Text Domain: wd-fb-og
@@ -16,7 +16,7 @@ Domain Path: /lang
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-$webdados_fb_open_graph_plugin_version='1.5.2';
+$webdados_fb_open_graph_plugin_version='1.6';
 $webdados_fb_open_graph_plugin_name='Facebook Open Graph, Google+ and Twitter Card Tags';
 $webdados_fb_open_graph_plugin_settings=array(
 		'fb_app_id_show',
@@ -47,6 +47,7 @@ $webdados_fb_open_graph_plugin_settings=array(
 		'fb_author_show_meta',
 		'fb_author_show_linkrelgp',
 		'fb_author_show_twitter',
+		'fb_author_hide_on_pages',
 		'fb_desc_show',
 		'fb_desc_show_meta',
 		'fb_desc_show_schema',
@@ -55,6 +56,7 @@ $webdados_fb_open_graph_plugin_settings=array(
 		'fb_desc_homepage',
 		'fb_desc_homepage_customtext',
 		'fb_image_show',
+		'fb_image_size_show',
 		'fb_image_show_schema',
 		'fb_image_show_twitter',
 		'fb_image',
@@ -71,7 +73,8 @@ $webdados_fb_open_graph_plugin_settings=array(
 		'fb_keep_data_uninstall',
 		'fb_adv_force_local',
 		'fb_adv_notify_fb',
-		'fb_adv_supress_fb_notice'
+		'fb_adv_supress_fb_notice',
+		'fb_twitter_card_type'
 );
 
 //We have to remove canonical NOW because the plugin runs too late - We're also loading the settings which is cool
@@ -112,11 +115,8 @@ function webdados_fb_open_graph() {
 		$fb_title=esc_attr(strip_tags(stripslashes($post->post_title)));
 		//SubHeading
 		if ($fb_show_subheading==1) {
-			@include_once(ABSPATH . 'wp-admin/includes/plugin.php');
-			if (is_plugin_active('subheading/index.php')) {
-				if (function_exists('get_the_subheading')) {
-					$fb_title.=' - '.get_the_subheading();
-				}
+			if (webdados_fb_open_graph_subheadingactive()) {
+				$fb_title.=' - '.get_the_subheading();
 			}
 		}
 		$fb_url=get_permalink();
@@ -132,7 +132,7 @@ function webdados_fb_open_graph() {
 			//If not we grab it from the content
 			$fb_desc=trim($post->post_content);
 		}
-		$fb_desc=(intval($fb_desc_chars)>0 ? substr(esc_attr(strip_tags(strip_shortcodes(stripslashes($fb_desc)))),0,$fb_desc_chars) : esc_attr(strip_tags(strip_shortcodes(stripslashes($fb_desc)))));
+		$fb_desc=(intval($fb_desc_chars)>0 ? mb_substr(esc_attr(strip_tags(strip_shortcodes(stripslashes($fb_desc)))),0,$fb_desc_chars) : esc_attr(strip_tags(strip_shortcodes(stripslashes($fb_desc)))));
 		if (intval($fb_image_show)==1 || intval($fb_image_show_schema)==1 || intval($fb_image_show_twitter)==1) {
 			$fb_image=webdados_fb_open_graph_post_image($fb_image_use_specific, $fb_image_use_featured, $fb_image_use_content, $fb_image_use_media, $fb_image_use_default, $fb_image);
 		}
@@ -144,6 +144,13 @@ function webdados_fb_open_graph() {
 			$fb_author_linkrelgp=get_the_author_meta('googleplus', $author_id);
 			$fb_author_twitter=get_the_author_meta('twitter', $author_id);
 		} else {
+			$fb_author='';
+			$fb_author_meta='';
+			$fb_author_linkrelgp='';
+			$fb_author_twitter='';
+		}
+		//Author - Hide on pages?
+		if (is_page() && $fb_author_hide_on_pages==1) {
 			$fb_author='';
 			$fb_author_meta='';
 			$fb_author_linkrelgp='';
@@ -192,7 +199,7 @@ function webdados_fb_open_graph() {
 							//If not we grab it from the content
 							$fb_desc=trim($bdppost->post_content);
 						}
-						$fb_desc=(intval($fb_desc_chars)>0 ? substr(esc_attr(strip_tags(strip_shortcodes(stripslashes($fb_desc)))),0,$fb_desc_chars) : esc_attr(strip_tags(strip_shortcodes(stripslashes($fb_desc)))));
+						$fb_desc=(intval($fb_desc_chars)>0 ? mb_substr(esc_attr(strip_tags(strip_shortcodes(stripslashes($fb_desc)))),0,$fb_desc_chars) : esc_attr(strip_tags(strip_shortcodes(stripslashes($fb_desc)))));
 						if (intval($fb_image_show)==1 || intval($fb_image_show_schema)==1 || intval($fb_image_show_twitter)==1) {
 							$thumbdone=false;
 							if (intval($fb_image_use_featured)==1) {
@@ -323,21 +330,18 @@ function webdados_fb_open_graph() {
 			//Locale - From our plugin
 			//Sitename - From our plugin
 			//Title - From WPSEO
-			$fb_title=$wpseo->title(false);
+			$fb_title=strip_tags($wpseo->title(false));
 			//Title - SubHeading plugin
 			if ($fb_show_subheading==1) {
-				@include_once(ABSPATH . 'wp-admin/includes/plugin.php');
-				if (is_plugin_active('subheading/index.php')) {
-					if (function_exists('get_the_subheading')) {
-						$fb_title.=' - '.get_the_subheading();
-					}
+				if (webdados_fb_open_graph_subheadingactive()) {
+					$fb_title.=' - '.get_the_subheading();
 				}
 			}
 			//URL - From WPSEO
 			$fb_url=$wpseo->canonical(false);
 			//Description - From WPSEO or our plugin
 			$fb_desc_temp=$wpseo->metadesc(false);
-			$fb_desc=(trim($fb_desc_temp)!='' ? trim($fb_desc_temp) : $fb_desc);
+			$fb_desc=strip_tags(trim($fb_desc_temp)!='' ? trim($fb_desc_temp) : $fb_desc);
 			//Image - From our plugin
 		}
 	}
@@ -346,6 +350,20 @@ function webdados_fb_open_graph() {
 	$fb_title = apply_filters('fb_og_title', $fb_title);
 	$fb_desc = apply_filters('fb_og_desc', $fb_desc);
 	$fb_image = apply_filters('fb_og_image', $fb_image);
+	$fb_image_size = false;
+	if (intval($fb_image_show)==1 && trim($fb_image)!='') {
+		if (intval($fb_image_size_show)==1) {
+			if (isset($GLOBALS['webdados_fb_img_size'])) { //Already fetched
+				$fb_image_size=$GLOBALS['webdados_fb_img_size'];
+			} else {
+				$fb_image_size=webdados_fb_open_graph_getimagesize($fb_image);
+			}
+		}
+	} else {
+		$fb_image_size_show=0;
+	}
+
+	//Strip
 	
 	$html='
 <!-- START - '.$webdados_fb_open_graph_plugin_name.' '.$webdados_fb_open_graph_plugin_version.' -->
@@ -380,7 +398,7 @@ if (intval($fb_article_dates_show)==1 && trim($fb_article_pub_date)!='') $html.=
 if (intval($fb_article_dates_show)==1 && trim($fb_article_mod_date)!='') $html.='<meta property="article:modified_time" content="'.trim(esc_attr($fb_article_mod_date)).'" />
 <meta property="og:updated_time" content="'.trim(esc_attr($fb_article_mod_date)).'" />
 ';
-if (intval($fb_article_sections_show)==1 && is_array($fb_sections) && count($fb_sections)>0) {
+if (intval($fb_article_sections_show)==1 && isset($fb_sections) && is_array($fb_sections) && count($fb_sections)>0) {
 	foreach($fb_sections as $fb_section) {
 		$html.='<meta property="article:section" content="'.trim(esc_attr($fb_section)).'"/>
 ';
@@ -410,11 +428,14 @@ if (intval($fb_article_sections_show)==1 && is_array($fb_sections) && count($fb_
 ';
 	if(intval($fb_image_show)==1 && trim($fb_image)!='') $html.='<meta property="og:image" content="'.trim(esc_attr($fb_image)).'"/>
 ';
+	if(intval($fb_image_size_show)==1 && isset($fb_image_size) && is_array($fb_image_size)!='') $html.='<meta property="og:image:width" content="'.intval(esc_attr($fb_image_size[0])).'"/>
+<meta property="og:image:height" content="'.intval(esc_attr($fb_image_size[1])).'"/>
+';
 	if(intval($fb_image_show_schema)==1 && trim($fb_image)!='') $html.='<meta itemprop="image" content="'.trim(esc_attr($fb_image)).'"/>
 ';
 	if(intval($fb_image_show_twitter)==1 && trim($fb_image)!='') $html.='<meta name="twitter:image:src" content="'.trim(esc_attr($fb_image)).'"/>
 ';
-	if(intval($fb_title_show_twitter)==1 || intval($fb_url_show_twitter)==1 || $fb_author_show_twitter==1 || $fb_publisher_show_twitter==1 || $fb_image_show_twitter==1) $html.='<meta name="twitter:card" content="summary_large_image"/>
+	if(intval($fb_title_show_twitter)==1 || intval($fb_url_show_twitter)==1 || $fb_author_show_twitter==1 || $fb_publisher_show_twitter==1 || $fb_image_show_twitter==1) $html.='<meta name="twitter:card" content="'.trim(esc_attr($fb_twitter_card_type)).'"/>
 ';
 	$html.='<!-- END - '.$webdados_fb_open_graph_plugin_name.' -->
 
@@ -484,11 +505,23 @@ function webdados_fb_open_graph_post_image($fb_image_use_specific=1,$fb_image_us
 	$thumbdone=false;
 	$fb_image='';
 	$minsize=intval($webdados_fb_open_graph_settings['fb_image_min_size']);
-	//Specific post image
-	if (intval($fb_image_use_specific)==1) {
-		if ($fb_image=trim(get_post_meta($post->ID, '_webdados_fb_open_graph_specific_image', true))) {
+	//Attachment page? - This overrides the other options
+	if (is_attachment()) {
+		if ($temp=wp_get_attachment_image_src(null, 'full')) {
+			$fb_image=trim($temp[0]);
+			$img_size=array(intval($temp[1]), intval($temp[2]));
 			if (trim($fb_image)!='') {
 				$thumbdone=true;
+			}
+		}
+	}
+	//Specific post image
+	if (!$thumbdone) {
+		if (intval($fb_image_use_specific)==1) {
+			if ($fb_image=trim(get_post_meta($post->ID, '_webdados_fb_open_graph_specific_image', true))) {
+				if (trim($fb_image)!='') {
+					$thumbdone=true;
+				}
 			}
 		}
 	}
@@ -515,8 +548,8 @@ function webdados_fb_open_graph_post_image($fb_image_use_specific=1,$fb_image_us
 					//There's an image on the content
 					$pos = strpos($image, site_url());
 					if ($pos === false) {
-						if (stristr($image, 'http://') || stristr($image, 'https://') || substr($image, 0, 2)=='//') {
-							if (substr($image, 0, 2)=='//') $image=((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https:' : 'http:').$image;
+						if (stristr($image, 'http://') || stristr($image, 'https://') || mb_substr($image, 0, 2)=='//') {
+							if (mb_substr($image, 0, 2)=='//') $image=((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https:' : 'http:').$image;
 							//Complete URL - offsite
 							//if (intval(ini_get('allow_url_fopen'))==1) {
 								$imagetemp=$image;
@@ -618,8 +651,8 @@ function webdados_fb_open_graph_post_image($fb_image_use_specific=1,$fb_image_us
 
 //Get image size
 function webdados_fb_open_graph_getimagesize($image) {
-	if (stristr($image, 'http://') || stristr($image, 'https://') || substr($image, 0, 2)=='//') {
-		if (function_exists('curl_version')) {
+	if (stristr($image, 'http://') || stristr($image, 'https://') || mb_substr($image, 0, 2)=='//') {
+		if (function_exists('curl_version') && function_exists('imagecreatefromstring')) {
 			//We'll get just a part of the image to speed things up. From http://stackoverflow.com/questions/4635936/super-fast-getimagesize-in-php
 			$headers = array(
 				"Range: bytes=0-32768"
@@ -673,6 +706,7 @@ function webdados_fb_open_graph_getimagesize($image) {
 		//Local path
 		$img_size=getimagesize($image);
 	}
+	$GLOBALS['webdados_fb_img_size']=$img_size;
 	return $img_size;
 }
 
@@ -789,7 +823,7 @@ if (is_admin()) {
 		if (!isset($_POST['webdados_fb_open_graph_custom_box_nonce']))
 			$save=false;
 	  	
-	  	$nonce=$_POST['webdados_fb_open_graph_custom_box_nonce'];
+	  	$nonce=(isset($_POST['webdados_fb_open_graph_custom_box_nonce']) ? $_POST['webdados_fb_open_graph_custom_box_nonce'] : '');
 
 		// Verify that the nonce is valid.
 		if (!wp_verify_nonce($nonce, 'webdados_fb_open_graph_custom_box'))
@@ -990,7 +1024,8 @@ function webdados_fb_open_graph_default_values() {
 		'fb_image_use_default' => 1,
 		'fb_keep_data_uninstall' => 1,
 		'fb_image_min_size' => 200,
-		'fb_adv_notify_fb' => 1
+		'fb_adv_notify_fb' => 1,
+		'fb_twitter_card_type' => 'summary_large_image'
 	);
 }
 function webdados_fb_open_graph_load_settings() {
@@ -1002,7 +1037,7 @@ function webdados_fb_open_graph_load_settings() {
 			//Merge the settings "all together now" (yes, it's a Beatles reference)
 			foreach($webdados_fb_open_graph_plugin_settings as $key) {
 				if (isset($usersettings[$key])) {
-					if (strlen(trim($usersettings[$key]))==0) {
+					if (mb_strlen(trim($usersettings[$key]))==0) {
 						if (!empty($defaults[$key])) {
 							$usersettings[$key]=$defaults[$key];
 						}
@@ -1017,7 +1052,7 @@ function webdados_fb_open_graph_load_settings() {
 			}
 			/*foreach($usersettings as $key => $value) {
 				//if ($value=='') {
-				if (strlen(trim($value))==0) {
+				if (mb_strlen(trim($value))==0) {
 					if (!empty($defaults[$key])) {
 						$usersettings[$key]=$defaults[$key];
 					}
@@ -1036,6 +1071,17 @@ function webdados_fb_open_graph_load_settings() {
 	} else {
 		return false; //To avoid activation errors
 	}
+}
+
+//Subheading plugin active?
+function webdados_fb_open_graph_subheadingactive() {
+	//@include_once(ABSPATH . 'wp-admin/includes/plugin.php');
+	//if (is_plugin_active('subheading/index.php')) {
+		if (class_exists('SubHeading') && function_exists('get_the_subheading')) {
+			return true;
+		}
+	//}
+	return false;
 }
 
 function webdados_fb_open_graph_upgrade() {
@@ -1066,7 +1112,6 @@ function webdados_fb_open_graph_upgrade() {
 		update_option('wonderm00n_open_graph_version', $webdados_fb_open_graph_plugin_version);
 	}
 }
-
 
 //Uninstall stuff
 register_uninstall_hook(__FILE__, 'webdados_fb_open_graph_uninstall'); //NOT WORKING! WHY?

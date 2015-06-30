@@ -43,6 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 			$usersettings['fb_author_show_meta']= 				intval(webdados_fb_open_graph_post('fb_author_show_meta'));
 			$usersettings['fb_author_show_linkrelgp']= 			intval(webdados_fb_open_graph_post('fb_author_show_linkrelgp'));
 			$usersettings['fb_author_show_twitter']= 			intval(webdados_fb_open_graph_post('fb_author_show_twitter'));
+			$usersettings['fb_author_hide_on_pages']= 			intval(webdados_fb_open_graph_post('fb_author_hide_on_pages'));
 			$usersettings['fb_desc_show']= 						intval(webdados_fb_open_graph_post('fb_desc_show'));
 			$usersettings['fb_desc_show_meta']= 				intval(webdados_fb_open_graph_post('fb_desc_show_meta'));
 			$usersettings['fb_desc_show_schema']= 				intval(webdados_fb_open_graph_post('fb_desc_show_schema'));
@@ -51,6 +52,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 			$usersettings['fb_desc_homepage']= 					trim(webdados_fb_open_graph_post('fb_desc_homepage'));
 			$usersettings['fb_desc_homepage_customtext']= 		trim(webdados_fb_open_graph_post('fb_desc_homepage_customtext'));
 			$usersettings['fb_image_show']= 					intval(webdados_fb_open_graph_post('fb_image_show'));
+			$usersettings['fb_image_size_show']= 				intval(webdados_fb_open_graph_post('fb_image_size_show'));
 			$usersettings['fb_image_show_schema']= 				intval(webdados_fb_open_graph_post('fb_image_show_schema'));
 			$usersettings['fb_image_show_twitter']= 			intval(webdados_fb_open_graph_post('fb_image_show_twitter'));
 			$usersettings['fb_image']= 							trim(webdados_fb_open_graph_post('fb_image'));
@@ -66,6 +68,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 			$usersettings['fb_adv_force_local']= 				intval(webdados_fb_open_graph_post('fb_adv_force_local'));
 			$usersettings['fb_adv_notify_fb']= 					intval(webdados_fb_open_graph_post('fb_adv_notify_fb'));
 			$usersettings['fb_adv_supress_fb_notice']= 			intval(webdados_fb_open_graph_post('fb_adv_supress_fb_notice'));
+			$usersettings['fb_twitter_card_type']= 				trim(webdados_fb_open_graph_post('fb_twitter_card_type'));
 			//Update
 			update_option('wonderm00n_open_graph_settings', $usersettings);
 		}
@@ -403,6 +406,14 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 										<?php _e('Links the article to the author Twitter profile. The user\'s Twitter user must be filled in.', 'wd-fb-og');?>
 									</td>
 								</tr>
+								<tr class="fb_author_options">
+									<th scope="row"><i class="dashicons-before dashicons-admin-site"></i><?php _e('Hide author on pages', 'wd-fb-og');?></th>
+									<td>
+										<input type="checkbox" name="fb_author_hide_on_pages" id="fb_author_hide_on_pages" value="1" <?php echo (intval($fb_author_hide_on_pages)==1 ? ' checked="checked"' : ''); ?>/>
+										<br/>
+										<?php _e('Hides all author tags on pages.', 'wd-fb-og');?>
+									</td>
+								</tr>
 								<tr>
 									<td colspan="2"><hr/></td>
 								</tr>
@@ -484,6 +495,14 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 									</td>
 								</tr>
 								<tr class="fb_image_options">
+									<th scope="row"><i class="dashicons-before dashicons-facebook-alt"></i><?php _e('Include Image size (og:image:width and og:image:height) tags', 'wd-fb-og');?></th>
+									<td>
+										<input type="checkbox" name="fb_image_size_show" id="fb_image_size_show" value="1" <?php echo (intval($fb_image_size_show)==1 ? ' checked="checked"' : ''); ?>/>
+										<br/>
+										<?php _e('Recommended only if Facebook is having problems loading the image when the post is shared for the first time.', 'wd-fb-og');?>
+									</td>
+								</tr>
+								<tr class="fb_image_options">
 									<th scope="row"><i class="dashicons-before dashicons-googleplus"></i><?php _e('Include Schema.org "itemprop" Image tag', 'wd-fb-og');?></th>
 									<td>
 										<input type="checkbox" name="fb_image_show_schema" id="fb_image_show_schema" value="1" <?php echo (intval($fb_image_show_schema)==1 ? ' checked="checked"' : ''); ?>/>
@@ -547,6 +566,18 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 										</div>
 									</td>
 								</tr>
+								<tr>
+									<td colspan="2"><hr/></td>
+								</tr>
+								<tr>
+									<th scope="row"><i class="dashicons-before dashicons-twitter"></i><?php _e('Twitter Card Type', 'wd-fb-og');?>:</th>
+									<td>
+										<select name="fb_twitter_card_type" id="fb_twitter_card_type">
+											<option value="summary"<?php if (trim($fb_twitter_card_type)=='summary') echo ' selected="selected"'; ?>><?php _e('Summary Card', 'wd-fb-og');?></option>
+											<option value="summary_large_image"<?php if (trim($fb_twitter_card_type)=='summary_large_image') echo ' selected="selected"'; ?>><?php _e('Summary Card with Large Image', 'wd-fb-og');?></option>
+										</select>
+									</td>
+								</tr>
 						</table>
 					</div>
 				</div>
@@ -575,7 +606,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 							<?php
 						}
 						//SubHeading
-						if(is_plugin_active('subheading/index.php')) {
+						if (webdados_fb_open_graph_subheadingactive()) {
 							$thirdparty=true;
 							?>
 							<hr/>
