@@ -71,6 +71,10 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 			$usersettings['fb_twitter_card_type']= 				trim(webdados_fb_open_graph_post('fb_twitter_card_type'));
 			//Update
 			update_option('wonderm00n_open_graph_settings', $usersettings);
+			//WPML - Register custom website description
+			if (function_exists('icl_object_id') && function_exists('icl_register_string')) {
+				icl_register_string('wd-fb-og', 'wd_fb_og_desc_homepage_customtext', trim(webdados_fb_open_graph_post('fb_desc_homepage_customtext')));
+			}
 		}
 	}
 	
@@ -479,6 +483,17 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 											</select>
 											<div id="fb_desc_homepage_customtext_div">
 												<textarea name="fb_desc_homepage_customtext" id="fb_desc_homepage_customtext" rows="3" cols="50"><?php echo trim(esc_attr($fb_desc_homepage_customtext)); ?></textarea>
+												<?php
+												if (function_exists('icl_object_id') && function_exists('icl_register_string')) {
+													?>
+													<br/>
+													<?php
+													printf(
+														__('WPML users: Set the default language description here, save changes and then go to <a href="%s">WPML &gt; String translation</a> to set it for other languages.', 'wd-fb-og'),
+														'admin.php?page=wpml-string-translation/menu/string-translation.php&amp;context=wd-fb-og'
+													); 
+												}
+												?>
 											</div>
 										</div>
 									</td>

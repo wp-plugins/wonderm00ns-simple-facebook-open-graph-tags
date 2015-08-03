@@ -1,13 +1,13 @@
 <?php
 /**
  * @package Facebook Open Graph, Google+ and Twitter Card Tags
- * @version 1.6
+ * @version 1.6.1
  */
 /*
 Plugin Name: Facebook Open Graph, Google+ and Twitter Card Tags
 Plugin URI: http://www.webdados.pt/produtos-e-servicos/internet/desenvolvimento-wordpress/facebook-open-graph-meta-tags-wordpress/
 Description: Inserts Facebook Open Graph, Google+ / Schema.org and Twitter Card Tags into your WordPress Blog/Website for more effective and efficient Facebook, Google+ and Twitter sharing results. You can also choose to insert the "enclosure" and "media:content" tags to the RSS feeds, so that apps like RSS Graffiti and twitterfeed post the image to Facebook correctly.
-Version: 1.6
+Version: 1.6.1
 Author: Webdados
 Author URI: http://www.webdados.pt
 Text Domain: wd-fb-og
@@ -16,7 +16,7 @@ Domain Path: /lang
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-$webdados_fb_open_graph_plugin_version='1.6';
+$webdados_fb_open_graph_plugin_version='1.6.1';
 $webdados_fb_open_graph_plugin_name='Facebook Open Graph, Google+ and Twitter Card Tags';
 $webdados_fb_open_graph_plugin_settings=array(
 		'fb_app_id_show',
@@ -256,6 +256,15 @@ function webdados_fb_open_graph() {
 		switch(trim($fb_desc_homepage)) {
 			case 'custom':
 				$fb_desc=esc_attr(strip_tags(stripslashes($fb_desc_homepage_customtext)));
+				//WPML?
+				if (function_exists('icl_object_id') && function_exists('icl_register_string')) {
+					global $sitepress;
+					if (ICL_LANGUAGE_CODE!=$sitepress->get_default_language()) {
+						$fb_desc=icl_t('wd-fb-og', 'wd_fb_og_desc_homepage_customtext', $fb_desc);
+					} else {
+						//We got it already
+					}
+				}
 				break;
 			default:
 				$fb_desc=esc_attr(strip_tags(stripslashes(get_bloginfo('description'))));

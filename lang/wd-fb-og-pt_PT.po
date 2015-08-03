@@ -1,10 +1,10 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Facebook Open Graph Meta Tags for WordPress v1.6\n"
+"Project-Id-Version: Facebook Open Graph Meta Tags for WordPress v1.6.1\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/wonderm00ns-simple-"
 "facebook-open-graph-tags\n"
 "POT-Creation-Date: 2015-06-30 12:13:21+00:00\n"
-"PO-Revision-Date: 2015-06-30 13:20-0000\n"
+"PO-Revision-Date: 2015-08-03 19:58-0000\n"
 "Last-Translator: Wonderm00n <wonderm00n@gmail.com>\n"
 "Language-Team: Webdados <info@webdados.pt>\n"
 "Language: pt_PT\n"
@@ -363,6 +363,16 @@ msgstr "Descrição do site"
 #: includes/settings-page.php:478
 msgid "Custom text"
 msgstr "Texto personalizado"
+
+#: includes/settings-page.php:492
+msgid ""
+"WPML users: Set the default language description here, save changes and then "
+"go to <a href=\"%s\">WPML &gt; String translation</a> to set it for other "
+"languages."
+msgstr ""
+"Utilizadores WPML: Defina aqui a descrição no idioma por omissão, guarde as "
+"alterações e vá a <a href=\"%s\">WPML &gt; Tradução de storing</a> para "
+"defini-la para outros idiomas."
 
 # @ wd-fb-og
 #: includes/settings-page.php:490

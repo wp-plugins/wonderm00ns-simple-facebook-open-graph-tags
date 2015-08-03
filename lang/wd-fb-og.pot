@@ -275,6 +275,10 @@ msgstr ""
 msgid "Custom text"
 msgstr ""
 
+#: includes/settings-page.php:492
+msgid "WPML users: Set the default language description here, save changes and then go to <a href=\"%s\">WPML &gt; String translation</a> to set it for other languages."
+msgstr ""
+
 #: includes/settings-page.php:490
 msgid "Include Image (og:image) tag"
 msgstr ""
