@@ -1,13 +1,13 @@
 <?php
 /**
  * @package Facebook Open Graph, Google+ and Twitter Card Tags
- * @version 1.6.1
+ * @version 1.6.2
  */
 /*
 Plugin Name: Facebook Open Graph, Google+ and Twitter Card Tags
 Plugin URI: http://www.webdados.pt/produtos-e-servicos/internet/desenvolvimento-wordpress/facebook-open-graph-meta-tags-wordpress/
 Description: Inserts Facebook Open Graph, Google+ / Schema.org and Twitter Card Tags into your WordPress Blog/Website for more effective and efficient Facebook, Google+ and Twitter sharing results. You can also choose to insert the "enclosure" and "media:content" tags to the RSS feeds, so that apps like RSS Graffiti and twitterfeed post the image to Facebook correctly.
-Version: 1.6.1
+Version: 1.6.2
 Author: Webdados
 Author URI: http://www.webdados.pt
 Text Domain: wd-fb-og
@@ -16,7 +16,7 @@ Domain Path: /lang
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-$webdados_fb_open_graph_plugin_version='1.6.1';
+$webdados_fb_open_graph_plugin_version='1.6.2';
 $webdados_fb_open_graph_plugin_name='Facebook Open Graph, Google+ and Twitter Card Tags';
 $webdados_fb_open_graph_plugin_settings=array(
 		'fb_app_id_show',
@@ -372,7 +372,13 @@ function webdados_fb_open_graph() {
 		$fb_image_size_show=0;
 	}
 
-	//Strip
+	//No spaces on URLs
+	if (trim($fb_url)!='')				$fb_url=				str_replace(' ', '%20', trim($fb_url));
+	if (trim($fb_publisher)!='')		$fb_publisher=			str_replace(' ', '%20', trim($fb_publisher));
+	if (trim($fb_publisher_schema)!='')	$fb_publisher_schema=	str_replace(' ', '%20', trim($fb_publisher_schema));
+	if (trim($fb_author)!='')			$fb_author=				str_replace(' ', '%20', trim($fb_author));
+	if (trim($fb_author_linkrelgp)!='')	$fb_author_linkrelgp=	str_replace(' ', '%20', trim($fb_author_linkrelgp));
+	if (trim($fb_image)!='')			$fb_image=				str_replace(' ', '%20', trim($fb_image));
 	
 	$html='
 <!-- START - '.$webdados_fb_open_graph_plugin_name.' '.$webdados_fb_open_graph_plugin_version.' -->
