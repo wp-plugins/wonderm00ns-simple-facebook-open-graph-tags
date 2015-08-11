@@ -1,13 +1,13 @@
 <?php
 /**
  * @package Facebook Open Graph, Google+ and Twitter Card Tags
- * @version 1.6.2.1
+ * @version 1.6.2.2
  */
 /*
 Plugin Name: Facebook Open Graph, Google+ and Twitter Card Tags
 Plugin URI: http://www.webdados.pt/produtos-e-servicos/internet/desenvolvimento-wordpress/facebook-open-graph-meta-tags-wordpress/
 Description: Inserts Facebook Open Graph, Google+ / Schema.org and Twitter Card Tags into your WordPress Blog/Website for more effective and efficient Facebook, Google+ and Twitter sharing results. You can also choose to insert the "enclosure" and "media:content" tags to the RSS feeds, so that apps like RSS Graffiti and twitterfeed post the image to Facebook correctly.
-Version: 1.6.2.1
+Version: 1.6.2.2
 Author: Webdados
 Author URI: http://www.webdados.pt
 Text Domain: wd-fb-og
@@ -16,7 +16,7 @@ Domain Path: /lang
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-$webdados_fb_open_graph_plugin_version='1.6.2.1';
+$webdados_fb_open_graph_plugin_version='1.6.2.2';
 $webdados_fb_open_graph_plugin_name='Facebook Open Graph, Google+ and Twitter Card Tags';
 $webdados_fb_open_graph_plugin_settings=array(
 		'fb_app_id_show',
@@ -958,7 +958,7 @@ if (is_admin()) {
 
 	//Facebook, Google+ and Twitter user fields
 	function webdados_fb_open_graph_add_usercontacts($usercontacts) {
-		if (defined('WPSEO_VERSION')) {
+		if (!defined('WPSEO_VERSION')) {
 			//Google+
 			$usercontacts['googleplus'] = __('Google+', 'wd-fb-og');
 			//Twitter
